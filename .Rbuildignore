@@ -1,0 +1,8 @@
+^.*\.Rproj$
+^\.Rproj\.user$
+^_pkgdown\.yml$
+^docs$
+^pkgdown$
+^public$
+^.gitlab-ci.yml$
+^CODE_OF_CONDUCT.md$

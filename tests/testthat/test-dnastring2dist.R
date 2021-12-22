@@ -1,0 +1,20 @@
+data(hiv)
+
+test_that("compareCodons()", {
+    myscore <- iupacMatrix()
+    myscore[1,1] <- -1
+    h <- hiv |> dnastring2dist(score=myscore)
+    expect_true(h$sitesUsed[1,1] == 150)
+    h <- hiv |> dnastring2dist(model="IUPAC")
+    expect_true(h$sitesUsed[1,1] == 273)
+    h <- hiv |> dnastring2dist(model="K80")
+    expect_true(h$sitesUsed[1,1] == 273)
+    mask1 <- IRanges::IRanges(start=c(1,61,121), end=c(30,90,150))
+    h <- hiv |> dnastring2dist(model="IUPAC", mask=mask1)
+    expect_true(h$sitesUsed[1,1] == 183)
+    region1 <- IRanges::IRanges(start=c(1,139), end=c(75,225))
+    h <- hiv |> dnastring2dist(model="IUPAC", region=region1)
+    expect_true(h$sitesUsed[1,1] == 162)
+    h <- hiv |> dnastring2dist(model="IUPAC", mask=mask1, region=region1)
+    expect_true(h$sitesUsed[1,1] == 105)
+})

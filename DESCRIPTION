@@ -1,0 +1,57 @@
+Package: MSA2dist
+Type: Package
+Title: MSA2dist calculates pairwise distances between all sequences of a
+    DNAStringSet or a AAStringSet using a custom score matrix and conducts
+    codon based analysis
+Version: 0.99.0
+Authors@R: 
+    person(given = "Kristian K",
+           family = "Ullrich",
+           role = c("aut", "cre"),
+           email = "ullrich@evolbio.mpg.de",
+           comment = c(ORCID = "0000-0003-4308-9626"))
+Description: MSA2dist calculates pairwise distances between all sequences of
+    a DNAStringSet or a AAStringSet using a custom score matrix and conducts
+    codon based analysis. It uses scoring matrices to be used in these pairwise
+    distance calcualtions which can be adapted to any scoring for DNA or AA
+    characters. E.g. by using literal distances MSA2dist calcualtes pairwise
+    IUPAC distances.
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: false
+biocViews: Alignment, Sequencing, Genetics, GO
+Depends:
+  R (>= 4.1.0)
+Imports:
+  Rcpp,
+  RcppThread,
+  Biostrings,
+  GenomicRanges,
+  IRanges,
+  ape,
+  doParallel,
+  dplyr,
+  foreach,
+  methods,
+  parallel,
+  rlang,
+  seqinr,
+  stringr,
+  tibble,
+  tidyr,
+  stats,
+  stringi
+Suggests:
+  rmarkdown,
+  knitr,
+  devtools,
+  testthat,
+  ggplot2,
+  BiocStyle
+LinkingTo: Rcpp, RcppThread
+VignetteBuilder: knitr
+NeedsCompilation: yes
+SystemRequirements: C++11
+URL: https://gitlab.gwdg.de/mpievolbio-it/msa2dist, https://mpievolbio-it.pages.gwdg.de/msa2dist/
+BugReports: https://gitlab.gwdg.de/mpievolbio-it/msa2dist/issues
+RoxygenNote: 7.1.2
