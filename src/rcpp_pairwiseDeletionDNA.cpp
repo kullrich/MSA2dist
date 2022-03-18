@@ -8,7 +8,6 @@ using namespace Rcpp;
 
 //' @useDynLib MSA2dist, .registration = TRUE
 //' @import Rcpp
-//' @import RcppThread
 //' @title rcpp_pairwiseDeletionDNA
 //' @name rcpp_pairwiseDeletionDNA
 //' @description returns number of DNA sites used
@@ -52,6 +51,7 @@ Rcpp::List rcpp_pairwiseDeletionDNA( Rcpp::StringVector dnavector, int ncores = 
   colnames(sitesMatrix) = dnavectornames;
   rownames(sitesMatrix) = dnavectornames;
   int nsites = dnavector[1].size();
+  RcppThread::ProgressBar bar(n, 1);
   RcppThread::parallelFor(0, n, [&] (int i) {
     for( int j=i; j < n; j++ ){
       double eqnum = 0;
@@ -73,7 +73,8 @@ Rcpp::List rcpp_pairwiseDeletionDNA( Rcpp::StringVector dnavector, int ncores = 
       distMatrix(j,i) = eqnum / ij_n;
       sitesMatrix(i,j) = ij_n;
       sitesMatrix(j,i) = ij_n;
-    }
+    };
+    bar++;
   }, ncores);
   return Rcpp::List::create(Rcpp::Named("sitesUsed") = sitesMatrix);
 }

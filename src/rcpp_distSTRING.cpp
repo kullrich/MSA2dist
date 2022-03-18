@@ -8,7 +8,6 @@ using namespace Rcpp;
 
 //' @useDynLib MSA2dist, .registration = TRUE
 //' @import Rcpp
-//' @import RcppThread
 //' @title rcpp_distSTRING
 //' @name rcpp_distSTRING
 //' @description calcualtes pairwise distances using a score matrix
@@ -47,6 +46,7 @@ Rcpp::List rcpp_distSTRING( Rcpp::StringVector dnavector, Rcpp::NumericMatrix sc
   colnames(sitesMatrix) = dnavectornames;
   rownames(sitesMatrix) = dnavectornames;
   int nsites = dnavector[1].size();
+  RcppThread::ProgressBar bar(n, 1);
   RcppThread::parallelFor(0, n, [&] (int i) {
     for( int j=i; j < n; j++ ){
       double eqnum = 0;
@@ -68,7 +68,8 @@ Rcpp::List rcpp_distSTRING( Rcpp::StringVector dnavector, Rcpp::NumericMatrix sc
       distMatrix(j,i) = eqnum / ij_n;
       sitesMatrix(i,j) = ij_n;
       sitesMatrix(j,i) = ij_n;
-    }
+    };
+    bar++;
   }, ncores);
   return Rcpp::List::create(Rcpp::Named("distSTRING") = distMatrix, Rcpp::Named("sitesUsed") = sitesMatrix);
 }

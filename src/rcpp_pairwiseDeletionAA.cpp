@@ -8,7 +8,6 @@ using namespace Rcpp;
 
 //' @useDynLib MSA2dist, .registration = TRUE
 //' @import Rcpp
-//' @import RcppThread
 //' @title rcpp_pairwiseDeletionAA
 //' @name rcpp_pairwiseDeletionAA
 //' @description returns number of AA sites used
@@ -57,6 +56,7 @@ Rcpp::List rcpp_pairwiseDeletionAA( Rcpp::StringVector aavector, int ncores = 1 
   colnames(sitesMatrix) = aavectornames;
   rownames(sitesMatrix) = aavectornames;
   int nsites = aavector[1].size();
+  RcppThread::ProgressBar bar(n, 1);
   RcppThread::parallelFor(0, n, [&] (int i) {
     for( int j=i; j < n; j++ ){
       double eqnum = 0;
@@ -78,7 +78,8 @@ Rcpp::List rcpp_pairwiseDeletionAA( Rcpp::StringVector aavector, int ncores = 1 
       distMatrix(j,i) = eqnum / ij_n;
       sitesMatrix(i,j) = ij_n;
       sitesMatrix(j,i) = ij_n;
-    }
+    };
+    bar++;
   }, ncores);
   return Rcpp::List::create(Rcpp::Named("sitesUsed") = sitesMatrix);
 }

@@ -3,7 +3,6 @@
 
 #' @useDynLib MSA2dist, .registration = TRUE
 #' @import Rcpp
-#' @import RcppThread
 #' @title rcpp_distSTRING
 #' @name rcpp_distSTRING
 #' @description calcualtes pairwise distances using a score matrix
@@ -23,7 +22,6 @@ rcpp_distSTRING <- function(dnavector, scoreMatrix, ncores = 1L) {
 
 #' @useDynLib MSA2dist, .registration = TRUE
 #' @import Rcpp
-#' @import RcppThread
 #' @title rcpp_pairwiseDeletionAA
 #' @name rcpp_pairwiseDeletionAA
 #' @description returns number of AA sites used
@@ -43,7 +41,6 @@ rcpp_pairwiseDeletionAA <- function(aavector, ncores = 1L) {
 
 #' @useDynLib MSA2dist, .registration = TRUE
 #' @import Rcpp
-#' @import RcppThread
 #' @title rcpp_pairwiseDeletionDNA
 #' @name rcpp_pairwiseDeletionDNA
 #' @description returns number of DNA sites used
