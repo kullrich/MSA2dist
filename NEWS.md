@@ -1,3 +1,11 @@
+# Changes in version 1.1.1 (2022-06-30)
+
+## Major changes
+
+## Minor improvements and bug fixes
+
+* Added cds2codonaln
+
 # Changes in version 0.99.3 (2022-03-18)
 
 ## Major changes

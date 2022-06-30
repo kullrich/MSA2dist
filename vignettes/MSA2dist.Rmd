@@ -12,6 +12,7 @@ abstract: >
     to look for synonymous and nonsynonymous substitutions in a parallelised
     fashion.
 bibliography: bibliography.bib
+nocite: '@*'
 output: BiocStyle::html_document
 vignette: >
     %\VignetteIndexEntry{MSA2dist Vignette}
@@ -380,10 +381,6 @@ print(hiv.xy |> dplyr::select(Codon,SynMean,NonSynMean,IndelMean) |>
 ```
 
 # References
-
----
-nocite: '@*'
----
 
 <div id="refs"></div>
 
