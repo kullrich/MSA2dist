@@ -19,7 +19,7 @@ using namespace std;
 #include "base.h"
 
 /******** Global variables ********/
-/*						The Genetic Codes 
+/*						The Genetic Codes
 http://www.ncbi.nlm.nih.gov/Taxonomy/Utils/wprintgc.cgi?mode=c
 	Last update of the Genetic Codes: October 05, 2000 */
 int genetic_code=1; //from 1 to 23
@@ -89,7 +89,7 @@ void Base::addString(string &result, string str, string flag) {
 * Function: getAminoAcid
 * Input Parameter: codon or codon's id
 * Output: Calculate the amino acid according to codon or codon's id.
-* Return Value: char 
+* Return Value: char
 ***********************************************************************/
 char Base::getAminoAcid(string codon) {
 	return transl_table[2*(genetic_code-1)][getID(codon)];
@@ -132,7 +132,7 @@ int Base::getID(string codon) {
 string Base::getCodon(int IDcodon) {
 	string codon="TTT";
 	if (IDcodon>=0 && IDcodon<64) {
-		codon[0]=convertInt(IDcodon/16); 
+		codon[0]=convertInt(IDcodon/16);
 		codon[1]=convertInt((IDcodon%16)/4);
 		codon[2]=convertInt(IDcodon%4);
 	}
@@ -168,7 +168,7 @@ int Base::convertChar(char ch) {
 /********************************************
 * Function: convertInt
 * Input Parameter: int
-* Output: Convert a digit- 0,1,2,3 into a 
+* Output: Convert a digit- 0,1,2,3 into a
 *		  char-T,C,A,G, respectively.
 * Return Value: char
 *********************************************/
@@ -204,29 +204,18 @@ string Base::stringtoUpper(string str) {
 }
 
 /********************************************
-* Function: getRandom
-* Input Parameter: void
-* Output: Generate a radnom integer
-* Return Value: int
-*********************************************/
-int Base::getRandom() {	
-	srand((unsigned)time(NULL));
-	return rand();
-}
-
-/********************************************
 * Function: initArray
 * Input Parameter: array of int/double, int, int/double(default=0)
 * Output: Init the array x[0...n-1]=value
 * Return Value: int
 *********************************************/
 int Base::initArray(double x[], int n, double value) {
-	int i; 
+	int i;
 	for (i=0; i<n; i++) x[i] = value;
 	return 0;
 }
 int Base::initArray(int x[], int n, int value) {
-	int i; 
+	int i;
 	for (i=0; i<n; i++) x[i] = value;
 	return 0;
 }
@@ -237,28 +226,28 @@ int Base::initArray(int x[], int n, int value) {
 * Output: Sum of array x[]
 * Return Value: double/int
 *********************************************/
-double Base::sumArray(double x[], int end, int begin) { 
+double Base::sumArray(double x[], int end, int begin) {
 	int i;
-	double sum=0.;	
-	for (i=begin; i<end; sum += x[i], i++);    
+	double sum=0.;
+	for (i=begin; i<end; sum += x[i], i++);
 	return sum;
 }
-int Base::sumArray(int x[], int end, int begin) { 
-	int i, sum=0;	
-	for (i=begin; i<end; sum += x[i], i++);    
+int Base::sumArray(int x[], int end, int begin) {
+	int i, sum=0;
+	for (i=begin; i<end; sum += x[i], i++);
 	return sum;
 }
 
 /********************************************
 * Function: norm
 * Input Parameter: array of double, int
-* Output: Sqrt of the sum of the elements' square 
+* Output: Sqrt of the sum of the elements' square
            sqrt(x0*x0 + x1*x1 + ...)
 * Return Value: double
 *********************************************/
 double Base::norm(double x[], int n) {
-	int i; 
-	double t=0; 
+	int i;
+	double t=0;
 	for (i=0; i<n; t += square(x[i]), i++);
 	return sqrt(t);
 }
@@ -266,13 +255,13 @@ double Base::norm(double x[], int n) {
 /********************************************
 * Function: scaleArray
 * Input Parameter: double, array of double, int
-* Output: Elements in array are mutipled by scale 
+* Output: Elements in array are mutipled by scale
 * Return Value: int
 *********************************************/
-int Base::scaleArray(double scale, double x[], int n) {	
-	int i; 	
+int Base::scaleArray(double scale, double x[], int n) {
+	int i;
 	for (i=0; i<n; i++) x[i] *= scale;
-	return 1; 
+	return 1;
 }
 
 /********************************************
@@ -281,40 +270,40 @@ int Base::scaleArray(double scale, double x[], int n) {
 * Output: Copy array's values one by one: to[] = from[]
 * Return Value: int
 *********************************************/
-int Base::copyArray(double from[], double to[], int n) {	
-	int i; 
+int Base::copyArray(double from[], double to[], int n) {
+	int i;
 	for (i=0; i<n; i++) to[i] = from[i];
-	return 1; 
+	return 1;
 }
 
 /********************************************
 * Function: innerp
 * Input Parameter: array, array, int
-* Output: Sum of 'n' products multiplied by 
+* Output: Sum of 'n' products multiplied by
 			two elements in x[], y[].
 * Return Value: int
 *********************************************/
 double Base::innerp(double x[], double y[], int n) {
-	int i; 
+	int i;
 	double t=0;
-	for (i=0; i<n; t += x[i]*y[i], i++); 
-	return t; 
+	for (i=0; i<n; t += x[i]*y[i], i++);
+	return t;
 }
 
 /********************************************
 * Function: initIdentityMatrix
 * Input Parameter: array of double, int
-* Output: Set x[i,j]=0 when x!=j and 
-			  x[i,j]=1 when x=j 
+* Output: Set x[i,j]=0 when x!=j and
+			  x[i,j]=1 when x=j
 * Return Value: int
 *********************************************/
 int Base::initIdentityMatrix(double x[], int n) {
 	int i,j;
 	for (i=0; i<n; i++) {
 		for (j=0; j<n; x[i*n+j]=0, j++);
-		x[i*n+i]=1; 
+		x[i*n+i]=1;
 	}
-	return 0; 
+	return 0;
 }
 
 /************************************************
@@ -340,13 +329,13 @@ Rcpp::StringVector Base::splitString(std::string const &str, std::string delim) 
 * Output: Parse estimated results for outputing
 * Return Value: string
   Order: "Comp1", "Comp2", "seq1", "seq2",
-         "Method", "Ka", "Ks", "Ka/Ks", 
+         "Method", "Ka", "Ks", "Ka/Ks",
 		 "P-Value(Fisher)", "Length", "S-Sites", "N-Sites",
          "Fold-Sites(0:2:4)", "Substitutions", "S-Substitutions", "N-Substitutions",
          "Fold-S-Substitutions(0:2:4)", "Fold-N-Substitutions(0:2:4)", "Divergence-Time", "Substitution-Rate-Ratio(rTC:rAG:rTA:rCG:rTG:rCA/rCA)",
          "GC(1:2:3)", "ML-Score", "AICc", "Akaike-Weight",
          "Model"
-******************************************************/		
+******************************************************/
 string Base::parseOutput() {
 	int i;
 	string result="", tmp;
@@ -411,30 +400,30 @@ string Base::parseOutput() {
 	addString(result, tmp);
 	//L[0], L[2], L[4] only for Prof.Li's series(LWL85, LPB93...) #13
 	if (L[0]<SMALLVALUE && L[2]<SMALLVALUE && L[4]<SMALLVALUE) {
-		tmp="NA";		
+		tmp="NA";
 	}
-	else {		
+	else {
 		tmp=CONVERT<string>(L[0]);
 	    tmp+=":";
 		tmp+=CONVERT<string>(L[2]);
 		tmp+=":";
-		tmp+=CONVERT<string>(L[4]);		
+		tmp+=CONVERT<string>(L[4]);
 	}
 	addString(result, tmp);
 	//Substitutions #14
 	addString(result, CONVERT<string>(snp));
 	//Sysnonymous(Sd) Substitutions(Nd)	#15
 	if (Sd>SMALLVALUE) {
-		tmp=CONVERT<string>(Sd);		
-	}	
+		tmp=CONVERT<string>(Sd);
+	}
 	else {
 		tmp="NA";
 	}
 	addString(result, tmp);
 	//Nonsysnonymous Substitutions(Nd) #16
 	if (Nd>SMALLVALUE) {
-		tmp=CONVERT<string>(Nd);		
-	}	
+		tmp=CONVERT<string>(Nd);
+	}
 	else {
 		tmp="NA";
 	}
@@ -445,7 +434,7 @@ string Base::parseOutput() {
 	    tmp+=":";
 		tmp+=CONVERT<string>(Si[2]);
 		tmp+=":";
-		tmp+=CONVERT<string>(Si[4]);		
+		tmp+=CONVERT<string>(Si[4]);
 	}
 	else {
 		tmp="NA";
@@ -457,7 +446,7 @@ string Base::parseOutput() {
 	    tmp+=":";
 		tmp+=CONVERT<string>(Vi[2]);
 		tmp+=":";
-		tmp+=CONVERT<string>(Vi[4]);		
+		tmp+=CONVERT<string>(Vi[4]);
 	}
 	else {
 		tmp="NA";
@@ -473,10 +462,10 @@ string Base::parseOutput() {
 	addString(result, tmp);
 	//Substitution-Rate-Ratio(rTC:rAG:rTA:rCG:rTG:rCA/rCA) #20
 	for (i=0, tmp=""; i<NUMBER_OF_RATES-1; i++) {
-		tmp+=CONVERT<string>(KAPPA[i]); 
+		tmp+=CONVERT<string>(KAPPA[i]);
 		tmp+=":";
 	}
-	tmp+=CONVERT<string>(KAPPA[i]); 
+	tmp+=CONVERT<string>(KAPPA[i]);
 	addString(result, tmp);
 	//GC Content #21
 	tmp=CONVERT<string>(GC[0]);
@@ -510,7 +499,7 @@ string Base::parseOutput() {
 	if (SEKa==NA) tmp = "NA";
 	else tmp = CONVERT<string>(SEKa);
 	addString(result, tmp, "\t");
-	
+
 	if (SEKs==NA) tmp = "NA";
 	else tmp = CONVERT<string>(SEKs);
 	addString(result, tmp, "\n");
@@ -538,14 +527,14 @@ double Base::fisher(double sd, double nd, double s, double n) {
 	R[1]=matrix[1]+matrix[3];
 	C[0]=matrix[0]+matrix[1];
 	C[1]=matrix[2]+matrix[3];
-	sum=R[0]+R[1];	
+	sum=R[0]+R[1];
 	//Calculate the numberator that is a constant
 	numerator+=factorial(R[0]);
 	numerator+=factorial(R[1]);
 	numerator+=factorial(C[0]);
 	numerator+=factorial(C[1]);
 	//Log of Factorial of N
-	fac_sum=factorial(sum);	
+	fac_sum=factorial(sum);
 	for (i=0, denominator=fac_sum; i<4; i++) {
 		denominator+=factorial(matrix[i]);
 	}
@@ -553,12 +542,12 @@ double Base::fisher(double sd, double nd, double s, double n) {
 	prob_current=exp(numerator-denominator);
 	//Two-tail probabilities if less than prob_current
 	for (i=0; i<R[0] + SMALLVALUE; i++) {
-		matrix[0]=i;       
+		matrix[0]=i;
 		matrix[1]=C[0]-i;
 		matrix[2]=R[0]-i;
 		matrix[3]=R[1]-C[0]+i;
-		if (matrix[0]>SMALLVALUE && matrix[1]>SMALLVALUE && matrix[2]>SMALLVALUE && matrix[3]>SMALLVALUE) {			
-			for (j=0, denominator=fac_sum; j<4; j++) {				
+		if (matrix[0]>SMALLVALUE && matrix[1]>SMALLVALUE && matrix[2]>SMALLVALUE && matrix[3]>SMALLVALUE) {
+			for (j=0, denominator=fac_sum; j<4; j++) {
 				denominator+=factorial(matrix[j]);
 			}
 			double temp=numerator-denominator;
@@ -574,7 +563,7 @@ double Base::fisher(double sd, double nd, double s, double n) {
 /**************************************************
 * Function: factorial
 * Input Parameter: n
-* Output: Compute the factorial of 'n', then return 
+* Output: Compute the factorial of 'n', then return
           the log of it.
 * Return Value: double
 ***************************************************/

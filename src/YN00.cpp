@@ -14,8 +14,8 @@
 * Modified Date: July.01, 2022
   Note: Source codes are adapted from yn00.c in PAML.
   Reference:
-  Yang Z, Nielsen R  (2000)  Estimating Synonymous and 
-  Nonsynonymous Substitution Rates Under Realistic 
+  Yang Z, Nielsen R  (2000)  Estimating Synonymous and
+  Nonsynonymous Substitution Rates Under Realistic
   Evolutionary Models. Mol Biol Evol 17:32-43.
 *************************************************************/
 #include <Rcpp.h>
@@ -35,26 +35,26 @@ void YN00::getFreqency(const string seq1, const string seq2) {
 	double fstop=0.0;
 	//Get A,C,G,T frequency at three positions
 	for (i=0; i<seq1.length(); i++) {
-		f12pos[(i%3)*4+convertChar(seq1[i])]++;			
+		f12pos[(i%3)*4+convertChar(seq1[i])]++;
 		f12pos[(i%3)*4+convertChar(seq2[i])]++;
 	}
-	for (i=0; i<CODONFREQ; i++) 
+	for (i=0; i<CODONFREQ; i++)
 		f12pos[i]/=(seq1.length()+seq2.length())/3;
-	//Get 64 amino acid probability	
-	for (i=0; i<CODON; i++) {		
+	//Get 64 amino acid probability
+	for (i=0; i<CODON; i++) {
 		pi[i]=f12pos[i/16]*f12pos[4+(i%16)/4]*f12pos[8+i%4];
 		if (getAminoAcid(i)=='!') {
-			fstop+=pi[i]; 
-			pi[i]=0; 
+			fstop+=pi[i];
+			pi[i]=0;
 		}
-	}	
+	}
 	//Scale the sum of pi[] to 1
 	for (i=0; i<CODON; i++)
 		pi[i]/=(1.0-fstop);
-	if (fabs(1-sumArray(pi,CODON))>1e-6) 
-		cout<<"Warning: error in get codon freqency."<<endl;
+	if (fabs(1-sumArray(pi,CODON))>1e-6)
+		Rcpp::Rcout<<"Warning: error in get codon freqency."<<endl;
 	for (i=0, npi0=0; i<CODON; i++)
-		if (pi[i]) 
+		if (pi[i])
 			pi_sqrt[npi0++]=sqrt(pi[i]);
 	npi0=CODON-npi0;
 }
@@ -73,32 +73,32 @@ int YN00::GetKappa(const string seq1, const string seq2) {
 		c[1]=getID(seq2.substr(h,3));
 		//aa[ ]: amino acid
 		aa[0]=getAminoAcid(c[0]);
-		aa[1]=getAminoAcid(c[1]);		
+		aa[1]=getAminoAcid(c[1]);
 		//b[][]: 0--3
 		for (j=0; j<3; j++) {
 			b[0][j]=convertChar(seq1[h+j]);
 			b[1][j]=convertChar(seq2[h+j]);
-		}		
+		}
 		//Find non-degenerate sites
-		for (pos=0; pos<3; pos++) {        
+		for (pos=0; pos<3; pos++) {
 			for (k=0,nondeg=0; k<2; k++) {
 				for (i=0; i<4; i++) {
-					if (i!=b[k][pos]) 						
-						if (getAminoAcid(c[k]+(i-b[k][pos])*by[pos])==aa[k]) 
-							break;					
+					if (i!=b[k][pos])
+						if (getAminoAcid(c[k]+(i-b[k][pos])*by[pos])==aa[k])
+							break;
 				}
-				if (i==4) 
+				if (i==4)
 					nondeg++;
 			}
 			//F[0][]: 0-fold
 			if (nondeg==2) {
 				F[0][b[0][pos]*4+b[1][pos]]+=.5;
 				F[0][b[1][pos]*4+b[0][pos]]+=.5;
-			}					
+			}
 		}
 		//Find 4-fold degenerate sites at 3rd position
 		for (k=0, fourdeg=0; k<2; k++) {
-			for (j=0, i=c[k]-b[k][2]; j<4; j++) 
+			for (j=0, i=c[k]-b[k][2]; j<4; j++)
 				if (j!=b[k][2] && getAminoAcid(i+j)!=aa[k])
 					break;
 			if (aa[0]==aa[1] && j==4)
@@ -106,16 +106,16 @@ int YN00::GetKappa(const string seq1, const string seq2) {
 		}
 		//F[1][]: 4-fold
 		if (fourdeg==2) {
-			F[1][b[0][2]*4+b[1][2]]+=.5; 
+			F[1][b[0][2]*4+b[1][2]]+=.5;
 			F[1][b[1][2]*4+b[0][2]]+=.5;
 		}
-	}//end of for (h)	
+	}//end of for (h)
 	for (k=0; k<2; k++) {  /* two kinds of sites */
 		S[k]=sumArray(F[k],16);
-		if (S[k]<=0) { 
-			wk[k]=0; 
-			continue; 
-		}		
+		if (S[k]<=0) {
+			wk[k]=0;
+			continue;
+		}
 		for (j=0; j<16; j++)
 			F[k][j]/=S[k];
 		//Transition
@@ -128,7 +128,7 @@ int YN00::GetKappa(const string seq1, const string seq2) {
 		}
 		//Correct kappa
 		DistanceF84(S[k], T, V, pi4, ka[k], t, nullValue);
-		wk[k]=(ka[k]>0?S[k]:0);	
+		wk[k]=(ka[k]>0?S[k]:0);
 	}
 	if (wk[0]+wk[1]==0) {
 		kappa=kdefault;
@@ -155,17 +155,17 @@ int YN00::DistanceF84(double n, double P, double Q, double pi4[], double &k_HKY,
 	    name="GYN";
 	} //wangdp added
 	if (P+Q>1) {
-		t=maxt; 
-		k_HKY=1; 
+		t=maxt;
+		k_HKY=1;
 		return 3;
 	}
 	if (P<-1e-10 || Q<-1e-10 || fabs(Y+R-1)>1e-8) {
-		return 3;		
+		return 3;
 	}
 	//HKY85
-	if (Q<Qsmall) 
+	if (Q<Qsmall)
 		failF84=failK80=1;
-	else if (Y<=0 || R<=0 || (tc<=0 && ag<=0)) 
+	else if (Y<=0 || R<=0 || (tc<=0 && ag<=0))
 		failF84=1;
 	else {
 		A=tc/Y+ag/R; B=tc+ag; C=Y*R;
@@ -182,7 +182,7 @@ int YN00::DistanceF84(double n, double P, double Q, double pi4[], double &k_HKY,
 		else {
 			a=-.5*log(a); b=-.5*log(b);
 		}
-		if (b<=0) 
+		if (b<=0)
 			failF84=1;
 		else {
 			k_F84=a/b-1;
@@ -191,7 +191,7 @@ int YN00::DistanceF84(double n, double P, double Q, double pi4[], double &k_HKY,
 			//Standard errors
 			a=A*C/(A*C-C*P/2-(A-B)*Q/2);
 			b=A*(A-B)/(A*C-C*P/2-(A-B)*Q/2)-(A-B-C)/(C-Q/2);
-			SEt=sqrt((a*a*P+b*b*Q-square(a*P+b*Q))/n);			
+			SEt=sqrt((a*a*P+b*b*Q-square(a*P+b*Q))/n);
 		}
 	}
 	//K80
@@ -215,8 +215,8 @@ int YN00::DistanceF84(double n, double P, double Q, double pi4[], double &k_HKY,
 	}
 	if (failK80) {/* try JC69 */
 		if ((P+=Q)>=.75) {
-			failJC69=1; 
-			P=.75*(n-1.)/n; 
+			failJC69=1;
+			P=.75*(n-1.)/n;
 		}
 		t=-.75*log(1-P*4/3.);
 		if (t>99)
@@ -225,7 +225,7 @@ int YN00::DistanceF84(double n, double P, double Q, double pi4[], double &k_HKY,
 			SEt=sqrt(9*P*(1-P)/n)/(3-4*P);
 		}
 	}
-	if (k_HKY>99) 
+	if (k_HKY>99)
 		k_HKY=maxkappa;
 	return(failF84+failK80+failJC69);
 }
@@ -236,34 +236,34 @@ int YN00::DistanceYN00(const string seq1, const string seq2, double &dS,double &
 	double w0=0, dS0=0, dN0=0, accu=5e-4, minomega=1e-5, maxomega=99;
 	double PMatrix[CODON*CODON];
 	if (t==0)
-		t=.5;  
-	if (omega<=0) 
+		t=.5;
+	if (omega<=0)
 		omega=1;
-	for (k=0; k<4; k++) 
+	for (k=0; k<4; k++)
 		fbS[k]=fbN[k]=0;
 	//Count sites of sequence 1
 	S=N=0;
 	CountSites(seq1, St, Nt, fbSt, fbNt);
-	S+=St/2; 
+	S+=St/2;
 	N+=Nt/2;
 	for (j=0; j<4; j++) {
-		fbS[j]+=fbSt[j]/2; 
-		fbN[j]+=fbNt[j]/2; 
+		fbS[j]+=fbSt[j]/2;
+		fbN[j]+=fbNt[j]/2;
 	}
 	//Count sites of sequence 2
 	CountSites(seq2, St, Nt, fbSt, fbNt);
-	S+=St/2; 
+	S+=St/2;
 	N+=Nt/2;
 	for (j=0; j<4; j++) {
-		fbS[j]+=fbSt[j]/2; 
-		fbN[j]+=fbNt[j]/2; 
+		fbS[j]+=fbSt[j]/2;
+		fbN[j]+=fbNt[j]/2;
 	}
-	if (t<0.001 || t>5) 
-		t=0.5; 
+	if (t<0.001 || t>5)
+		t=0.5;
 	if (omega<0.01 || omega>5)
 		omega=.5;
 	for (ir=0; ir<(iteration?nround:1); ir++) {   /* iteration */
-		if (iteration) 
+		if (iteration)
 			GetPMatCodon(PMatrix, kappa, omega);
 		else
 			for (j=0; j<CODON*CODON; j++) {
@@ -277,8 +277,8 @@ int YN00::DistanceYN00(const string seq1, const string seq2, double &dS,double &
 		//nonsynonymous
 		DistanceF84(N, Ndts/N, Ndtv/N, fbN, k_HKY, dN, SEKa);
 		if (dS<1e-9) {
-			status=-1; 
-			omega=maxomega; 
+			status=-1;
+			omega=maxomega;
 		}
 		else {
 			omega=max2(minomega, dN/dS);
@@ -287,10 +287,10 @@ int YN00::DistanceYN00(const string seq1, const string seq2, double &dS,double &
 		if ( fabs(dS-dS0)<accu && fabs(dN-dN0)<accu && fabs(omega-w0)<accu )
 			break;
 		dS0=dS;
-		dN0=dN; 
+		dN0=dN;
 		w0=omega;
 	} //end of for (ir) */
-	if (ir==nround) 
+	if (ir==nround)
 		status=-2;
 	return status;
 }
@@ -312,17 +312,17 @@ int YN00::YNCountDiffs(const string seq1, const string seq2, double &Sdts,double
 			continue;
 		for (i=0; i<2; i++) {
 			b[i][0]=c[i]/16;
-			b[i][1]=(c[i]%16)/4; 
+			b[i][1]=(c[i]%16)/4;
 			b[i][2]=c[i]%4;
 			aa[i]=getAminoAcid(c[i]);
 		}
 		//ndiff: differences of two codons
 		ndiff=0;
 		sts=stv=nts=ntv=0;
-		//dmark[]: position of different codon 
+		//dmark[]: position of different codon
 		for (k=0; k<3; k++) {
 			dmark[k] = -1;
-			if (b[0][k]!=b[1][k]) 
+			if (b[0][k]!=b[1][k])
 				dmark[ndiff++]=k;
 		}
 		snp+=ndiff;
@@ -332,14 +332,14 @@ int YN00::YNCountDiffs(const string seq1, const string seq2, double &Sdts,double
 		if (ndiff==1) {
 			transi=b[0][dmark[0]]+b[1][dmark[0]];
 			transi=(transi==1 || transi==5);
-			if (aa[0]==aa[1])  { 
+			if (aa[0]==aa[1])  {
 				if (transi)
-					sts++; 
+					sts++;
 				else
-					stv++; 
+					stv++;
 			}
 			else {
-				if (transi) 
+				if (transi)
 					nts++;
 				else
 					ntv++;
@@ -353,10 +353,10 @@ int YN00::YNCountDiffs(const string seq1, const string seq2, double &Sdts,double
 					step[i1]=-1;
 				if (ndiff==2) {
 					step[0]=dmark[k];
-					step[1]=dmark[1-k];  
+					step[1]=dmark[1-k];
 				}
 				else {
-					step[0]=k/2; 
+					step[0]=k/2;
 					step[1]=k%2;
 					if (step[0]<=step[1])
 						step[1]++;
@@ -366,7 +366,7 @@ int YN00::YNCountDiffs(const string seq1, const string seq2, double &Sdts,double
 					bt1[i1]=bt2[i1]=b[0][i1];
 				stspath[k]=stvpath[k]=ntspath[k]=ntvpath[k]=0;
 				//ppath[]: probabilty of each path
-				for (i1=0, ppath[k]=1; i1<ndiff; i1++) { 
+				for (i1=0, ppath[k]=1; i1<ndiff; i1++) {
 					bt2[step[i1]]=b[1][step[i1]];
 					//ct[]: mutated codon's ID(0--63)
 					for (i2=0,ct[0]=ct[1]=0; i2<3; i2++) {
@@ -375,53 +375,53 @@ int YN00::YNCountDiffs(const string seq1, const string seq2, double &Sdts,double
 					}
 					//ppath[k]: probabilty of path k
 					ppath[k]*=PMatrix[ct[0]*CODON+ct[1]];
-					for (i2=0; i2<2; i2++) 
+					for (i2=0; i2<2; i2++)
 						aa[i2]=getAminoAcid(ct[i2]);
 					if (aa[1]=='!') {
-						nstop++;  
+						nstop++;
 						ppath[k]=0;
 						break;
 					}
 					transi=b[0][step[i1]]+b[1][step[i1]];
 					transi=(transi==1 || transi==5);  /* transition? */
 					//ts & tr when syn & nonsyn in path k
-					if (aa[0]==aa[1]) { 
+					if (aa[0]==aa[1]) {
 						if (transi)
 							stspath[k]++;
 						else
-							stvpath[k]++; 
+							stvpath[k]++;
 					}
 					else {
 						if (transi)
-							ntspath[k]++; 
+							ntspath[k]++;
 						else
-							ntvpath[k]++; 
+							ntvpath[k]++;
 					}
-					for (i2=0; i2<3; i2++) 
+					for (i2=0; i2<3; i2++)
 						bt1[i2]=bt2[i2];
 				}
 			}  /* for (k,npath) */
 			if (npath==nstop) {  /* all paths through stop codons */
-				if (ndiff==2) { 
-					nts=.5; 
-					ntv=1.5; 
+				if (ndiff==2) {
+					nts=.5;
+					ntv=1.5;
 				}
 				else {
-					nts=.5; 
-					ntv=2.5; 
+					nts=.5;
+					ntv=2.5;
 				}
 			}
 			else {
 				//sum probabilty of all path
 				sump=sumArray(ppath,npath);
-				if (sump>1e-20) {					
+				if (sump>1e-20) {
 					for (k=0;k<npath;k++) { //p: the probabilty of path k
 						p=ppath[k]/sump;
-						sts+=stspath[k]*p; stv+=stvpath[k]*p;  
+						sts+=stspath[k]*p; stv+=stvpath[k]*p;
 						nts+=ntspath[k]*p; ntv+=ntvpath[k]*p;
 					}
 				}
-			}			
+			}
 		}//end of if (ndiff)
 		Sdts+=sts;
 		Sdtv+=stv;
@@ -453,20 +453,20 @@ int YN00::GetPMatCodon(double PMatrix[], double kappa, double omega) {
 			c[0]=getAminoAcid(i);
 			c[1]=getAminoAcid(j);
 			//stop codon
-			if (c[0]=='!' || c[1]=='!')  
+			if (c[0]=='!' || c[1]=='!')
 				continue;
 			//whether two codons only have one difference
 			for (k=0, ndiff=0; k<3; k++) {
 				if (from[k]!=to[k]) {
-					ndiff++; 
-					pos=k; 
+					ndiff++;
+					pos=k;
 				}
-			}			
+			}
 			if (ndiff==1) {
 				//only have one difference
 				PMatrix[i*CODON+j]=1;
 				//transition
-				if ((from[pos]+to[pos]-1)*(from[pos]+to[pos]-5)==0)  
+				if ((from[pos]+to[pos]-1)*(from[pos]+to[pos]-5)==0)
 					PMatrix[i*CODON+j]*=kappa;
 				//nonsynonymous
 				if (c[0]!=c[1])
@@ -474,21 +474,21 @@ int YN00::GetPMatCodon(double PMatrix[], double kappa, double omega) {
 				//diagonal element is equal
 				PMatrix[j*CODON+i]=PMatrix[i*CODON+j];
 			}
-		}			
+		}
 	}
 	//PMatrix[](*Q): transition probability matrix
-	for (i=0; i<CODON; i++) 
-		for (j=0; j<CODON; j++) 
+	for (i=0; i<CODON; i++)
+		for (j=0; j<CODON; j++)
 			PMatrix[i*CODON+j]*=pi[j];
 	//scale the sum of PMat[][j](j=0-63) to zero
-	for (i=0, mr=0; i<CODON; i++) { 
+	for (i=0, mr=0; i<CODON; i++) {
 		PMatrix[i*CODON+i]=-sumArray(PMatrix+i*CODON,CODON);
 		//The sum of transition probability of main diagnoal elements
 		mr-=pi[i]*PMatrix[i*CODON+i];
 	}
 	//calculate exp(PMatrix*t)
 	eigenQREV(PMatrix, pi, pi_sqrt, CODON, npi0, Root, U, V);
-	for (i=0; i<CODON; i++) 
+	for (i=0; i<CODON; i++)
 		Root[i]/=mr;
 	PMatUVRoot(PMatrix, t, CODON, U, V, Root);
 	return 0;
@@ -504,7 +504,7 @@ int YN00::PMatUVRoot (double P[], double t, int n, double U[], double V[], doubl
 			for (j=0, uexpt=U[i*n+k]*expt; j<n; j++)
 				*pP++ += uexpt*V[k*n+j];
 	for (i=0; i<n*n; i++)
-		if (P[i]<smallp) 
+		if (P[i]<smallp)
 			P[i]=0;
 	return (0);
 }
@@ -513,35 +513,35 @@ int YN00::PMatUVRoot (double P[], double t, int n, double U[], double V[], doubl
 int YN00::CountSites(const string seq, double &Stot, double &Ntot,double fbS[],double fbN[]) {
 	int h, i, j, k, c[2], aa[2], b[3], by[3]={16,4,1};
 	double r, S,N;
-	Stot=Ntot=0;  
+	Stot=Ntot=0;
 	initArray(fbS, 4);
 	initArray(fbN, 4);
 	for (h=0; h<seq.length(); h+=3) {
 		//Get codon id and amino acid
 		c[0]=getID(seq.substr(h,3));
-		aa[0]=getAminoAcid(c[0]); 		
+		aa[0]=getAminoAcid(c[0]);
 		for (i=0; i<3; i++) {
-			b[i]=convertChar(seq[h+i]); 
-		}		
+			b[i]=convertChar(seq[h+i]);
+		}
 		for (j=0, S=N=0; j<3; j++) {
 			for (k=0; k<4; k++) {    /* b[j] changes to k */
-				if (k==b[j]) 
+				if (k==b[j])
 					continue;
 				//c[0] change at position j
 				c[1]=c[0]+(k-b[j])*by[j];
 				aa[1]=getAminoAcid(c[1]);
-				if (aa[1]=='!') 
+				if (aa[1]=='!')
 					continue;
-				r=pi[c[1]];				
+				r=pi[c[1]];
 				if (k+b[j]==1 || k+b[j]==5)	//transition
 					r*=kappa;
 				if (aa[0]==aa[1]) { //synonymous
 					S+=r;
-					fbS[b[j]]+=r; //syn probability of A,C,G,T					
+					fbS[b[j]]+=r; //syn probability of A,C,G,T
 				}
 				else { //nonsynonymous
 					N+=r;
-					fbN[b[j]]+=r; //nonsyn probability of A,C,G,T					
+					fbN[b[j]]+=r; //nonsyn probability of A,C,G,T
 				}
 			}
 		}
@@ -550,7 +550,7 @@ int YN00::CountSites(const string seq, double &Stot, double &Ntot,double fbS[],d
 	}
 	//Scale Stot+Ntot to seq.length()
 	r=seq.length()/(Stot+Ntot);
-	Stot*=r; 
+	Stot*=r;
 	Ntot*=r;
 	//get probablity of syn of four nul.
 	r=sumArray(fbS,4);
@@ -563,10 +563,10 @@ int YN00::CountSites(const string seq, double &Stot, double &Ntot,double fbS[],d
 	return 0;
 }
 
-string YN00::Run(string seq1, string seq2) {	
-	t=0.4; 
+string YN00::Run(string seq1, string seq2) {
+	t=0.4;
 	kappa=NA;
-	omega=1;	
+	omega=1;
 	Ks=Ka=0.1;
 	getFreqency(seq1, seq2);
 	GetKappa(seq1, seq2);
@@ -577,39 +577,39 @@ string YN00::Run(string seq1, string seq2) {
 
 //The following functions are used to calculate PMatrix by Taylor.
 int YN00::eigenQREV (double Q[], double pi[], double pi_sqrt[], int n, int npi0, double Root[], double U[], double V[]) {
-/* 
-This finds the eigen solution of the rate matrix Q for a time-reversible 
+/*
+This finds the eigen solution of the rate matrix Q for a time-reversible
 Markov process, using the algorithm for a real symmetric matrix.
-Rate matrix Q = S * diag{pi} = U * diag{Root} * V, 
+Rate matrix Q = S * diag{pi} = U * diag{Root} * V,
 where S is symmetrical, all elements of pi are positive, and U*V = I.
 pi_sqrt[n-npi0] has to be calculated before calling this routine.
 
   [U 0] [Q_0 0] [U^-1 0]    [Root  0]
   [0 I] [0   0] [0    I]  = [0     0]
-  
+
 	Ziheng Yang, 25 December 2001 (ref is CME/eigenQ.pdf)
 	*/
 	int i, j, inew, jnew, nnew=n-npi0, status;
 	//npi0 is the number of stop codons in selected genetic table
 	if (npi0==0) {	//seldom occur
 		//Set U[64*64]
-		for (i=0; i<n; i++) {			
-			for (j=0, U[i*n+i]=Q[i*n+i]; j<i; j++) 
+		for (i=0; i<n; i++) {
+			for (j=0, U[i*n+i]=Q[i*n+i]; j<i; j++)
 				U[i*n+j]=U[j*n+i]=(Q[i*n+j]*pi_sqrt[i]/pi_sqrt[j]);
 		}
 		//Set U[64*64]
 		status=eigenRealSym(U, n, Root, V);
-		for (i=0; i<n; i++) 
+		for (i=0; i<n; i++)
 			for (j=0; j<n; j++)
 				V[i*n+j]=U[j*n+i]*pi_sqrt[j];
-		for (i=0; i<n; i++) 
-			for (j=0; j<n; j++) 
+		for (i=0; i<n; i++)
+			for (j=0; j<n; j++)
 				U[i*n+j] /= pi_sqrt[i];
 	}
 	else {
 		for (i=0, inew=0; i<n; i++) {
 			if (pi[i]) {
-				for (j=0, jnew=0; j<i; j++) 
+				for (j=0, jnew=0; j<i; j++)
 					if (pi[j]) {
 						U[inew*nnew+jnew]=U[jnew*nnew+inew]=Q[i*n+j]*pi_sqrt[inew]/pi_sqrt[jnew];
 						jnew++;
@@ -628,12 +628,12 @@ pi_sqrt[n-npi0] has to be calculated before calling this routine.
 						V[i*n+j]=U[jnew*nnew+inew]*pi_sqrt[jnew];
 						jnew--;
 					}
-					else 
+					else
 						V[i*n+j]=(i==j);
 				inew--;
 			}
-			else 
-				for (j=0; j<n; j++)  
+			else
+				for (j=0; j<n; j++)
 					V[i*n+j]=(i==j);
 		}
 		for (i=n-1, inew=nnew-1; i>=0; i--) {  /* construct U */
@@ -643,11 +643,11 @@ pi_sqrt[n-npi0] has to be calculated before calling this routine.
 						U[i*n+j]=U[inew*nnew+jnew]/pi_sqrt[inew];
 						jnew--;
 					}
-					else 
+					else
 						U[i*n+j]=(i==j);
 					inew--;
 			}
-			else 
+			else
 				for (j=0; j<n; j++)
 					U[i*n+j]=(i==j);
 		}
@@ -656,7 +656,7 @@ pi_sqrt[n-npi0] has to be calculated before calling this routine.
 }
 
 void YN00::HouseholderRealSym(double a[], int n, double d[], double e[]) {
-/* This uses HouseholderRealSym transformation to reduce a real symmetrical matrix 
+/* This uses HouseholderRealSym transformation to reduce a real symmetrical matrix
 a[n*n] into a tridiagonal matrix represented by d and e.
 d[] is the diagonal (eigends), and e[] the off-diagonal.
 	*/
@@ -699,7 +699,7 @@ d[] is the diagonal (eigends), and e[] the off-diagonal.
 						a[j*n+k]-=(f*e[k]+g*a[i*n+k]);
 				}
 			}
-		} 
+		}
 		else
 			e[i]=a[i*n+m];
 		d[i]=h;
@@ -724,10 +724,10 @@ d[] is the diagonal (eigends), and e[] the off-diagonal.
 }
 
 int YN00::EigenTridagQLImplicit(double d[], double e[], int n, double z[]) {
-/* This finds the eigen solution of a tridiagonal matrix represented by d and e.  
+/* This finds the eigen solution of a tridiagonal matrix represented by d and e.
 d[] is the diagonal (eigenvalues), e[] is the off-diagonal
-z[n*n]: as input should have the identity matrix to get the eigen solution of the 
-tridiagonal matrix, or the output from HouseholderRealSym() to get the 
+z[n*n]: as input should have the identity matrix to get the eigen solution of the
+tridiagonal matrix, or the output from HouseholderRealSym() to get the
 eigen solution to the original real symmetric matrix.
 z[n*n]: has the orthogonal matrix as output
 
@@ -813,10 +813,10 @@ void YN00::EigenSort(double d[], double U[], int n) {
 }
 
 int YN00::eigenRealSym(double A[], int n, double Root[], double work[]) {
-/* This finds the eigen solution of a real symmetrical matrix A[n*n].  In return, 
+/* This finds the eigen solution of a real symmetrical matrix A[n*n].  In return,
 A has the right vectors and Root has the eigenvalues. work[n] is the working space.
-The matrix is first reduced to a tridiagonal matrix using HouseholderRealSym(), 
-and then using the QL algorithm with implicit shifts.  
+The matrix is first reduced to a tridiagonal matrix using HouseholderRealSym(),
+and then using the QL algorithm with implicit shifts.
 
   Adapted from routine tqli in Numerical Recipes in C, with reference to LAPACK
   Ziheng Yang, 23 May 2001

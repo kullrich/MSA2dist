@@ -6,7 +6,7 @@
 * Version: 1.0
 * Author: Zhang Zhang  (zhanghzhang@genomics.org.cn)
 * Date: Feb.2, 2005
-* Modified Version: 1.2 
+* Modified Version: 1.2
 * Modified Author: ZZ
 * Modified Date: Apr. 2006
 * Version: 2.0
@@ -21,12 +21,12 @@
 #define VERSION		"2.0.2, July. 2022"
 #define CODONLENGTH 3			//Length of codon
 #define DNASIZE 4				//A C G T
-#define XSIZE DNASIZE*DNASIZE   //Size of one group AXX (X=A,C,G,T) 
+#define XSIZE DNASIZE*DNASIZE   //Size of one group AXX (X=A,C,G,T)
 #define CODON 64				//Codon Size
 //#define NULL 0					//Zero
 #define NA -1					//Not Available
 #define NCODE	23				//Number of genetic codes
-#define NNCODE  NCODE*2			//Double of the number genetic codes		
+#define NNCODE  NCODE*2			//Double of the number genetic codes
 #define SMALLVALUE 1e-6			//Value near to zero
 #define NUMBER_OF_RATES	6		//Number of substitution rates
 #define MODELCOUNT	14			//Number of candidate models
@@ -64,7 +64,7 @@ template<class out_type,class in_value>
 	out_type CONVERT(const in_value & t) {
 		std::stringstream stream;
 		//Put the value 't' into the stream
-		stream<<t;			
+		stream<<t;
 		out_type result;
 		//Put the stream into the 'result'
 		stream>>result;
@@ -77,11 +77,9 @@ public:
 	/* Split string into vector */
 	Rcpp::StringVector splitString(std::string const &str, std::string delim);
 	/* Parse results */
-	std::string parseOutput();	
+	std::string parseOutput();
 	/* Format string for outputting into file */
 	void addString(std::string &result, std::string str, std::string flag="\t");
-	/* Generate a random integer */
-	int getRandom();
 	/* Convert a char-T,C,A,G into a digit 0,1,2,3, respectively */
 	int convertChar(char ch);
 	/* Convert a digit-0,1,2,3 into a char T,C,A,G, respectively */
@@ -137,10 +135,10 @@ protected:
 	/* Total Numbers of substitutions per i-th type site: K[i]=A[i]+B[i] */
 	double K[5];
 	/* 	   T  C  A  G
-		T  -  6  7  8  
+		T  -  6  7  8
 		C  0  -  9  10
 		A  1  3  -  11
-		G  2  4  5  -				*/	
+		G  2  4  5  -				*/
 	/* Transition/transversion rate ratio, tc: between pyrimidines, ag: between purines */
 	double kappa, kappatc, kappaag;
 public:
