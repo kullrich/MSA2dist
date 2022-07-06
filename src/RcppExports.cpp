@@ -11,6 +11,20 @@ Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
 Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
+// rcpp_KaKs
+Rcpp::DataFrame rcpp_KaKs(Rcpp::StringVector cdsstr, const std::string sgc, const std::string method, bool verbose);
+RcppExport SEXP _MSA2dist_rcpp_KaKs(SEXP cdsstrSEXP, SEXP sgcSEXP, SEXP methodSEXP, SEXP verboseSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::StringVector >::type cdsstr(cdsstrSEXP);
+    Rcpp::traits::input_parameter< const std::string >::type sgc(sgcSEXP);
+    Rcpp::traits::input_parameter< const std::string >::type method(methodSEXP);
+    Rcpp::traits::input_parameter< bool >::type verbose(verboseSEXP);
+    rcpp_result_gen = Rcpp::wrap(rcpp_KaKs(cdsstr, sgc, method, verbose));
+    return rcpp_result_gen;
+END_RCPP
+}
 // rcpp_distSTRING
 Rcpp::List rcpp_distSTRING(Rcpp::StringVector dnavector, Rcpp::NumericMatrix scoreMatrix, int ncores);
 RcppExport SEXP _MSA2dist_rcpp_distSTRING(SEXP dnavectorSEXP, SEXP scoreMatrixSEXP, SEXP ncoresSEXP) {
@@ -50,6 +64,7 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
+    {"_MSA2dist_rcpp_KaKs", (DL_FUNC) &_MSA2dist_rcpp_KaKs, 4},
     {"_MSA2dist_rcpp_distSTRING", (DL_FUNC) &_MSA2dist_rcpp_distSTRING, 3},
     {"_MSA2dist_rcpp_pairwiseDeletionAA", (DL_FUNC) &_MSA2dist_rcpp_pairwiseDeletionAA, 2},
     {"_MSA2dist_rcpp_pairwiseDeletionDNA", (DL_FUNC) &_MSA2dist_rcpp_pairwiseDeletionDNA, 2},

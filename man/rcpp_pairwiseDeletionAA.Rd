@@ -7,9 +7,9 @@
 rcpp_pairwiseDeletionAA(aavector, ncores = 1L)
 }
 \arguments{
-\item{aavector}{StringVector}
+\item{aavector}{StringVector [mandatory]}
 
-\item{ncores}{number of cores}
+\item{ncores}{number of cores [default: 1]}
 }
 \value{
 list

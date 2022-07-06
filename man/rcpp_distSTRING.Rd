@@ -7,17 +7,17 @@
 rcpp_distSTRING(dnavector, scoreMatrix, ncores = 1L)
 }
 \arguments{
-\item{dnavector}{StringVector}
+\item{dnavector}{StringVector [mandatory]}
 
-\item{scoreMatrix}{NumericMatrix}
+\item{scoreMatrix}{NumericMatrix [mandatory]}
 
-\item{ncores}{number of cores}
+\item{ncores}{number of cores [default: 1]}
 }
 \value{
 list
 }
 \description{
-calcualtes pairwise distances using a score matrix
+calculates pairwise distances using a score matrix
 }
 \examples{
 ## load example sequence data

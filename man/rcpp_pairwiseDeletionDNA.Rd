@@ -7,9 +7,9 @@
 rcpp_pairwiseDeletionDNA(dnavector, ncores = 1L)
 }
 \arguments{
-\item{dnavector}{StringVector}
+\item{dnavector}{StringVector [mandatory]}
 
-\item{ncores}{number of cores}
+\item{ncores}{number of cores [default: 1]}
 }
 \value{
 list

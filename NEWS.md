@@ -1,3 +1,13 @@
+# Changes in version 1.1.2 (2022-07-05)
+
+## Major changes
+
+* Added KaKs Calculator 2.0 models as rcpp implementation
+
+## Minor improvements and bug fixes
+
+* fixed some typos
+
 # Changes in version 1.1.1 (2022-06-30)
 
 ## Major changes
