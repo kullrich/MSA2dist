@@ -64,9 +64,9 @@
 #' @references "data(hiv):" Ganeshan et al. (1997) Human immunodeficiency virus
 #' type 1 genetic evolution in children with different rates of development of
 #' disease. \emph{J. Virology.} \bold{71(1)}, 663-677.
-#' @references Wang et al. (2009). gamma-MYN: a new algorithm for estimating Ka and
-#' Ks with consideration of variable substitution rates. \emph{Biology Direct},
-#' \bold{4(1)}, 1-18.
+#' @references Wang et al. (2009). gamma-MYN: a new algorithm for estimating Ka
+#' and Ks with consideration of variable substitution rates.
+#' \emph{Biology Direct}, \bold{4(1)}, 1-18.
 #' @examples
 #' ## load example sequence data
 #' data("hiv", package="MSA2dist")
