@@ -12,10 +12,10 @@
 * Modified Version: 2.0.2
 * Modified Author: Kristian K Ullrich (ullrich@evolbio.mpg.de)
 * Modified Date: July.01, 2022
-  References: 
+  References:
   Li WH  (1993)  Unbiased estimation of the Rates of synonymous
   and nonsynonymous substitution. J. Mol. Evol. 36:96-99.
-  Pamilo P, Bianchi NO  (1993)  Evolution of the Zfx and Zfy 
+  Pamilo P, Bianchi NO  (1993)  Evolution of the Zfx and Zfy
   genes: rates and interdependence between the genes. Mol. Biol.
   Evol. 10:271-281.
   Tzeng Y-H, Pan R, Li W-H  (2004)  Comparison of Three Methods
@@ -23,6 +23,7 @@
   Substitutions. Mol. Biol. Evol. 21:2290-2298.
 **********************************************************/
 #include <Rcpp.h>
+// [[Rcpp::plugins(cpp11)]]
 using namespace Rcpp;
 using namespace std;
 #include "LPB93.h"
@@ -55,10 +56,10 @@ int MLPB93::TransitionTransversion(string codon1, string codon2, int pos) {
 	int isSyn=-1;
 	//Ile: ATT, ATC, ATA; Met: ATA
 	if ((codon1=="ATA" && codon2=="ATG" && pos==2)||(codon1=="ATG" && codon2=="ATA" && pos==2)) {
-		isSyn=0;		
+		isSyn=0;
 	}
 	if ((codon1=="ATA" && (codon2=="ATC"||codon2=="ATT") && pos==2) || ( (codon1=="ATC"||codon1=="ATT") && codon2=="ATA" && pos==2)) {
-		isSyn=1;		
+		isSyn=1;
 	}
 	//Arg: CGA, CGG, AGA, AGG
 	if ((codon1=="CGA" && codon2=="AGA" && pos==0)||(codon1=="AGA" && codon2=="CGA" && pos==0)) {
@@ -68,13 +69,15 @@ int MLPB93::TransitionTransversion(string codon1, string codon2, int pos) {
 		isSyn=1;
 	}
 	//Synonymous: A<->G, C<->T
-	//Normal situation	
+	//Normal situation
 	if (isSyn==-1) {
-		int sum = convertChar(codon1[pos]) + convertChar(codon2[pos]);	
-		if (sum==5 || sum==1)
-			isSyn=1;
-		else
-			isSyn=0;
+		int sum = convertChar(codon1[pos]) + convertChar(codon2[pos]);
+		if (sum==5 || sum==1) {
+		  isSyn=1;
+		}
+		else {
+		  isSyn=0;
+		}
 	}
 	int class1=getCodonClass(codon1,pos);
 	int class2=getCodonClass(codon2,pos);

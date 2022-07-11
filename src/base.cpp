@@ -14,6 +14,7 @@
 * Modified Date: July.01, 2022
 *************************************************************/
 #include <Rcpp.h>
+// [[Rcpp::plugins(cpp11)]]
 using namespace Rcpp;
 using namespace std;
 #include "base.h"
@@ -107,7 +108,9 @@ char Base::getAminoAcid(int id) {
 int Base::getNumNonsense(int genetic_code) {
 	int num, i;
 	for (num=i=0; i<CODON; i++) {
-		if (getAminoAcid(i)=='!') num++;
+		if (getAminoAcid(i)=='!') {
+		  num++;
+		}
 	}
 	return num;
 }
@@ -198,7 +201,8 @@ char Base::convertInt(int i) {
 * Return Value: string
 *********************************************/
 string Base::stringtoUpper(string str) {
-	int j;
+	//int j;
+  std::size_t j;
 	for (j=0; str[j]=toupper(str[j]), j<str.length(); j++);
 	return str;
 }
@@ -211,12 +215,16 @@ string Base::stringtoUpper(string str) {
 *********************************************/
 int Base::initArray(double x[], int n, double value) {
 	int i;
-	for (i=0; i<n; i++) x[i] = value;
+	for (i=0; i<n; i++) {
+	  x[i]=value;
+	}
 	return 0;
 }
 int Base::initArray(int x[], int n, int value) {
 	int i;
-	for (i=0; i<n; i++) x[i] = value;
+	for (i=0; i<n; i++) {
+	  x[i]=value;
+	}
 	return 0;
 }
 
@@ -234,7 +242,7 @@ double Base::sumArray(double x[], int end, int begin) {
 }
 int Base::sumArray(int x[], int end, int begin) {
 	int i, sum=0;
-	for (i=begin; i<end; sum += x[i], i++);
+	for (i=begin; i<end; sum+=x[i], i++);
 	return sum;
 }
 
@@ -248,7 +256,7 @@ int Base::sumArray(int x[], int end, int begin) {
 double Base::norm(double x[], int n) {
 	int i;
 	double t=0;
-	for (i=0; i<n; t += square(x[i]), i++);
+	for (i=0; i<n; t+=square(x[i]), i++);
 	return sqrt(t);
 }
 
@@ -260,7 +268,9 @@ double Base::norm(double x[], int n) {
 *********************************************/
 int Base::scaleArray(double scale, double x[], int n) {
 	int i;
-	for (i=0; i<n; i++) x[i] *= scale;
+	for (i=0; i<n; i++) {
+    x[i]*=scale;
+	}
 	return 1;
 }
 
@@ -272,7 +282,9 @@ int Base::scaleArray(double scale, double x[], int n) {
 *********************************************/
 int Base::copyArray(double from[], double to[], int n) {
 	int i;
-	for (i=0; i<n; i++) to[i] = from[i];
+	for (i=0; i<n; i++) {
+	  to[i]=from[i];
+	}
 	return 1;
 }
 
@@ -286,7 +298,7 @@ int Base::copyArray(double from[], double to[], int n) {
 double Base::innerp(double x[], double y[], int n) {
 	int i;
 	double t=0;
-	for (i=0; i<n; t += x[i]*y[i], i++);
+	for (i=0; i<n; t+=x[i]*y[i], i++);
 	return t;
 }
 
@@ -317,7 +329,7 @@ Rcpp::StringVector Base::splitString(std::string const &str, std::string delim) 
     size_t start;
     size_t end=0;
     while ((start=str.find_first_not_of(delim, end))!=std::string::npos) {
-        end = str.find(delim, start);
+        end=str.find(delim, start);
         split.push_back(str.substr(start, end-start));
     }
     return split;
@@ -374,10 +386,11 @@ string Base::parseOutput() {
 	}
 	addString(result, tmp);
 	//Fisher's test: p_value #9
-	if (Sd<SMALLVALUE || Nd<SMALLVALUE || S<SMALLVALUE || N<SMALLVALUE)
-		tmp="NA";
+	if (Sd<SMALLVALUE || Nd<SMALLVALUE || S<SMALLVALUE || N<SMALLVALUE) {
+	  tmp="NA";
+	}
 	else {
-		tmp=CONVERT<string>(fisher(Sd,Nd,S-Sd,N-Nd));
+		tmp=CONVERT<string>(fisher(Sd, Nd, S-Sd, N-Nd));
 	}
 	addString(result, tmp);
 	//Length of compared pairwise sequences #10
@@ -404,7 +417,7 @@ string Base::parseOutput() {
 	}
 	else {
 		tmp=CONVERT<string>(L[0]);
-	    tmp+=":";
+    tmp+=":";
 		tmp+=CONVERT<string>(L[2]);
 		tmp+=":";
 		tmp+=CONVERT<string>(L[4]);
@@ -431,7 +444,7 @@ string Base::parseOutput() {
 	//Si for Li's series' methods(LWL85, LPB93...) #17
 	if (Si[0]!=0.0 || Si[2]!=0.0 || Si[4]!=0.0) { //Si[0], Si[2], Si[4]
 		tmp=CONVERT<string>(Si[0]);
-	    tmp+=":";
+    tmp+=":";
 		tmp+=CONVERT<string>(Si[2]);
 		tmp+=":";
 		tmp+=CONVERT<string>(Si[4]);
@@ -443,7 +456,7 @@ string Base::parseOutput() {
 	//Vi for Li's series' methods(LWL85, LPB93...) #18
 	if (Vi[0]!=0.0 || Vi[2]!=0.0 || Vi[4]!=0.0) { //Vi[0], Vi[2], Vi[4]
 		tmp=CONVERT<string>(Vi[0]);
-	    tmp+=":";
+    tmp+=":";
 		tmp+=CONVERT<string>(Vi[2]);
 		tmp+=":";
 		tmp+=CONVERT<string>(Vi[4]);
@@ -478,32 +491,47 @@ string Base::parseOutput() {
 	tmp+=")";
 	addString(result, tmp);
 	//Maximum Likelihood Value #22
-	if (lnL==NA) tmp="NA";
-	else tmp=CONVERT<string>(lnL);
+	if (lnL==NA) {
+	  tmp="NA";
+	}
+	else {
+	  tmp=CONVERT<string>(lnL);
+	}
 	addString(result, tmp);
 	//AICc #23
-	if (AICc==NA) tmp="NA";
-	else tmp=CONVERT<string>(AICc);
+	if (AICc==NA) {
+	  tmp="NA";
+	}
+	else {
+	  tmp=CONVERT<string>(AICc);
+	}
 	addString(result, tmp);
 	//Akaike weight in model selection #24
-	if (AkaikeWeight==NA) tmp="NA";
-	else tmp=CONVERT<string>(AkaikeWeight);
+	if (AkaikeWeight==NA) {
+	  tmp="NA";
+	}
+	else {
+	  tmp=CONVERT<string>(AkaikeWeight);
+	}
 	addString(result, tmp);
 	//Selected Model according to AICc #25
-	if (model==""||model.length()==0) tmp="NA";
-	else tmp=model;
+	if (model==""||model.length()==0) {
+	  tmp="NA";
+	}
+	else {
+	  tmp=model;
+	}
 	/* addString(result, tmp, "\n"); */
 	addString(result, tmp, "");
-/*
+  /*
 	//Standard Errors
-	if (SEKa==NA) tmp = "NA";
-	else tmp = CONVERT<string>(SEKa);
+	if (SEKa==NA) {tmp="NA";}
+	else {tmp=CONVERT<string>(SEKa);}
 	addString(result, tmp, "\t");
-
-	if (SEKs==NA) tmp = "NA";
-	else tmp = CONVERT<string>(SEKs);
+	if (SEKs==NA) {tmp="NA";}
+	else {tmp=CONVERT<string>(SEKs);}
 	addString(result, tmp, "\n");
-*/
+  */
 	return result;
 }
 
@@ -583,5 +611,5 @@ double Base::factorial(double n) {
 		x+=0.9999999999995183;
 		temp=log(x)-5.58106146679532777-n+(n-0.5)*log(n+6.5);
 	}
-	return (temp);
+	return temp;
 }

@@ -12,8 +12,8 @@ using namespace Rcpp;
 //' @name rcpp_pairwiseDeletionAA
 //' @description returns number of AA sites used
 //' @return list
-//' @param aavector StringVector
-//' @param ncores number of cores
+//' @param aavector StringVector [mandatory]
+//' @param ncores number of cores [default: 1]
 //' @examples
 //' ## load example sequence data
 //' data("hiv", package="MSA2dist")
@@ -47,39 +47,40 @@ Rcpp::List rcpp_pairwiseDeletionAA( Rcpp::StringVector aavector, int ncores = 1 
   dist_mat[".S"]=-1.0;dist_mat[".R"]=-1.0;dist_mat[".L"]=-1.0;dist_mat[".P"]=-1.0;dist_mat[".T"]=-1.0;dist_mat[".A"]=-1.0;dist_mat[".V"]=-1.0;dist_mat[".G"]=-1.0;dist_mat[".I"]=-1.0;dist_mat[".F"]=-1.0;dist_mat[".Y"]=-1.0;dist_mat[".C"]=-1.0;dist_mat[".H"]=-1.0;dist_mat[".Q"]=-1.0;dist_mat[".N"]=-1.0;dist_mat[".K"]=-1.0;dist_mat[".D"]=-1.0;dist_mat[".E"]=-1.0;dist_mat[".M"]=-1.0;dist_mat[".W"]=-1.0;dist_mat[".."]=-1.0;;dist_mat[".-"]=-1.0;;dist_mat[".X"]=-1.0;
   dist_mat["-S"]=-1.0;dist_mat["-R"]=-1.0;dist_mat["-L"]=-1.0;dist_mat["-P"]=-1.0;dist_mat["-T"]=-1.0;dist_mat["-A"]=-1.0;dist_mat["-V"]=-1.0;dist_mat["-G"]=-1.0;dist_mat["-I"]=-1.0;dist_mat["-F"]=-1.0;dist_mat["-Y"]=-1.0;dist_mat["-C"]=-1.0;dist_mat["-H"]=-1.0;dist_mat["-Q"]=-1.0;dist_mat["-N"]=-1.0;dist_mat["-K"]=-1.0;dist_mat["-D"]=-1.0;dist_mat["-E"]=-1.0;dist_mat["-M"]=-1.0;dist_mat["-W"]=-1.0;dist_mat["-."]=-1.0;;dist_mat["--"]=-1.0;;dist_mat["-X"]=-1.0;
   dist_mat["XS"]=-1.0;dist_mat["XR"]=-1.0;dist_mat["XL"]=-1.0;dist_mat["XP"]=-1.0;dist_mat["XT"]=-1.0;dist_mat["XA"]=-1.0;dist_mat["XV"]=-1.0;dist_mat["XG"]=-1.0;dist_mat["XI"]=-1.0;dist_mat["XF"]=-1.0;dist_mat["XY"]=-1.0;dist_mat["XC"]=-1.0;dist_mat["XH"]=-1.0;dist_mat["XQ"]=-1.0;dist_mat["XN"]=-1.0;dist_mat["XK"]=-1.0;dist_mat["XD"]=-1.0;dist_mat["XE"]=-1.0;dist_mat["XM"]=-1.0;dist_mat["XW"]=-1.0;dist_mat["X."]=-1.0;;dist_mat["X-"]=-1.0;;dist_mat["XX"]=-1.0;
-  int n = aavector.size();
+  int n=aavector.size();
   Rcpp::NumericMatrix distMatrix(n, n);
-  CharacterVector aavectornames = aavector.attr("names");
-  colnames(distMatrix) = aavectornames;
-  rownames(distMatrix) = aavectornames;
+  CharacterVector aavectornames=aavector.attr("names");
+  colnames(distMatrix)=aavectornames;
+  rownames(distMatrix)=aavectornames;
   Rcpp::NumericMatrix sitesMatrix(n, n);
-  colnames(sitesMatrix) = aavectornames;
-  rownames(sitesMatrix) = aavectornames;
-  int nsites = aavector[1].size();
+  colnames(sitesMatrix)=aavectornames;
+  rownames(sitesMatrix)=aavectornames;
+  int nsites=aavector[1].size();
   RcppThread::ProgressBar bar(n, 1);
   RcppThread::parallelFor(0, n, [&] (int i) {
-    for( int j=i; j < n; j++ ){
-      double eqnum = 0;
-      int ij_n = nsites;
-      for( int s=0; s < nsites; s++){
+    for( int j=i; j < n; j++ ) {
+      double eqnum=0;
+      int ij_n=nsites;
+      for( int s=0; s < nsites; s++) {
         std::string is;
         std::string js;
-        is = aavector[i][s];
-        js = aavector[j][s];
+        is=aavector[i][s];
+        js=aavector[j][s];
         double ij_dist;
-        ij_dist = dist_mat[is+js];
-        if(ij_dist >= 0.0){
-          eqnum = eqnum + ij_dist;
-        } else {
-          ij_n = ij_n -1;
+        ij_dist=dist_mat[is+js];
+        if(ij_dist >= 0.0) {
+          eqnum=eqnum+ij_dist;
+        }
+        else {
+          ij_n=ij_n-1;
         };
       }
-      distMatrix(i,j) = eqnum / ij_n;
-      distMatrix(j,i) = eqnum / ij_n;
-      sitesMatrix(i,j) = ij_n;
-      sitesMatrix(j,i) = ij_n;
+      distMatrix(i,j)=eqnum/ij_n;
+      distMatrix(j,i)=eqnum/ij_n;
+      sitesMatrix(i,j)=ij_n;
+      sitesMatrix(j,i)=ij_n;
     };
     bar++;
   }, ncores);
-  return Rcpp::List::create(Rcpp::Named("sitesUsed") = sitesMatrix);
+  return Rcpp::List::create(Rcpp::Named("sitesUsed")=sitesMatrix);
 }

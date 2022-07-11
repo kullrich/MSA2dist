@@ -109,7 +109,7 @@ consideration of unequal transitional substitutions.
 type 1 genetic evolution in children with different rates of development of
 disease. \emph{J. Virology.} \bold{71(1)}, 663-677.
 
-Wang et al. (2009). γ-MYN: a new algorithm for estimating Ka and
+Wang et al. (2009). gamma-MYN: a new algorithm for estimating Ka and
 Ks with consideration of variable substitution rates. \emph{Biology Direct},
 \bold{4(1)}, 1-18.
 }

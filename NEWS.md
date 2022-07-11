@@ -1,3 +1,11 @@
+# Changes in version 1.1.3 (2022-07-11)
+
+## Major changes
+
+## Minor improvements and bug fixes
+
+* fixed rcpp indentation Warnings
+
 # Changes in version 1.1.2 (2022-07-05)
 
 ## Major changes

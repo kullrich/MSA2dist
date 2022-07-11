@@ -12,9 +12,9 @@
 * Modified Version: 2.0.2
 * Modified Author: Kristian K Ullrich (ullrich@evolbio.mpg.de)
 * Modified Date: July.01, 2022
-  References: 
+  References:
   Li WH, Wu CI, Luo CC  (1985)  A new method for
-  estimating synonymous and nonsynonymous rates of nucleotide 
+  estimating synonymous and nonsynonymous rates of nucleotide
   substitution considering the relative likelihood of nucleotide
   and codon changes. Mol. Biol. Evol. 2:150-174.
   Tzeng Y-H, Pan R, Li W-H  (2004)  Comparison of Three Methods
@@ -22,14 +22,17 @@
   Substitutions. Mol. Biol. Evol. 21:2290-2298.
 **********************************************************/
 #include <Rcpp.h>
+// [[Rcpp::plugins(cpp11)]]
 using namespace Rcpp;
 using namespace std;
 #include "LWL85.h"
 
 LWL85::LWL85() {
 	int i;
-	name="LWL";	
-	for (i=0; i<5; i++) K[i]=A[i]=B[i]=Pi[i]=Qi[i]=0;
+	name="LWL";
+	for (i=0; i<5; i++) {
+	  K[i]=A[i]=B[i]=Pi[i]=Qi[i]=0;
+	}
 }
 
 /************************************************
@@ -45,27 +48,32 @@ void LWL85::CountSiteAndDiff(string codon1, string codon2) {
 	string temp1="", temp2="";
 	int sum=1, stop=0;
 	//Count sites
-	for (i=0; i<CODONLENGTH; i++) {		
+	for (i=0; i<CODONLENGTH; i++) {
 		L[getCodonClass(codon1,i)]++;
 		L[getCodonClass(codon2,i)]++;
 	}
 	//Count differences
 	for (i=0; i<3; i++) {
 		diff[i]=-1;
-		if (codon1[i]!=codon2[i]) { 
+		if (codon1[i]!=codon2[i]) {
 			diff[num]=i;
 			num++;
-		}		
+		}
 	}
 	//Two codons are identical
-	if (num==0) return;
+	if (num==0) {
+	  return;
+	}
 	//Sum is the number of evolution pathway.
-	for (i=1; i<=num; i++) sum*=i;
+	for (i=1; i<=num; i++) {
+	  sum*=i;
+	}
 	snp+=num;
-	for (i=0; i<CODONLENGTH; i++)
-		Si_temp[2*i]=Vi_temp[2*i]=0.0;
+	for (i=0; i<CODONLENGTH; i++) {
+	  Si_temp[2*i]=Vi_temp[2*i]=0.0;
+	}
 	//One difference
-	if (num==1) {		
+	if (num==1) {
 		TransitionTransversion(codon1, codon2, diff[0]);
 	}
 	//Two differences: 2 pathways for evolution (i,j)
@@ -85,13 +93,13 @@ void LWL85::CountSiteAndDiff(string codon1, string codon2) {
 					}
 				}
 			}
-		}	
+		}
 	}
 	//Three differences: 6 pathways for evolution (i,j,k)
-	if (num==3) {	
+	if (num==3) {
 		for (i=0; i<3; i++) {
-        	for (j=0; j<3; j++) {
-        		for (k=0; k<3; k++) {    				
+      for (j=0; j<3; j++) {
+        for (k=0; k<3; k++) {
 					if ((i!=j) && (i!=k) && (j!=k)) {
 						temp1=codon1;
 						temp1[diff[i]]=codon2[diff[i]];
@@ -99,12 +107,13 @@ void LWL85::CountSiteAndDiff(string codon1, string codon2) {
 						temp2[diff[j]]=codon2[diff[j]];
 						if (getAminoAcid(temp1)!='!' && getAminoAcid(temp2)!='!') {
 							//pathway: codon1 <-> temp1 <-> temp2 <-> codon2
-							TransitionTransversion(codon1, temp1, diff[i]);							
-							TransitionTransversion(temp1, temp2, diff[j]);														
+							TransitionTransversion(codon1, temp1, diff[i]);
+							TransitionTransversion(temp1, temp2, diff[j]);
 							TransitionTransversion(temp2, codon2, diff[k]);
 						}
-						else
-							stop++;
+						else {
+              stop++;
+            }
 					}
 				}
 			}
@@ -141,7 +150,7 @@ int LWL85::getCodonClass(string codon, int pos) {
 	else if (codonClass==3) {
 		codonClass=4;
 	}
-	return codonClass;		
+	return codonClass;
 }
 
 /************************************************
@@ -154,7 +163,7 @@ int LWL85::getCodonClass(string codon, int pos) {
 *************************************************/
 int LWL85::TransitionTransversion(string codon1, string codon2, int pos) {
 	//1:synonymous, 0:nonsynonymous
-	int isSyn=0;	
+	int isSyn=0;
 	/* Follow kakstools.py sent from Prof.Li WH */
 	//CGA, CGG, AGA, AGG
 	if ((codon1=="CGA" && codon2=="AGA" && pos==0)||(codon1=="AGA" && codon2=="CGA" && pos==0)) {
@@ -162,19 +171,20 @@ int LWL85::TransitionTransversion(string codon1, string codon2, int pos) {
 	}
 	if ((codon1=="CGG" && codon2=="AGG" && pos==0)||(codon1=="AGG" && codon2=="CGG" && pos==0)) {
 		isSyn=1;
-	}	
-	if (isSyn==1) {		
+	}
+	if (isSyn==1) {
 		int c1=getCodonClass(codon1,pos);
 		int c2=getCodonClass(codon2,pos);
-		Si_temp[c1]+=0.5;	//different from the following 
+		Si_temp[c1]+=0.5;	//different from the following
 		Vi_temp[c2]+=0.5;
 		return 1;
 	}
 	/* Normal situation */
-	//Synonymous: T(0)<->C(1), A(2)<->G(3) 	
+	//Synonymous: T(0)<->C(1), A(2)<->G(3)
 	int sum=convertChar(codon1[pos])+convertChar(codon2[pos]);
-	if (sum==5 || sum==1)
-		isSyn=1;
+	if (sum==5 || sum==1) {
+	  isSyn=1;
+	}
 	int class1=getCodonClass(codon1,pos);
 	int class2=getCodonClass(codon2,pos);
 	if (isSyn==1) {
@@ -195,53 +205,54 @@ int LWL85::TransitionTransversion(string codon1, string codon2, int pos) {
 * Return Value: void
 *************************************************/
 void LWL85::preProcess(string seq1, string seq2) {
-	long i;
+	//long i;
+	std::size_t i;
 	double ts=0, tv=0;
 	double ai[5], bi[5];
-	for (i=0; i<seq1.length(); i+=3) {		
+	for (i=0; i<seq1.length(); i+=3) {
 		CountSiteAndDiff(seq1.substr(i,3), seq2.substr(i,3));
 	}
-	for (i=0; i<5; i+=2) {		
+	for (i=0; i<5; i+=2) {
 		ai[i]=bi[i]=0.0;
 		ts+=Si[i];
 		tv+=Vi[i];
 		L[i]=L[i]/2.0;
 		Pi[i]=Si[i]/L[i];
 		Qi[i]=Vi[i]/L[i];
-		if ((1 - 2*Pi[i] - Qi[i])>0 && (1 - 2*Qi[i])>0) {
+		if ((1-2*Pi[i] - Qi[i])>0 && (1-2*Qi[i])>0) {
 			ai[i]=1/(1-2*Pi[i]-Qi[i]);
 			if ((fabs(GAMMA-0.2)<SMALLVALUE)||GAMMA==-1) {
-			    name="GLWL";
+        name="GLWL";
 			}
 			if ((fabs(GAMMA-0.6)<SMALLVALUE)||GAMMA==4||GAMMA==-2) {
-			    name="GMLWL";
+        name="GMLWL";
 			}
 			if ((GAMMA==1||GAMMA==-3)&&(name=="LPB")) {
-			    name="GLPB";
+        name="GLPB";
 			}
 			if ((GAMMA==1||GAMMA==-4)&&(name=="MLPB")) {
-			    name="GMLPB";
+        name="GMLPB";
 			}
 			if ((fabs(GAMMA-0.2)<SMALLVALUE)||(fabs(GAMMA-0.6)<SMALLVALUE)||GAMMA==4||GAMMA==1) {
-			    ai[i]=1-2*Pi[i]-Qi[i];
+        ai[i]=1-2*Pi[i]-Qi[i];
 				ai[i]=pow(ai[i], -1.0/GAMMA)-1;
 			}
 			bi[i]=1/(1-2*Qi[i]);
 			if ((fabs(GAMMA-0.2)<SMALLVALUE)||(fabs(GAMMA-0.6)<SMALLVALUE)||GAMMA==4||GAMMA==1) {
-				bi[i] = 1 - 2*Qi[i];
-				bi[i] = pow(bi[i], -1.0/GAMMA)-1;
+				bi[i]=1-2*Qi[i];
+				bi[i]=pow(bi[i], -1.0/GAMMA)-1;
 			}
-			//zhangyubin add 
+			//zhangyubin add
 		}
 		if ((fabs(GAMMA-0.2)<SMALLVALUE)||(fabs(GAMMA-0.6)<SMALLVALUE)||GAMMA==4||GAMMA==1) {
-			B[i]=GAMMA*0.5*bi[i];		
+			B[i]=GAMMA*0.5*bi[i];
 			A[i]=GAMMA*0.5*ai[i]-0.25*GAMMA*bi[i];
 			K[i]=A[i]+B[i];
-		} 
+		}
 		else {
-            if (ai[i]>0 && bi[i]>0) {
-			    if (log(bi[i])>=0) {
-					B[i]=0.5*log(bi[i]);
+      if (ai[i]>0 && bi[i]>0) {
+        if (log(bi[i])>=0) {
+          B[i]=0.5*log(bi[i]);
 				}
 				if ((0.5*log(ai[i])-0.25*log(bi[i]))>=0) {
 					A[i]=0.5*log(ai[i])-0.25*log(bi[i]);
@@ -250,10 +261,12 @@ void LWL85::preProcess(string seq1, string seq2) {
 			}
 		}
 	}
-	if (tv>0)
-		kappa=2*ts/tv;
-	else
-		kappa=2;
+	if (tv>0) {
+	  kappa=2*ts/tv;
+	}
+	else {
+	  kappa=2;
+	}
 	//For output formatting
 	KAPPA[0]=KAPPA[1]=kappa;
 	return;
@@ -270,7 +283,7 @@ string LWL85::Run(string seq1, string seq2) {
 	S=L[2]/3+L[4];
 	N=L[0]+2*L[2]/3;
 	Sd=L[2]*A[2]+L[4]*K[4];
-	Ks=Sd/S;	
+	Ks=Sd/S;
 	Nd=L[0]*K[0]+L[2]*B[2];
 	Ka=Nd/N;
 	t=(S*Ks+N*Ka)/(S+N);
@@ -287,10 +300,10 @@ int MLWL85::TransitionTransversion(string codon1, string codon2, int pos) {
 	int isSyn=-1;
 	//Ile: ATT, ATC, ATA; Met: ATA
 	if ((codon1=="ATA" && codon2=="ATG" && pos==2)||(codon1=="ATG" && codon2=="ATA" && pos==2)) {
-		isSyn=0;		
+		isSyn=0;
 	}
 	if ((codon1=="ATA" && (codon2=="ATC"||codon2=="ATT") && pos==2) || ( (codon1=="ATC"||codon1=="ATT") && codon2=="ATA" && pos==2)) {
-		isSyn=1;		
+		isSyn=1;
 	}
 	//Arg: CGA, CGG, AGA, AGG
 	if ((codon1=="CGA" && codon2=="AGA" && pos==0)||(codon1=="AGA" && codon2=="CGA" && pos==0)) {
@@ -300,13 +313,15 @@ int MLWL85::TransitionTransversion(string codon1, string codon2, int pos) {
 		isSyn=1;
 	}
 	//Synonymous: A<->G, C<->T
-	//Normal situation	
+	//Normal situation
 	if (isSyn==-1) {
-		int sum = convertChar(codon1[pos]) + convertChar(codon2[pos]);	
-		if (sum==5 || sum==1)
-			isSyn=1;
-		else
-			isSyn=0;
+		int sum=convertChar(codon1[pos])+convertChar(codon2[pos]);
+		if (sum==5 || sum==1) {
+		  isSyn=1;
+		}
+		else {
+		  isSyn=0;
+		}
 	}
 	int class1=getCodonClass(codon1,pos);
 	int class2=getCodonClass(codon2,pos);
@@ -323,11 +338,12 @@ int MLWL85::TransitionTransversion(string codon1, string codon2, int pos) {
 
 /* One of differences between MLWL85 and LWL85 is allowing for kappa in S and N */
 string MLWL85::Run(string stra, string strb) {
-	long i;
+	//long i;
+  std::size_t i;
 	double ts=0.0, tv=0.0;	//Transition, Transversion
 	double ai[5], bi[5];
 	for (i=0; i<stra.length(); i+=3) {
-		this->CountSiteAndDiff(stra.substr(i,3), strb.substr(i,3));
+		this->CountSiteAndDiff(stra.substr(i, 3), strb.substr(i, 3));
 	}
 	for (i=0; i<5; i+=2) {
 		ai[i]=bi[i]=0;
@@ -336,7 +352,7 @@ string MLWL85::Run(string stra, string strb) {
 		L[i]=L[i]/2.0;
 		Pi[i]=Si[i]/L[i];
 		Qi[i]=Vi[i]/L[i];
-		if ((1 - 2*Pi[i] - Qi[i])>0 &&  (1 - 2*Qi[i])>0) {
+		if ((1-2*Pi[i]-Qi[i])>0 &&  (1-2*Qi[i])>0) {
 			ai[i]=1/(1-2*Pi[i]-Qi[i]);
 			if (GAMMA==4||(fabs(GAMMA-0.6)<SMALLVALUE)|(GAMMA==-1)) {
 				name="GMLWL";
@@ -350,19 +366,19 @@ string MLWL85::Run(string stra, string strb) {
 				bi[i]=1-2*Qi[i];
 				bi[i]=pow(bi[i], -1.0/GAMMA)-1;
 			}
-			//zhangyubin add 
+			//zhangyubin add
 		}
 		if (GAMMA==4||(fabs(GAMMA-0.6)<SMALLVALUE)) {
-			B[i]=GAMMA*0.5*bi[i];		
+			B[i]=GAMMA*0.5*bi[i];
 			A[i]=GAMMA*0.5*ai[i]-0.25*GAMMA*bi[i];
 			K[i]=A[i]+B[i];
-		} 
+		}
 		else {
 			if (ai[i]>0 && bi[i]>0) {
 				if (log(bi[i])>=0) {
 					B[i]=0.5*log(bi[i]);
 				}
-				if ((0.5*log(ai[i]) - 0.25*log(bi[i]))>=0) {
+				if ((0.5*log(ai[i])-0.25*log(bi[i]))>=0) {
 					A[i]=0.5*log(ai[i])-0.25*log(bi[i]);
 				}
 				K[i]=A[i]+B[i];
@@ -370,24 +386,26 @@ string MLWL85::Run(string stra, string strb) {
 		}
 	}
 	kappa=2.0*ts/tv;
-	if (ts<SMALLVALUE || tv<SMALLVALUE) kappa=1;
+	if (ts<SMALLVALUE || tv<SMALLVALUE) {
+	  kappa=1;
+	}
 	KAPPA[0]=KAPPA[1]=kappa;
 	if (kappa>2.0) {
 		S=(kappa-1)*L[2]/(kappa+1)+L[4];
-		N=L[0]+2*L[2]/(kappa+1);		
+		N=L[0]+2*L[2]/(kappa+1);
 	}
 	else {
 		if (kappa>0.5) {
 			S=(kappa-0.5)*L[2]/(kappa+1.5)+L[4];
-			N=L[0]+2*L[2]/(kappa+1.5);		
+			N=L[0]+2*L[2]/(kappa+1.5);
 		}
 		else {
 			S=L[2]/3+L[4];
-			N=2*L[2]/3+L[0];			
+			N=2*L[2]/3+L[0];
 		}
 	}
 	Sd=L[2]*A[2]+L[4]*K[4];
-	Ks=Sd/S;		
+	Ks=Sd/S;
 	Nd=L[0]*K[0]+L[2]*B[2];
 	Ka=Nd/N;
 	t=(S*Ks+N*Ka)/(S+N);

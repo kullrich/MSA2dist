@@ -14,6 +14,7 @@
 * Modified Date: July.01, 2022
 ****************************************************************/
 #include <Rcpp.h>
+// [[Rcpp::plugins(cpp11)]]
 using namespace Rcpp;
 using namespace std;
 #include "KaKs.h"
@@ -46,7 +47,9 @@ Rcpp::DataFrame rcpp_KaKs( Rcpp::StringVector cdsstr,
     Rcpp::DataFrame results_df;
 	try {
 		KAKS kk;
-		if (!kk.Run(cdsstr, sgc, method, verbose)) throw 1;
+		if (!kk.Run(cdsstr, sgc, method, verbose)) {
+      throw 1;
+    }
 		results_df=kk.results_df;
 	}
 	catch (...) {
