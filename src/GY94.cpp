@@ -274,16 +274,16 @@ void GY94::EncodeSeqs(void) {
 
 int GY94::GetCodonFreqs(double pi[]) {
 	//int n=com.ncode, i, j, ic, b[3];
-  std::size_t i;
-  int n=com.ncode, j, ic, b[3];
+  std::size_t ii;
+  int n=com.ncode, i, j, ic, b[3];
 	double fb3x4[12], fb4[4];
 	int flag[CODON];
-	for (i=0, initArray(flag, 64); i<str1.length(); i+=3) {
-		j=getID(str1.substr(i, 3));
+	for (ii=0, initArray(flag, 64); ii<str1.length(); ii+=3) {
+		j=getID(str1.substr(ii, 3));
 		if (getAminoAcid(j)!='!') {
 		  flag[j]=1;
 		}
-		j=getID(str2.substr(i,3));
+		j=getID(str2.substr(ii, 3));
 		if (getAminoAcid(j)!='!') {
 		  flag[j]=1;
 		}
@@ -1147,13 +1147,11 @@ int GY94::EigenQc (int getstats, double blength, double *S, double *dS, double *
   int n=Nsensecodon, i, j, k, ic1, ic2, aa1, aa2;
 	int ndiff, pos=0, from[3], to[3];
 	double mr, rs0, ra0, rs, ra; /* rho's */
-	//double d4=0, d0[3],d[3],ts[3],tv[3];  /* rates at positions and 4-fold sites */
+	//double d4=0, d0[3], d[3], ts[3], tv[3];  /* rates at positions and 4-fold sites */
   //double d0[3], d[3], ts[3], tv[3];  /* rates at positions and 4-fold sites */
-  double d0[3], ts[3], tv[3];  /* rates at positions and 4-fold sites */
 	double *pi=com.pi, w=-1, pijQij;
 	double space_pisqrt[CODON];
 	//for (i=0; i<3; d[i]=d0[i]=ts[i]=tv[i]=0, i++);
-	for (i=0; i<3; d0[i]=ts[i]=tv[i]=0, i++);
 	initArray(Q, n*n);
 	//Equal codon frequency
 	if (model=="JC" || model=="K2P" || model=="TNEF" || model=="K3P"|| model=="TIMEF" ||model=="TVMEF"|| model=="SYM") {

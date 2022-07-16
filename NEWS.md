@@ -1,3 +1,11 @@
+# Changes in version 1.1.4 (2022-07-16)
+
+## Major changes
+
+## Minor improvements and bug fixes
+
+* fixed rcpp Warnings
+
 # Changes in version 1.1.3 (2022-07-11)
 
 ## Major changes

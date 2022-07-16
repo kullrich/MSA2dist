@@ -395,22 +395,30 @@ bool KAKS::calculateKaKs() {
 		}
     //2009 June added by ZhangYubin for Gamma  started
 		if (gmyn||gng86||gyn00||glwl85||gmlwl85||glpb93||gmlpb93) {
-      //float fka,fks,fkaks;
+      //float fka, fks, fkaks;
       float fkaks;
+		  fkaks=0.0;
       string tresult;
       tresult=result;
+      if (VERBOSE) {
+        Rcpp::Rcout<<"tresult:"<<endl;
+        Rcpp::Rcout<<tresult<<endl;
+      }
+      addString(tresult, "\n", "");
+      /*
       if (temp==0) {
         tresult=tresult.replace(0, tresult.find('\n')+1, "");
       }
+      */
       temp++;
-      int j,k;
+      int j, k;
       j=tresult.find('\n');
       string linecontent=tresult.substr(0, j+1);
       linecontent[linecontent.length()-1]='\t';
       tresult=tresult.replace(0, j+1, "");
       k=1;
       while((j=linecontent.find('\t'))>0) {
-        string temp=linecontent.substr(0,j).c_str();
+        string temp=linecontent.substr(0, j).c_str();
         /*
         if (k==3) {
           fka=atof(temp.c_str());
@@ -419,12 +427,18 @@ bool KAKS::calculateKaKs() {
           fks=atof(temp.c_str());
         }
         */
-        if (k==5) {
+        //if (k==5) {
+        if (k==8) {
           fkaks=atof(temp.c_str());
           //goto att;
         }
         linecontent=linecontent.replace(0, j+1, "");
         k++;
+      }
+      if (VERBOSE) {
+        Rcpp::Rcout<<"gmyn||gng86||gyn00||glwl85||gmlwl85||glpb93||gmlpb93"<<endl;
+        Rcpp::Rcout<<"fkaks:"<<endl;
+        Rcpp::Rcout<<fkaks<<endl;
       }
       if ((!myn)&&(!ng86)&&(!lwl85)&&(!mlwl85)&&(!lpb93)&&(!mlpb93)&&(!yn00)) {
         //||(gmlpb93&&myn))//&&(!gy94)&&(!ms)&&(!ma))
