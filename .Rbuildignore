@@ -6,3 +6,4 @@
 ^public$
 ^.gitlab-ci.yml$
 ^CODE_OF_CONDUCT.md$
+^README\.md$
