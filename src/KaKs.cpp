@@ -92,7 +92,8 @@ int KAKS::Initialize() {
 	seq_filename=output_filename=detail_filename="";
 	genetic_code=1;
 	number=0;
-	results_df=Rcpp::DataFrame::create(Named("rownames")=titleInfo);
+	results_vec={};
+	results_names={};
 	return 1;
 }
 
@@ -556,13 +557,16 @@ bool KAKS::calculateKaKs() {
       Rcpp::Rcout<<result<<endl;
 		}
 		//Add results to data frame
+		/*
 		Rcpp::StringVector tsplit;
 		tsplit=splitString(result, "\t");
 		if (VERBOSE) {
       Rcpp::Rcout<<tsplit<<endl;
 		}
+		*/
 		string colname_tmp=seq1_name+'_'+seq2_name;
-		results_df.push_back(tsplit, colname_tmp);
+		results_vec.push_back(result);
+		results_names.push_back(colname_tmp);
 		result="";
 	}
 	catch (...) {

@@ -3,7 +3,7 @@ Type: Package
 Title: MSA2dist calculates pairwise distances between all sequences of a
     DNAStringSet or a AAStringSet using a custom score matrix and conducts
     codon based analysis
-Version: 1.1.4
+Version: 1.1.5
 Authors@R: 
     person(given = "Kristian K",
            family = "Ullrich",
@@ -55,4 +55,4 @@ NeedsCompilation: yes
 SystemRequirements: C++11
 URL: https://gitlab.gwdg.de/mpievolbio-it/MSA2dist, https://mpievolbio-it.pages.gwdg.de/MSA2dist/
 BugReports: https://gitlab.gwdg.de/mpievolbio-it/MSA2dist/issues
-RoxygenNote: 7.2.0
+RoxygenNote: 7.2.1

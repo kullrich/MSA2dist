@@ -30,7 +30,8 @@
 #' @importFrom foreach foreach %do% %dopar%
 #' @importFrom tidyr %>% as_tibble pivot_longer
 #' @importFrom dplyr slice left_join
-#' @importFrom tibble column_to_rownames
+#' @importFrom tibble column_to_rownames add_column
+#' @importFrom stringr str_split
 #' @seealso \code{\link[seqinr]{kaks}}
 #' @references "MS/MA/GNG/GLWL/GLPB/GMLWL/GMLPB/GYN:" Wang et al. (2010)
 #' KaKs_Calculator 2.0: a toolkit incorporating
@@ -266,7 +267,11 @@ dnastring2kaks <- function(cds,
             OUT <- rcpp_KaKs(cdsstr = as.character(cds),
                 sgc = sgc, method = model, verbose = verbose)
             OUT <- as.data.frame(t(
-                tibble::column_to_rownames(OUT, "rownames")))
+                tibble::column_to_rownames(tidyr::as_tibble(
+                setNames(stringr::str_split(OUT$results_vec,
+                "\t"), OUT$results_names)) %>%
+                tibble::add_column(rownames=OUT$rownames),
+                "rownames")))
             attr(OUT, "model") <- model
             attr(OUT, "align") <- "FALSE"
             attr(OUT, "MSA2dist.class") <- "dnastring2kaks"
@@ -290,11 +295,17 @@ dnastring2kaks <- function(cds,
                         MSA2dist::cds2codonaln(cds[i], cds[j], ...)),
                         sgc = sgc,
                         method = model)
-                    tmp_out <- setNames(tmp_out[,2], tmp_out[,1])
+                    tmp_out <- as.data.frame(t(
+                        tibble::column_to_rownames(
+                        tidyr::as_tibble(
+                        setNames(stringr::str_split(
+                        tmp_out$results_vec,
+                        "\t"), tmp_out$results_names)) %>%
+                        tibble::add_column(
+                        rownames=tmp_out$rownames),
+                        "rownames")))
                     tmp_out["Comp1"] <- i
                     tmp_out["Comp2"] <- j
-                    tmp_out["seq1"] <- cds.names[i]
-                    tmp_out["seq2"] <- cds.names[j]
                     tmp_out
                 }
             }

@@ -7,7 +7,7 @@
 #' @name rcpp_KaKs
 #' @description calculates KaKs as implememted in
 #' KaKs Calculator 2.0 \code{MSA2dist} with \code{Rcpp}.
-#' @return \code{data.frame}
+#' @return \code{list}
 #' @param cdsstr StringVector [mandatory]
 #' @param sgc standard genetic code to use [default: 1]
 #' @param method KaKs Calculator 2.0 codon model [default: YN]

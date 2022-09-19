@@ -26,7 +26,7 @@
 
 /* KAKS class */
 class KAKS: public Base {
-public:	
+public:
 	/* int tempt; //zhangyubin add for multi-lines data to only gamma */
 	KAKS();
 	~KAKS();
@@ -41,7 +41,7 @@ public:
 	/* Uninitialize class, for unloading */
 	int Uninitialize();
 	void getGCContent2(std::string str);
-protected:		
+protected:
 	/* Use several methods to calculate ka/ks */
 	bool calculateKaKs();
     /* NONE: an in-house algorithm in BGI, that is NG86 without correction */
@@ -57,11 +57,11 @@ protected:
 	/* Modified LPB93 */
 	void start_MLPB93(float GAMMA);
 	/* GY94 */
-	void start_GY94(float GAMMA);	
+	void start_GY94(float GAMMA);
 	/* YN00 */
 	void start_YN00(float GAMMA);
 	/* MYN */
-	void start_MYN(float GAMMA);	
+	void start_MYN(float GAMMA);
 	/* Model Selection and Model Averaging */
 	void start_MSMA(float GAMMA);
 	/* Get GCC of entire sequences and of three codon positions */
@@ -93,8 +93,9 @@ public:
 	bool VERBOSE;
 	/* Number of compared pairwise sequences */
 	unsigned long number;	//Maybe too many
-	/* results data frame */
-	Rcpp::DataFrame results_df;
+	/* results vector */
+	std::vector<std::string> results_vec;
+	std::vector<std::string> results_names;
 protected:
 	/* File name for detailed results for model selection */
 	std::string detail_filename;
@@ -107,6 +108,6 @@ private:
 	std::ofstream os;
 	/* A pair of sequence */
 	std::string seq1, seq2;
-}; 
+};
 
 #endif

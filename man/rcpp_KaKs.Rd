@@ -16,7 +16,7 @@ rcpp_KaKs(cdsstr, sgc = "1", method = "YN", verbose = FALSE)
 \item{verbose}{specify if verbose output [default: FALSE]}
 }
 \value{
-\code{data.frame}
+\code{list}
 }
 \description{
 calculates KaKs as implememted in

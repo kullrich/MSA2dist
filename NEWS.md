@@ -1,3 +1,11 @@
+# Changes in version 1.1.5 (2022-09-19)
+
+## Major changes
+
+## Minor improvements and bug fixes
+
+* changed rcpp_KaKs data access from data.frame to list
+
 # Changes in version 1.1.4 (2022-07-16)
 
 ## Major changes

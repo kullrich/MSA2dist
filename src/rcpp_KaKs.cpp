@@ -25,7 +25,7 @@ using namespace std;
 //' @name rcpp_KaKs
 //' @description calculates KaKs as implememted in
 //' KaKs Calculator 2.0 \code{MSA2dist} with \code{Rcpp}.
-//' @return \code{data.frame}
+//' @return \code{list}
 //' @param cdsstr StringVector [mandatory]
 //' @param sgc standard genetic code to use [default: 1]
 //' @param method KaKs Calculator 2.0 codon model [default: YN]
@@ -40,19 +40,22 @@ using namespace std;
 //' @export rcpp_KaKs
 //' @author Kristian K Ullrich
 // [[Rcpp::export]]
-Rcpp::DataFrame rcpp_KaKs( Rcpp::StringVector cdsstr,
+Rcpp::List rcpp_KaKs( Rcpp::StringVector cdsstr,
     const std::string sgc="1",
     const std::string method="YN",
     bool verbose=false ) {
-    Rcpp::DataFrame results_df;
+    Rcpp::List results_list;
 	try {
 		KAKS kk;
 		if (!kk.Run(cdsstr, sgc, method, verbose)) {
       throw 1;
     }
-		results_df=kk.results_df;
+		results_list=Rcpp::List::create(
+		  Rcpp::Named("rownames")=kk.titleInfo,
+      _["results_vec"]=kk.results_vec,
+      _["results_names"]=kk.results_names);
 	}
 	catch (...) {
 	}
-	return results_df;
+	return results_list;
 }
