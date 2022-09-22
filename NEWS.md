@@ -1,3 +1,11 @@
+# Changes in version 1.1.6 (2022-09-22)
+
+## Major changes
+
+## Minor improvements and bug fixes
+
+* changed test-rcpp_KaKs
+
 # Changes in version 1.1.5 (2022-09-19)
 
 ## Major changes
