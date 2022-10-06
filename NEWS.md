@@ -1,3 +1,11 @@
+# Changes in version 1.1.7 (2022-10-05)
+
+## Major changes
+
+* changed licence into GPL-3 to account for KaKs Calculator 2.0 licence
+
+## Minor improvements and bug fixes
+
 # Changes in version 1.1.6 (2022-09-22)
 
 ## Major changes
