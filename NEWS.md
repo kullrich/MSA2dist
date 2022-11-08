@@ -1,3 +1,11 @@
+# Changes in version 1.3.1 (2022-11-08)
+
+## Major changes
+
+## Minor improvements and bug fixes
+
+* additional Genetic Codes into base.cpp
+
 # Changes in version 1.1.7 (2022-10-05)
 
 ## Major changes
