@@ -14,6 +14,7 @@ using namespace Rcpp;
 //' @return list
 //' @param aavector StringVector [mandatory]
 //' @param ncores number of cores [default: 1]
+//' @param symmetric symmetric score matrix [default: 1]
 //' @examples
 //' ## load example sequence data
 //' data("hiv", package="MSA2dist")
@@ -22,7 +23,7 @@ using namespace Rcpp;
 //' @export rcpp_pairwiseDeletionAA
 //' @author Kristian K Ullrich
 // [[Rcpp::export]]
-Rcpp::List rcpp_pairwiseDeletionAA( Rcpp::StringVector aavector, int ncores = 1 ) {
+Rcpp::List rcpp_pairwiseDeletionAA( Rcpp::StringVector aavector, int ncores = 1, int symmetric = 1 ) {
   std::unordered_map<std::string, double> dist_mat;
   dist_mat["SS"]=0.0;dist_mat["SR"]=1.0;dist_mat["SL"]=1.0;dist_mat["SP"]=1.0;dist_mat["ST"]=1.0;dist_mat["SA"]=1.0;dist_mat["SV"]=1.0;dist_mat["SG"]=1.0;dist_mat["SI"]=1.0;dist_mat["SF"]=1.0;dist_mat["SY"]=1.0;dist_mat["SC"]=1.0;dist_mat["SH"]=1.0;dist_mat["SQ"]=1.0;dist_mat["SN"]=1.0;dist_mat["SK"]=1.0;dist_mat["SD"]=1.0;dist_mat["SE"]=1.0;dist_mat["SM"]=1.0;dist_mat["SW"]=1.0;dist_mat["S."]=-1.0;;dist_mat["S-"]=-1.0;;dist_mat["SX"]=-1.0;
   dist_mat["RS"]=1.0;dist_mat["RR"]=0.0;dist_mat["RL"]=1.0;dist_mat["RP"]=1.0;dist_mat["RT"]=1.0;dist_mat["RA"]=1.0;dist_mat["RV"]=1.0;dist_mat["RG"]=1.0;dist_mat["RI"]=1.0;dist_mat["RF"]=1.0;dist_mat["RY"]=1.0;dist_mat["RC"]=1.0;dist_mat["RH"]=1.0;dist_mat["RQ"]=1.0;dist_mat["RN"]=1.0;dist_mat["RK"]=1.0;dist_mat["RD"]=1.0;dist_mat["RE"]=1.0;dist_mat["RM"]=1.0;dist_mat["RW"]=1.0;dist_mat["R."]=-1.0;;dist_mat["R-"]=-1.0;;dist_mat["RX"]=-1.0;
@@ -57,30 +58,56 @@ Rcpp::List rcpp_pairwiseDeletionAA( Rcpp::StringVector aavector, int ncores = 1 
   rownames(sitesMatrix)=aavectornames;
   int nsites=aavector[1].size();
   RcppThread::ProgressBar bar(n, 1);
-  RcppThread::parallelFor(0, n, [&] (int i) {
-    for( int j=i; j < n; j++ ) {
-      double eqnum=0;
-      int ij_n=nsites;
-      for( int s=0; s < nsites; s++) {
-        std::string is;
-        std::string js;
-        is=aavector[i][s];
-        js=aavector[j][s];
-        double ij_dist;
-        ij_dist=dist_mat[is+js];
-        if(ij_dist >= 0.0) {
-          eqnum=eqnum+ij_dist;
+  if(symmetric == 0){
+    RcppThread::parallelFor(0, n, [&] (int i) {
+      for( int j=0; j < n; j++ ) {
+        double eqnum=0;
+        int ij_n=nsites;
+        for( int s=0; s < nsites; s++) {
+          std::string is;
+          std::string js;
+          is=aavector[i][s];
+          js=aavector[j][s];
+          double ij_dist;
+          ij_dist=dist_mat[is+js];
+          if(ij_dist >= 0.0) {
+            eqnum=eqnum+ij_dist;
+          }
+          else {
+            ij_n=ij_n-1;
+          };
         }
-        else {
-          ij_n=ij_n-1;
-        };
-      }
-      distMatrix(i,j)=eqnum/ij_n;
-      distMatrix(j,i)=eqnum/ij_n;
-      sitesMatrix(i,j)=ij_n;
-      sitesMatrix(j,i)=ij_n;
-    };
-    bar++;
-  }, ncores);
+        distMatrix(i,j)=eqnum/ij_n;
+        sitesMatrix(i,j)=ij_n;
+      };
+      bar++;
+    }, ncores);
+  } else {
+    RcppThread::parallelFor(0, n, [&] (int i) {
+      for( int j=i; j < n; j++ ) {
+        double eqnum=0;
+        int ij_n=nsites;
+        for( int s=0; s < nsites; s++) {
+          std::string is;
+          std::string js;
+          is=aavector[i][s];
+          js=aavector[j][s];
+          double ij_dist;
+          ij_dist=dist_mat[is+js];
+          if(ij_dist >= 0.0) {
+            eqnum=eqnum+ij_dist;
+          }
+          else {
+            ij_n=ij_n-1;
+          };
+        }
+        distMatrix(i,j)=eqnum/ij_n;
+        distMatrix(j,i)=eqnum/ij_n;
+        sitesMatrix(i,j)=ij_n;
+        sitesMatrix(j,i)=ij_n;
+      };
+      bar++;
+    }, ncores);
+  }
   return Rcpp::List::create(Rcpp::Named("sitesUsed")=sitesMatrix);
 }

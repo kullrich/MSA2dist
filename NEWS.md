@@ -1,3 +1,16 @@
+# Changes in version 1.5.1 (2023-05-22)
+
+## Major changes
+
+## Minor improvements and bug fixes
+
+* additional option to use asymmetric score matrix (symmetric=FALSE)
+* changed rcpp_distSTRING.cpp
+* changed rcpp_pairwiseDeletionAA.cpp
+* changed rcpp_pairwiseDeletionDNA.cpp
+* changed aastring2dist.R
+* changed dnastring2dist.R
+
 # Changes in version 1.3.1 (2022-11-08)
 
 ## Major changes

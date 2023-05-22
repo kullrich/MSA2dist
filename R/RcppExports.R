@@ -34,14 +34,17 @@ rcpp_KaKs <- function(cdsstr, sgc = "1", method = "YN", verbose = FALSE) {
 #' @param dnavector StringVector [mandatory]
 #' @param scoreMatrix NumericMatrix [mandatory]
 #' @param ncores number of cores [default: 1]
+#' @param symmetric symmetric score matrix [default: 1]
 #' @examples
 #' ## load example sequence data
 #' data("hiv", package="MSA2dist")
 #' rcpp_distSTRING(dnavector=as.character(hiv), scoreMatrix=iupacMatrix())
 #' @export rcpp_distSTRING
 #' @author Kristian K Ullrich
-rcpp_distSTRING <- function(dnavector, scoreMatrix, ncores = 1L) {
-    .Call(`_MSA2dist_rcpp_distSTRING`, dnavector, scoreMatrix, ncores)
+rcpp_distSTRING <- function(dnavector, scoreMatrix,
+    ncores = 1L, symmetric = 1L) {
+    .Call(`_MSA2dist_rcpp_distSTRING`, dnavector, scoreMatrix,
+    ncores, symmetric)
 }
 
 #' @useDynLib MSA2dist, .registration = TRUE
@@ -52,6 +55,7 @@ rcpp_distSTRING <- function(dnavector, scoreMatrix, ncores = 1L) {
 #' @return list
 #' @param aavector StringVector [mandatory]
 #' @param ncores number of cores [default: 1]
+#' @param symmetric symmetric score matrix [default: 1]
 #' @examples
 #' ## load example sequence data
 #' data("hiv", package="MSA2dist")
@@ -59,8 +63,8 @@ rcpp_distSTRING <- function(dnavector, scoreMatrix, ncores = 1L) {
 #' rcpp_pairwiseDeletionAA(aavector=h, ncores=1)
 #' @export rcpp_pairwiseDeletionAA
 #' @author Kristian K Ullrich
-rcpp_pairwiseDeletionAA <- function(aavector, ncores = 1L) {
-    .Call(`_MSA2dist_rcpp_pairwiseDeletionAA`, aavector, ncores)
+rcpp_pairwiseDeletionAA <- function(aavector, ncores = 1L, symmetric = 1L) {
+    .Call(`_MSA2dist_rcpp_pairwiseDeletionAA`, aavector, ncores, symmetric)
 }
 
 #' @useDynLib MSA2dist, .registration = TRUE
@@ -71,6 +75,7 @@ rcpp_pairwiseDeletionAA <- function(aavector, ncores = 1L) {
 #' @return list
 #' @param dnavector StringVector [mandatory]
 #' @param ncores number of cores [default: 1]
+#' @param symmetric symmetric score matrix [default: 1]
 #' @examples
 #' ## load example sequence data
 #' data("woodmouse", package="ape")
@@ -78,7 +83,7 @@ rcpp_pairwiseDeletionAA <- function(aavector, ncores = 1L) {
 #' rcpp_pairwiseDeletionDNA(dnavector=w, ncores=1)
 #' @export rcpp_pairwiseDeletionDNA
 #' @author Kristian K Ullrich
-rcpp_pairwiseDeletionDNA <- function(dnavector, ncores = 1L) {
-    .Call(`_MSA2dist_rcpp_pairwiseDeletionDNA`, dnavector, ncores)
+rcpp_pairwiseDeletionDNA <- function(dnavector, ncores = 1L, symmetric = 1L) {
+    .Call(`_MSA2dist_rcpp_pairwiseDeletionDNA`, dnavector, ncores, symmetric)
 }
 

@@ -12,7 +12,7 @@ Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
 // rcpp_KaKs
-Rcpp::DataFrame rcpp_KaKs(Rcpp::StringVector cdsstr, const std::string sgc, const std::string method, bool verbose);
+Rcpp::List rcpp_KaKs(Rcpp::StringVector cdsstr, const std::string sgc, const std::string method, bool verbose);
 RcppExport SEXP _MSA2dist_rcpp_KaKs(SEXP cdsstrSEXP, SEXP sgcSEXP, SEXP methodSEXP, SEXP verboseSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
@@ -26,48 +26,51 @@ BEGIN_RCPP
 END_RCPP
 }
 // rcpp_distSTRING
-Rcpp::List rcpp_distSTRING(Rcpp::StringVector dnavector, Rcpp::NumericMatrix scoreMatrix, int ncores);
-RcppExport SEXP _MSA2dist_rcpp_distSTRING(SEXP dnavectorSEXP, SEXP scoreMatrixSEXP, SEXP ncoresSEXP) {
+Rcpp::List rcpp_distSTRING(Rcpp::StringVector dnavector, Rcpp::NumericMatrix scoreMatrix, int ncores, int symmetric);
+RcppExport SEXP _MSA2dist_rcpp_distSTRING(SEXP dnavectorSEXP, SEXP scoreMatrixSEXP, SEXP ncoresSEXP, SEXP symmetricSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< Rcpp::StringVector >::type dnavector(dnavectorSEXP);
     Rcpp::traits::input_parameter< Rcpp::NumericMatrix >::type scoreMatrix(scoreMatrixSEXP);
     Rcpp::traits::input_parameter< int >::type ncores(ncoresSEXP);
-    rcpp_result_gen = Rcpp::wrap(rcpp_distSTRING(dnavector, scoreMatrix, ncores));
+    Rcpp::traits::input_parameter< int >::type symmetric(symmetricSEXP);
+    rcpp_result_gen = Rcpp::wrap(rcpp_distSTRING(dnavector, scoreMatrix, ncores, symmetric));
     return rcpp_result_gen;
 END_RCPP
 }
 // rcpp_pairwiseDeletionAA
-Rcpp::List rcpp_pairwiseDeletionAA(Rcpp::StringVector aavector, int ncores);
-RcppExport SEXP _MSA2dist_rcpp_pairwiseDeletionAA(SEXP aavectorSEXP, SEXP ncoresSEXP) {
+Rcpp::List rcpp_pairwiseDeletionAA(Rcpp::StringVector aavector, int ncores, int symmetric);
+RcppExport SEXP _MSA2dist_rcpp_pairwiseDeletionAA(SEXP aavectorSEXP, SEXP ncoresSEXP, SEXP symmetricSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< Rcpp::StringVector >::type aavector(aavectorSEXP);
     Rcpp::traits::input_parameter< int >::type ncores(ncoresSEXP);
-    rcpp_result_gen = Rcpp::wrap(rcpp_pairwiseDeletionAA(aavector, ncores));
+    Rcpp::traits::input_parameter< int >::type symmetric(symmetricSEXP);
+    rcpp_result_gen = Rcpp::wrap(rcpp_pairwiseDeletionAA(aavector, ncores, symmetric));
     return rcpp_result_gen;
 END_RCPP
 }
 // rcpp_pairwiseDeletionDNA
-Rcpp::List rcpp_pairwiseDeletionDNA(Rcpp::StringVector dnavector, int ncores);
-RcppExport SEXP _MSA2dist_rcpp_pairwiseDeletionDNA(SEXP dnavectorSEXP, SEXP ncoresSEXP) {
+Rcpp::List rcpp_pairwiseDeletionDNA(Rcpp::StringVector dnavector, int ncores, int symmetric);
+RcppExport SEXP _MSA2dist_rcpp_pairwiseDeletionDNA(SEXP dnavectorSEXP, SEXP ncoresSEXP, SEXP symmetricSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< Rcpp::StringVector >::type dnavector(dnavectorSEXP);
     Rcpp::traits::input_parameter< int >::type ncores(ncoresSEXP);
-    rcpp_result_gen = Rcpp::wrap(rcpp_pairwiseDeletionDNA(dnavector, ncores));
+    Rcpp::traits::input_parameter< int >::type symmetric(symmetricSEXP);
+    rcpp_result_gen = Rcpp::wrap(rcpp_pairwiseDeletionDNA(dnavector, ncores, symmetric));
     return rcpp_result_gen;
 END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
     {"_MSA2dist_rcpp_KaKs", (DL_FUNC) &_MSA2dist_rcpp_KaKs, 4},
-    {"_MSA2dist_rcpp_distSTRING", (DL_FUNC) &_MSA2dist_rcpp_distSTRING, 3},
-    {"_MSA2dist_rcpp_pairwiseDeletionAA", (DL_FUNC) &_MSA2dist_rcpp_pairwiseDeletionAA, 2},
-    {"_MSA2dist_rcpp_pairwiseDeletionDNA", (DL_FUNC) &_MSA2dist_rcpp_pairwiseDeletionDNA, 2},
+    {"_MSA2dist_rcpp_distSTRING", (DL_FUNC) &_MSA2dist_rcpp_distSTRING, 4},
+    {"_MSA2dist_rcpp_pairwiseDeletionAA", (DL_FUNC) &_MSA2dist_rcpp_pairwiseDeletionAA, 3},
+    {"_MSA2dist_rcpp_pairwiseDeletionDNA", (DL_FUNC) &_MSA2dist_rcpp_pairwiseDeletionDNA, 3},
     {NULL, NULL, 0}
 };
 

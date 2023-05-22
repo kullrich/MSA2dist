@@ -15,4 +15,10 @@ test_that("aastring2dist()", {
     h <- hiv |> cds2aa() |> aastring2dist(score=granthamMatrix(),
         mask=mask1, region=region1)
     expect_true(h$sitesUsed[1,1] == 35)
+    myscore <- granthamMatrix()
+    myscore[5,6]<-0
+    h <- hiv |> cds2aa() |> aastring2dist(score=myscore)
+    expect_true(h$distSTRING[1,2] == h$distSTRING[2,1])
+    h <- hiv |> cds2aa() |> aastring2dist(score=myscore, symmetric=FALSE)
+    expect_true(h$distSTRING[1,2] != h$distSTRING[2,1])
 })

@@ -17,4 +17,9 @@ test_that("compareCodons()", {
     expect_true(h$sitesUsed[1,1] == 162)
     h <- hiv |> dnastring2dist(model="IUPAC", mask=mask1, region=region1)
     expect_true(h$sitesUsed[1,1] == 105)
+    myscore[1,4] <- 0.5
+    h <- hiv |> dnastring2dist(score=myscore)
+    expect_true(h$distSTRING[1,2] == h$distSTRING[2,1])
+    h <- hiv |> dnastring2dist(score=myscore, symmetric=FALSE)
+    expect_true(h$distSTRING[1,2] != h$distSTRING[2,1])
 })

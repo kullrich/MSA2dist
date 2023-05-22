@@ -8,6 +8,7 @@ dnastring2dist(
     dna,
     model = "IUPAC",
     threads = 1,
+    symmetric = TRUE,
     score = NULL,
     mask = NULL,
     region = NULL,
@@ -21,6 +22,8 @@ dnastring2dist(
 \code{ape::dist.dna} [default: IUPAC]}
 
 \item{threads}{number of parallel threads [default: 1]}
+
+\item{symmetric}{symmetric score matrix [default: TRUE]}
 
 \item{score}{\code{score matrix} use score matrix to calculate
 distances [default: NULL]}
@@ -63,6 +66,10 @@ region1 <- IRanges::IRanges(start=c(1,139), end=c(75,225))
 hiv |> dnastring2dist(model="IUPAC", region=region1)
 ## use mask and region
 hiv |> dnastring2dist(model="IUPAC", mask=mask1, region=region1)
+## use asymmetric score matrix
+myscore <- iupacMatrix()
+myscore[1, 4] <- 0.5
+(hiv |> dnastring2dist(score=myscore, symmetric=FALSE))$distSTRING[1:2, 1:2]
 }
 \seealso{
 \code{\link[ape]{dist.dna}}

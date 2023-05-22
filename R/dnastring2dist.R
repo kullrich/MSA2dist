@@ -6,6 +6,7 @@
 #' @param model specify model either "IUPAC" or any model from
 #' \code{ape::dist.dna} [default: IUPAC]
 #' @param threads number of parallel threads [default: 1]
+#' @param symmetric symmetric score matrix [default: TRUE]
 #' @param score \code{score matrix} use score matrix to calculate
 #' distances [default: NULL]
 #' @param mask \code{IRanges} object indicating masked sites
@@ -45,18 +46,18 @@
 #' hiv |> dnastring2dist(model="IUPAC", region=region1)
 #' ## use mask and region
 #' hiv |> dnastring2dist(model="IUPAC", mask=mask1, region=region1)
+#' ## use asymmetric score matrix
+#' myscore <- iupacMatrix()
+#' myscore[1, 4] <- 0.5
+#' (hiv |> dnastring2dist(score=myscore, symmetric=FALSE))$distSTRING[1:2, 1:2]
 #' @export dnastring2dist
 #' @author Kristian K Ullrich
 
-dnastring2dist <- function(dna,
-    model = "IUPAC",
-    threads = 1,
-    score = NULL,
-    mask = NULL,
-    region = NULL,
-    ...){
+dnastring2dist <- function(dna, model="IUPAC", threads=1, symmetric=TRUE,
+    score=NULL, mask=NULL, region=NULL, ...){
     stopifnot("Error: Input needs to be DNAStringSet"=
         methods::is(dna, "DNAStringSet"))
+    if(symmetric){symmetric_int <- 1}else{symmetric_int <- 0}
     region.dna <- IRanges::IRanges(start=1, end=unique(width(dna)))
     if(!is.null(mask) || !is.null(region)){
         dna.region <- MSA2dist::string2region(dna, mask=mask, region=region)
@@ -64,8 +65,8 @@ dnastring2dist <- function(dna,
         region.dna <- dna.region@metadata$regionUsed
     } else{dna.char <- as.character(dna)}
     if(!is.null(score)){
-        OUT <- rcpp_distSTRING(dnavector = dna.char,
-            scoreMatrix = score, ncores = threads)
+        OUT <- rcpp_distSTRING(dnavector=dna.char,
+            scoreMatrix=score, ncores=threads, symmetric=symmetric_int)
         OUT$distSTRING <- as.data.frame(OUT$distSTRING)
         OUT$sitesUsed <- as.data.frame(OUT$sitesUsed)
     }
@@ -76,8 +77,9 @@ dnastring2dist <- function(dna,
             "K81","F84", "BH87", "T92", "TN93", "GG95", "logdet",
             "paralin", "indel", "indelblock"))
         if(model == "IUPAC"){
-            OUT <- rcpp_distSTRING(dnavector = dna.char,
-                scoreMatrix=iupacMatrix(), ncores=threads)
+            OUT <- rcpp_distSTRING(dnavector=dna.char,
+                scoreMatrix=iupacMatrix(), ncores=threads,
+                symmetric=symmetric_int)
             OUT$distSTRING <- as.data.frame(OUT$distSTRING)
             OUT$sitesUsed <- as.data.frame(OUT$sitesUsed)
         }
@@ -88,14 +90,16 @@ dnastring2dist <- function(dna,
                     model=model, ...))
                 sitesUsed_ <- rcpp_pairwiseDeletionDNA(
                     dnavector=dna.char,
-                    ncores=threads)
+                    ncores=threads,
+                    symmetric=symmetric_int)
             } else{
                 distSTRING_ <- as.matrix(ape::dist.dna(
                     x=MSA2dist::dnastring2dnabin(dna),
                     model=model, ...))
                 sitesUsed_ <- rcpp_pairwiseDeletionDNA(
                     dnavector=as.character(dna),
-                    ncores=threads)
+                    ncores=threads,
+                    symmetric=symmetric_int)
             }
             OUT <- list(distSTRING = as.data.frame(distSTRING_))
             OUT <- append(OUT, sitesUsed_)

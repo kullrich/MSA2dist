@@ -4,7 +4,7 @@
 \alias{rcpp_distSTRING}
 \title{rcpp_distSTRING}
 \usage{
-rcpp_distSTRING(dnavector, scoreMatrix, ncores = 1L)
+rcpp_distSTRING(dnavector, scoreMatrix, ncores = 1L, symmetric = 1L)
 }
 \arguments{
 \item{dnavector}{StringVector [mandatory]}
@@ -12,6 +12,8 @@ rcpp_distSTRING(dnavector, scoreMatrix, ncores = 1L)
 \item{scoreMatrix}{NumericMatrix [mandatory]}
 
 \item{ncores}{number of cores [default: 1]}
+
+\item{symmetric}{symmetric score matrix [default: 1]}
 }
 \value{
 list

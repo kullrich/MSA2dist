@@ -4,12 +4,14 @@
 \alias{rcpp_pairwiseDeletionDNA}
 \title{rcpp_pairwiseDeletionDNA}
 \usage{
-rcpp_pairwiseDeletionDNA(dnavector, ncores = 1L)
+rcpp_pairwiseDeletionDNA(dnavector, ncores = 1L, symmetric = 1L)
 }
 \arguments{
 \item{dnavector}{StringVector [mandatory]}
 
 \item{ncores}{number of cores [default: 1]}
+
+\item{symmetric}{symmetric score matrix [default: 1]}
 }
 \value{
 list

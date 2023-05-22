@@ -4,6 +4,7 @@
 #' of a \code{AAStringSet}.
 #' @param aa \code{AAStringSet} [mandatory]
 #' @param threads number of parallel threads [default: 1]
+#' @param symmetric symmetric score matrix [default: TRUE]
 #' @param score \code{score matrix} use a score matrix to calculate distances
 #' [mandatory]
 #' @param mask \code{IRanges} object indicating masked sites
@@ -35,17 +36,20 @@
 #' ## use mask and region
 #' hiv |> cds2aa() |> aastring2dist(score=granthamMatrix(),
 #'     mask=mask1, region=region1)
+#' ## use asymmetric score matrix
+#' myscore <- granthamMatrix()
+#' myscore[5, 6] <- 0
+#' h <- hiv |> cds2aa() |> aastring2dist(score=myscore, symmetric=FALSE)
+#' h$distSTRING[1:2, 1:2]
 #' @export aastring2dist
 #' @author Kristian K Ullrich
 
-aastring2dist <- function(aa,
-    threads = 1,
-    score = NULL,
-    mask = NULL,
-    region = NULL){
+aastring2dist <- function(aa, threads=1, symmetric=TRUE, score=NULL,
+    mask=NULL, region=NULL){
     stopifnot("Error: input needs to be an AAStringSet"=
         methods::is(aa, "AAStringSet"))
     stopifnot("Error: set score matrix e.g 'granthamMatrix()'"= !is.null(score))
+    if(symmetric){symmetric_int <- 1}else{symmetric_int <- 0}
     region.aa <- IRanges::IRanges(start=1, end=unique(width(aa)))
     if(!is.null(mask) || !is.null(region)){
         aa.region <- MSA2dist::string2region(aa, mask=mask, region=region)
@@ -53,7 +57,7 @@ aastring2dist <- function(aa,
         region.aa <- methods::slot(aa.region, "metadata")$regionUsed
     } else{aa.char <- as.character(aa)}
     OUT <- MSA2dist::rcpp_distSTRING(dnavector=aa.char,
-        scoreMatrix=score, ncores=threads)
+        scoreMatrix=score, ncores=threads, symmetric=symmetric_int)
     OUT$distSTRING <- as.data.frame(OUT$distSTRING)
     OUT$sitesUsed <- as.data.frame(OUT$sitesUsed)
     OUT$regionUsed <- region.aa

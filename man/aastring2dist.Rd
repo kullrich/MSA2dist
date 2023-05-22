@@ -4,12 +4,21 @@
 \alias{aastring2dist}
 \title{aastring2dist}
 \usage{
-aastring2dist(aa, threads = 1, score = NULL, mask = NULL, region = NULL)
+aastring2dist(
+    aa,
+    threads = 1,
+    symmetric = TRUE,
+    score = NULL,
+    mask = NULL,
+    region = NULL
+)
 }
 \arguments{
 \item{aa}{\code{AAStringSet} [mandatory]}
 
 \item{threads}{number of parallel threads [default: 1]}
+
+\item{symmetric}{symmetric score matrix [default: TRUE]}
 
 \item{score}{\code{score matrix} use a score matrix to calculate distances
 [mandatory]}
@@ -44,6 +53,11 @@ hiv |> cds2aa() |> aastring2dist(score=granthamMatrix(), region=region1)
 ## use mask and region
 hiv |> cds2aa() |> aastring2dist(score=granthamMatrix(),
     mask=mask1, region=region1)
+## use asymmetric score matrix
+myscore <- granthamMatrix()
+myscore[5, 6] <- 0
+h <- hiv |> cds2aa() |> aastring2dist(score=myscore, symmetric=FALSE)
+h$distSTRING[1:2, 1:2]
 }
 \seealso{
 \code{\link[MSA2dist]{dnastring2dist}}

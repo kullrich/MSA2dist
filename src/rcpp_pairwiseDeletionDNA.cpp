@@ -14,6 +14,7 @@ using namespace Rcpp;
 //' @return list
 //' @param dnavector StringVector [mandatory]
 //' @param ncores number of cores [default: 1]
+//' @param symmetric symmetric score matrix [default: 1]
 //' @examples
 //' ## load example sequence data
 //' data("woodmouse", package="ape")
@@ -22,7 +23,7 @@ using namespace Rcpp;
 //' @export rcpp_pairwiseDeletionDNA
 //' @author Kristian K Ullrich
 // [[Rcpp::export]]
-Rcpp::List rcpp_pairwiseDeletionDNA( Rcpp::StringVector dnavector, int ncores = 1 ) {
+Rcpp::List rcpp_pairwiseDeletionDNA( Rcpp::StringVector dnavector, int ncores = 1, int symmetric = 1 ) {
   std::unordered_map<std::string, double> dist_mat;
   dist_mat["AA"]=0.0;dist_mat["AC"]=1.0;dist_mat["AG"]=1.0;dist_mat["AT"]=1.0;dist_mat["AR"]=-1.0;dist_mat["AY"]=-1.0;dist_mat["AS"]=-1.0;dist_mat["AW"]=-1.0;dist_mat["AK"]=-1.0;dist_mat["AM"]=-1.0;dist_mat["AB"]=-1.0;dist_mat["AD"]=-1.0;dist_mat["AH"]=-1.0;dist_mat["AV"]=-1.0;dist_mat["A."]=-1.0;dist_mat["A-"]=-1.0;dist_mat["AN"]=-1.0;dist_mat["AX"]=-1.0;
   dist_mat["CA"]=1.0;dist_mat["CC"]=0.0;dist_mat["CG"]=1.0;dist_mat["CT"]=1.0;dist_mat["CR"]=-1.0;dist_mat["CY"]=-1.0;dist_mat["CS"]=-1.0;dist_mat["CW"]=-1.0;dist_mat["CK"]=-1.0;dist_mat["CM"]=-1.0;dist_mat["CB"]=-1.0;dist_mat["CD"]=-1.0;dist_mat["CH"]=-1.0;dist_mat["CV"]=-1.0;dist_mat["C."]=-1.0;dist_mat["C-"]=-1.0;dist_mat["CN"]=-1.0;dist_mat["CX"]=-1.0;
@@ -52,30 +53,56 @@ Rcpp::List rcpp_pairwiseDeletionDNA( Rcpp::StringVector dnavector, int ncores = 
   rownames(sitesMatrix)=dnavectornames;
   int nsites=dnavector[1].size();
   RcppThread::ProgressBar bar(n, 1);
-  RcppThread::parallelFor(0, n, [&] (int i) {
-    for( int j=i; j < n; j++ ) {
-      double eqnum=0;
-      int ij_n=nsites;
-      for( int s=0; s < nsites; s++) {
-        std::string is;
-        std::string js;
-        is=dnavector[i][s];
-        js=dnavector[j][s];
-        double ij_dist;
-        ij_dist=dist_mat[is+js];
-        if(ij_dist >= 0.0) {
-          eqnum=eqnum+ij_dist;
+  if(symmetric == 0){
+    RcppThread::parallelFor(0, n, [&] (int i) {
+      for( int j=0; j < n; j++ ) {
+        double eqnum=0;
+        int ij_n=nsites;
+        for( int s=0; s < nsites; s++) {
+          std::string is;
+          std::string js;
+          is=dnavector[i][s];
+          js=dnavector[j][s];
+          double ij_dist;
+          ij_dist=dist_mat[is+js];
+          if(ij_dist >= 0.0) {
+            eqnum=eqnum+ij_dist;
+          }
+          else {
+            ij_n=ij_n -1;
+          };
         }
-        else {
-          ij_n=ij_n -1;
-        };
-      }
-      distMatrix(i,j)=eqnum/ij_n;
-      distMatrix(j,i)=eqnum/ij_n;
-      sitesMatrix(i,j)=ij_n;
-      sitesMatrix(j,i)=ij_n;
-    };
-    bar++;
-  }, ncores);
+        distMatrix(i,j)=eqnum/ij_n;
+        sitesMatrix(i,j)=ij_n;
+      };
+      bar++;
+    }, ncores);
+  } else {
+    RcppThread::parallelFor(0, n, [&] (int i) {
+      for( int j=i; j < n; j++ ) {
+        double eqnum=0;
+        int ij_n=nsites;
+        for( int s=0; s < nsites; s++) {
+          std::string is;
+          std::string js;
+          is=dnavector[i][s];
+          js=dnavector[j][s];
+          double ij_dist;
+          ij_dist=dist_mat[is+js];
+          if(ij_dist >= 0.0) {
+            eqnum=eqnum+ij_dist;
+          }
+          else {
+            ij_n=ij_n -1;
+          };
+        }
+        distMatrix(i,j)=eqnum/ij_n;
+        distMatrix(j,i)=eqnum/ij_n;
+        sitesMatrix(i,j)=ij_n;
+        sitesMatrix(j,i)=ij_n;
+      };
+      bar++;
+    }, ncores);
+  }
   return Rcpp::List::create(Rcpp::Named("sitesUsed")=sitesMatrix);
 }

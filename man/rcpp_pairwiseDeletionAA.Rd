@@ -4,12 +4,14 @@
 \alias{rcpp_pairwiseDeletionAA}
 \title{rcpp_pairwiseDeletionAA}
 \usage{
-rcpp_pairwiseDeletionAA(aavector, ncores = 1L)
+rcpp_pairwiseDeletionAA(aavector, ncores = 1L, symmetric = 1L)
 }
 \arguments{
 \item{aavector}{StringVector [mandatory]}
 
 \item{ncores}{number of cores [default: 1]}
+
+\item{symmetric}{symmetric score matrix [default: 1]}
 }
 \value{
 list

@@ -15,6 +15,7 @@ using namespace Rcpp;
 //' @param dnavector StringVector [mandatory]
 //' @param scoreMatrix NumericMatrix [mandatory]
 //' @param ncores number of cores [default: 1]
+//' @param symmetric symmetric score matrix [default: 1]
 //' @examples
 //' ## load example sequence data
 //' data("hiv", package="MSA2dist")
@@ -22,7 +23,7 @@ using namespace Rcpp;
 //' @export rcpp_distSTRING
 //' @author Kristian K Ullrich
 // [[Rcpp::export]]
-Rcpp::List rcpp_distSTRING( Rcpp::StringVector dnavector, Rcpp::NumericMatrix scoreMatrix, int ncores = 1 ) {
+Rcpp::List rcpp_distSTRING( Rcpp::StringVector dnavector, Rcpp::NumericMatrix scoreMatrix, int ncores = 1, int symmetric = 1 ) {
   std::unordered_map<std::string, double> dist_mat;
   int nCols=scoreMatrix.ncol();
   int nRows=scoreMatrix.nrow();
@@ -47,29 +48,54 @@ Rcpp::List rcpp_distSTRING( Rcpp::StringVector dnavector, Rcpp::NumericMatrix sc
   rownames(sitesMatrix)=dnavectornames;
   int nsites=dnavector[1].size();
   RcppThread::ProgressBar bar(n, 1);
-  RcppThread::parallelFor(0, n, [&] (int i) {
-    for( int j=i; j < n; j++ ){
-      double eqnum=0;
-      int ij_n=nsites;
-      for( int s=0; s < nsites; s++){
-        std::string is;
-        std::string js;
-        is=dnavector[i][s];
-        js=dnavector[j][s];
-        double ij_dist;
-        ij_dist=dist_mat[is+js];
-        if(ij_dist >= 0.0){
-          eqnum=eqnum+ij_dist;
-        } else {
-          ij_n=ij_n-1;
-        };
-      }
-      distMatrix(i,j)=eqnum/ij_n;
-      distMatrix(j,i)=eqnum/ij_n;
-      sitesMatrix(i,j)=ij_n;
-      sitesMatrix(j,i)=ij_n;
-    };
-    bar++;
-  }, ncores);
+  if(symmetric == 0){
+    RcppThread::parallelFor(0, n, [&] (int i) {
+      for( int j=0; j < n; j++ ){
+        double eqnum=0;
+        int ij_n=nsites;
+        for( int s=0; s < nsites; s++){
+          std::string is;
+          std::string js;
+          is=dnavector[i][s];
+          js=dnavector[j][s];
+          double ij_dist;
+          ij_dist=dist_mat[is+js];
+          if(ij_dist >= 0.0){
+            eqnum=eqnum+ij_dist;
+          } else {
+            ij_n=ij_n-1;
+          };
+        }
+        distMatrix(i,j)=eqnum/ij_n;
+        sitesMatrix(i,j)=ij_n;
+      };
+      bar++;
+    }, ncores);
+  } else {
+    RcppThread::parallelFor(0, n, [&] (int i) {
+      for( int j=i; j < n; j++ ){
+        double eqnum=0;
+        int ij_n=nsites;
+        for( int s=0; s < nsites; s++){
+          std::string is;
+          std::string js;
+          is=dnavector[i][s];
+          js=dnavector[j][s];
+          double ij_dist;
+          ij_dist=dist_mat[is+js];
+          if(ij_dist >= 0.0){
+            eqnum=eqnum+ij_dist;
+          } else {
+            ij_n=ij_n-1;
+          };
+        }
+        distMatrix(i,j)=eqnum/ij_n;
+        distMatrix(j,i)=eqnum/ij_n;
+        sitesMatrix(i,j)=ij_n;
+        sitesMatrix(j,i)=ij_n;
+      };
+      bar++;
+    }, ncores);
+  }
   return Rcpp::List::create(Rcpp::Named("distSTRING")=distMatrix, Rcpp::Named("sitesUsed")=sitesMatrix);
 }
