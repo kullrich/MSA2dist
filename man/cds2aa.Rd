@@ -38,6 +38,7 @@ data(woodmouse, package="ape")
 #cds2aa(dnabin2dnastring(woodmouse), shorten=TRUE)
 woodmouse |> dnabin2dnastring() |> cds2aa(shorten=TRUE)
 #cds2aa(dnabin2dnastring(woodmouse), shorten=TRUE,
+#genetic.code=Biostrings::getGeneticCode("2"))
 woodmouse |> dnabin2dnastring() |> cds2aa(shorten=TRUE,
 genetic.code=Biostrings::getGeneticCode("2"))
 }

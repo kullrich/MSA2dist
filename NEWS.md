@@ -1,3 +1,11 @@
+# Changes in version 1.5.2 (2023-05-24)
+
+## Major changes
+
+## Minor improvements and bug fixes
+
+* added aa2selfscore
+
 # Changes in version 1.5.1 (2023-05-22)
 
 ## Major changes

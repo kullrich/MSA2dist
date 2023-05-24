@@ -3,7 +3,7 @@ Type: Package
 Title: MSA2dist calculates pairwise distances between all sequences of a
     DNAStringSet or a AAStringSet using a custom score matrix and conducts
     codon based analysis
-Version: 1.5.1
+Version: 1.5.2
 Authors@R: 
     person(given = "Kristian K",
            family = "Ullrich",
@@ -35,11 +35,12 @@ Imports:
   parallel,
   rlang,
   seqinr,
+  stats,
+  stringi,
   stringr,
   tibble,
   tidyr,
-  stats,
-  stringi
+  utils
 Suggests:
   rmarkdown,
   knitr,
