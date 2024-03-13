@@ -328,6 +328,45 @@ head(hiv |> dnastring2kaks(model="Li"))
 head(hiv |> dnastring2kaks(model="NG86", threads=1))
 ```
 
+## Using any model from KaKs_Calculator 2.0
+
+models to choose from KaKs_Calculator 2.0 [@wang2010kaks_calculator] are:
+
+- MS [@wang2010kaks_calculator]
+- MA [@wang2010kaks_calculator]
+- GNG [@wang2010kaks_calculator]
+- GLWL [@wang2010kaks_calculator]
+- GLPB [@wang2010kaks_calculator]
+- GMLWL [@wang2010kaks_calculator]
+- GMLPB [@wang2010kaks_calculator]
+- GYN [@wang2010kaks_calculator]
+- LWL [@li1985new]
+- LPB [@li1993unbiased, @pamilo1993evolution]
+- NG [@nei1986simple]
+- MLPB [@tzeng2004comparison]
+- GY [@goldman1994codon]
+- YN [@yang2000codon]
+- MYN [@zhang2006computing, @wang2009gamma]
+
+```{r}
+## use hiv data
+## model MYN
+head(hiv |> dnastring2kaks(model="MYN"))
+## model YN
+head(hiv |> dnastring2kaks(model="YN", threads=1))
+```
+
+## Using indices to calculate Ka/Ks
+
+```{r}
+## use hiv data
+idx <- list(c(2, 3), c(5,7,9))
+## model MYN
+head(hiv |> indices2kaks(idx, model="MYN"))
+## model YN
+head(hiv |> indices2kaks(idx, model="YN", threads=1))
+```
+
 ## Codon comparison
 
 As an example for the codon comparison data from the Human Immunodeficiency

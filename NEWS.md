@@ -1,124 +1,115 @@
-# Changes in version 1.5.2 (2023-05-24)
+# MSA2dist 1.7.1 (2024-03-13)
 
-## Major changes
+NEW FEATURES
 
-## Minor improvements and bug fixes
+* added pal2nal
+* added cdsstring2codonaln
+* added indices2kaks
+* added KaKs Calculator 2.0 example to vignette
+
+CHANGES
+
+* changed dnastring2kaks to use cdsstring2codonaln function
+
+# MSA2dist 1.5.2 (2023-05-24)
+
+NEW FEATURES
 
 * added aa2selfscore
 
-# Changes in version 1.5.1 (2023-05-22)
+# MSA2dist 1.5.1 (2023-05-22)
 
-## Major changes
-
-## Minor improvements and bug fixes
+NEW FEATURES
 
 * additional option to use asymmetric score matrix (symmetric=FALSE)
+
+CHANGES
+    
 * changed rcpp_distSTRING.cpp
 * changed rcpp_pairwiseDeletionAA.cpp
 * changed rcpp_pairwiseDeletionDNA.cpp
 * changed aastring2dist.R
 * changed dnastring2dist.R
 
-# Changes in version 1.3.1 (2022-11-08)
+# MSA2dist 1.3.1 (2022-11-08)
 
-## Major changes
-
-## Minor improvements and bug fixes
+NEW FEATURES
 
 * additional Genetic Codes into base.cpp
 
-# Changes in version 1.1.7 (2022-10-05)
+# MSA2dist 1.1.7 (2022-10-05)
 
-## Major changes
+CHANGES
 
 * changed licence into GPL-3 to account for KaKs Calculator 2.0 licence
 
-## Minor improvements and bug fixes
+# MSA2dist 1.1.6 (2022-09-22)
 
-# Changes in version 1.1.6 (2022-09-22)
-
-## Major changes
-
-## Minor improvements and bug fixes
+CHANGES
 
 * changed test-rcpp_KaKs
 
-# Changes in version 1.1.5 (2022-09-19)
+# MSA2dist 1.1.5 (2022-09-19)
 
-## Major changes
-
-## Minor improvements and bug fixes
+CHANGES
 
 * changed rcpp_KaKs data access from data.frame to list
 
-# Changes in version 1.1.4 (2022-07-16)
+# MSA2dist 1.1.4 (2022-07-16)
 
-## Major changes
-
-## Minor improvements and bug fixes
+BUG FIXES
 
 * fixed rcpp Warnings
 
-# Changes in version 1.1.3 (2022-07-11)
+# MSA2dist 1.1.3 (2022-07-11)
 
-## Major changes
-
-## Minor improvements and bug fixes
+BUG FIXES
 
 * fixed rcpp indentation Warnings
 
-# Changes in version 1.1.2 (2022-07-05)
+# MSA2dist 1.1.2 (2022-07-05)
 
-## Major changes
+NEW FEATURES
 
 * Added KaKs Calculator 2.0 models as rcpp implementation
 
-## Minor improvements and bug fixes
+BUG FIXES
 
 * fixed some typos
 
-# Changes in version 1.1.1 (2022-06-30)
+# MSA2dist 1.1.1 (2022-06-30)
 
-## Major changes
-
-## Minor improvements and bug fixes
+NEW FEATURES
 
 * Added cds2codonaln
 
-# Changes in version 0.99.3 (2022-03-18)
+# MSA2dist 0.99.3 (2022-03-18)
 
-## Major changes
-
-## Minor improvements and bug fixes
+BUG FIXES
 
 * Fix RcppThread::LdFlags warning
 
-# Changes in version 0.99.2 (2022-01-28)
+# MSA2dist 0.99.2 (2022-01-28)
 
-## Major changes
-
-## Minor improvements and bug fixes
+NEW FEATURES
 
 * Added RcppThread::ProgressBar
 
-# Changes in version 0.99.1 (2022-01-27)
+# MSA2dist 0.99.1 (2022-01-27)
 
-## Major changes
+CHANGES
 
 * Changed version number into 0.99.2
-
-## Minor improvements and bug fixes
-
 * Changed URL links in DESCRIPTION
 
-# Changes in version 0.99.0 (2021-12-22)
+# MSA2dist 0.99.0 (2021-12-22)
 
-## Major changes
-
-* Changed version number into 0.99.1
-
-* Changed name from distSTRING into MSA2dist
+NEW FEATURES
 
 * Submitted to Bioconductor
 
-## Minor improvements and bug fixes
+CHANGES
+
+* Changed version number into 0.99.1
+* Changed name from distSTRING into MSA2dist
+
