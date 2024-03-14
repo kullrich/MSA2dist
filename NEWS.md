@@ -1,3 +1,9 @@
+# MSA2dist 1.7.2 (2024-03-14)
+
+BUG FIXES
+
+* fixed pal2nal to cover individual gaps longer than 1
+
 # MSA2dist 1.7.1 (2024-03-13)
 
 NEW FEATURES

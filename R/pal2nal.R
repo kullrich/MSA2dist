@@ -53,11 +53,11 @@ pal2nal <- function(pal,
                 gap_pos <- pal.gap.pos[[i]][j]
                 gap_len <- pal.gap.len[[i]][j]
                 gap_len_cumsum <- pal.gap.len.cumsum[[i]][j]
-                gap <- paste0(rep("---", gap_len))
+                gap <- paste0(rep("---", gap_len), collapse="")
                 if(gap_pos==1){
                     n_i <- paste0(n_i, gap)
                 } else {
-                    n_i_codons_to_add <- gap_pos-gap_len_cumsum-n_i_codons_added
+                    n_i_codons_to_add <- gap_pos-n_i_codons_added
                     n_i<- paste0(n_i, substr(nal_i,
                         (n_i_codons_added*3)+1,
                         (n_i_codons_added+n_i_codons_to_add)*3))
