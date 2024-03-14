@@ -199,6 +199,10 @@ indices2kaks <- function(cds,
             }
             parallel::stopCluster(cl)
             OUT_LIST <- as.data.frame(OUT_LIST)
+            OUT_LIST[["Ka"]] <- OUT_LIST[["ka"]]
+            OUT_LIST[["Ks"]] <- OUT_LIST[["ks"]]
+            OUT_LIST[["Ka/Ks"]] <- as.numeric(OUT_LIST[["ka"]])/
+                as.numeric(OUT_LIST[["ks"]])
             attr(OUT_LIST, "model") <- "Li"
             attr(OUT_LIST, "align") <- "TRUE"
             attr(OUT_LIST, "MSA2dist.class") <- "dnastring2kaks"
@@ -233,7 +237,15 @@ indices2kaks <- function(cds,
                 }
             }
             parallel::stopCluster(cl)
-            OUT_LIST <- as.data.frame(OUT_LIST)
+            if(is.null(dim(OUT_LIST))){
+                OUT_LIST <- as.data.frame(t(OUT_LIST))
+            } else {
+                OUT_LIST <- as.data.frame(OUT_LIST)
+            }
+            OUT_LIST[["Ka"]] <- OUT_LIST[["ka"]]
+            OUT_LIST[["Ks"]] <- OUT_LIST[["ks"]]
+            OUT_LIST[["Ka/Ks"]] <- as.numeric(OUT_LIST[["ka"]])/
+                as.numeric(OUT_LIST[["ks"]])
             attr(OUT_LIST, "model") <- "Li"
             attr(OUT_LIST, "align") <- "TRUE"
             attr(OUT_LIST, "MSA2dist.class") <- "dnastring2kaks"
@@ -267,6 +279,9 @@ indices2kaks <- function(cds,
             }
             parallel::stopCluster(cl)
             OUT_LIST <- as.data.frame(OUT_LIST)
+            OUT_LIST[["Ka"]] <- OUT_LIST[["dn"]]
+            OUT_LIST[["Ks"]] <- OUT_LIST[["ds"]]
+            OUT_LIST[["Ka/Ks"]] <- OUT_LIST[["dn/ds"]]
             attr(OUT_LIST, "model") <- "NG86"
             attr(OUT_LIST, "align") <- "FALSE"
             attr(OUT_LIST, "MSA2dist.class") <- "dnastring2kaks"
@@ -300,7 +315,14 @@ indices2kaks <- function(cds,
                 }
             }
             parallel::stopCluster(cl)
-            OUT_LIST <- as.data.frame(OUT_LIST)
+            if(is.null(dim(OUT_LIST))){
+                OUT_LIST <- as.data.frame(t(OUT_LIST))
+            } else {
+                OUT_LIST <- as.data.frame(OUT_LIST)
+            }
+            OUT_LIST[["Ka"]] <- OUT_LIST[["dn"]]
+            OUT_LIST[["Ks"]] <- OUT_LIST[["ds"]]
+            OUT_LIST[["Ka/Ks"]] <- OUT_LIST[["dn/ds"]]
             attr(OUT_LIST, "model") <- "NG86"
             attr(OUT_LIST, "align") <- "TRUE"
             attr(OUT_LIST, "MSA2dist.class") <- "dnastring2kaks"

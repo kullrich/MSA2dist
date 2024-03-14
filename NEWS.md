@@ -1,3 +1,10 @@
+# MSA2dist 1.7.3 (2024-03-14)
+
+BUG FIXES
+
+* fixed dnastring2kaks to return correct orientation
+* fixed pal2nal to use gap_pos-n_i_codons_added-1
+
 # MSA2dist 1.7.2 (2024-03-14)
 
 BUG FIXES

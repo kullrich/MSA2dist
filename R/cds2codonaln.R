@@ -68,7 +68,8 @@ cds2codonaln <- function(cds1, cds2, type="global",
         type=type, substitutionMatrix=substitutionMatrix, gapOpening=gapOpening,
         gapExtension=gapExtension))[[1L]]
     names(xy.aln) <- c(x.name, y.name)
-    xy.cds <- setNames(DNAStringSet(list(cds1, cds2)), c(x.name, y.name))
+    xy.cds <- setNames(Biostrings::DNAStringSet(list(cds1, cds2)),
+        c(x.name, y.name))
     xy.cds.aln <- MSA2dist::pal2nal(xy.aln, xy.cds, remove.gaps=remove.gaps)
     return(xy.cds.aln)
 }

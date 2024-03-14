@@ -172,6 +172,10 @@ dnastring2kaks <- function(cds,
                 OUT$seq1 <- gsub("_seq2", "seq2", OUT$seq1)
                 OUT$seq2 <- gsub("_seq2", "seq2", OUT$seq2)
             }
+            OUT[["Ka"]] <- OUT[["ka"]]
+            OUT[["Ks"]] <- OUT[["ks"]]
+            OUT[["Ka/Ks"]] <- as.numeric(OUT[["ka"]])/
+                as.numeric(OUT[["ks"]])
             attr(OUT, "model") <- "Li"
             attr(OUT, "align") <- "FALSE"
             attr(OUT, "MSA2dist.class") <- "dnastring2kaks"
@@ -201,7 +205,15 @@ dnastring2kaks <- function(cds,
                 }
             }
             parallel::stopCluster(cl)
-            OUT <- as.data.frame(OUT)
+            if(is.null(dim(OUT))){
+                OUT <- as.data.frame(t(OUT))
+            } else {
+                OUT <- as.data.frame(OUT)
+            }
+            OUT[["Ka"]] <- OUT[["ka"]]
+            OUT[["Ks"]] <- OUT[["ks"]]
+            OUT[["Ka/Ks"]] <- as.numeric(OUT[["ka"]])/
+                as.numeric(OUT[["ks"]])
             attr(OUT, "model") <- "Li"
             attr(OUT, "align") <- "TRUE"
             attr(OUT, "MSA2dist.class") <- "dnastring2kaks"
@@ -231,6 +243,9 @@ dnastring2kaks <- function(cds,
             }
             parallel::stopCluster(cl)
             OUT <- as.data.frame(OUT)
+            OUT[["Ka"]] <- OUT[["dn"]]
+            OUT[["Ks"]] <- OUT[["ds"]]
+            OUT[["Ka/Ks"]] <- OUT[["dn/ds"]]
             attr(OUT, "model") <- "NG86"
             attr(OUT, "align") <- "FALSE"
             attr(OUT, "MSA2dist.class") <- "dnastring2kaks"
@@ -259,7 +274,14 @@ dnastring2kaks <- function(cds,
                 }
             }
             parallel::stopCluster(cl)
-            OUT <- as.data.frame(OUT)
+            if(is.null(dim(OUT))){
+                OUT <- as.data.frame(t(OUT))
+            } else {
+                OUT <- as.data.frame(OUT)
+            }
+            OUT[["Ka"]] <- OUT[["dn"]]
+            OUT[["Ks"]] <- OUT[["ds"]]
+            OUT[["Ka/Ks"]] <- OUT[["dn/ds"]]
             attr(OUT, "model") <- "NG86"
             attr(OUT, "align") <- "TRUE"
             attr(OUT, "MSA2dist.class") <- "dnastring2kaks"
