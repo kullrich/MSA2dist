@@ -10,6 +10,9 @@ pal2nal(pal, nal, remove.gaps = FALSE)
 \item{pal}{\code{AAStringSet} [mandatory]}
 
 \item{nal}{\code{DNAStringSet} [mandatory]}
+
+\item{remove.gaps}{specify if gaps in the codon alignment should be removed
+[default: FALSE]}
 }
 \value{
 codon alignment as \code{DNAStringSet}

@@ -5,6 +5,8 @@
 #' the protein alignment into a codon alignment.
 #' @param pal \code{AAStringSet} [mandatory]
 #' @param nal \code{DNAStringSet} [mandatory]
+#' @param remove.gaps specify if gaps in the codon alignment should be removed
+#' [default: FALSE]
 #' @return codon alignment as \code{DNAStringSet}
 #' @importFrom Biostrings DNAString DNAStringSet AAString AAStringSet
 #' readDNAStringSet readAAStringSet writeXStringSet width subseq

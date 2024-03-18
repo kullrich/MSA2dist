@@ -1,3 +1,9 @@
+# MSA2dist 1.7.4 (2024-03-18)
+
+BUG FIXES
+
+* fixed pal2nal
+
 # MSA2dist 1.7.3 (2024-03-14)
 
 BUG FIXES
