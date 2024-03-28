@@ -16,4 +16,6 @@ test_that("cds2aa() outputs AAStringSet", {
     shorten=TRUE))[2] == "XXL")
     expect_true(as.character(cds2aa(Biostrings::DNAStringSet("GTG"),
     genetic.code=Biostrings::getGeneticCode("2"))) == "M")
+    expect_true(as.character(cds2aa(cds1.cds2.aln, return.cds=TRUE))[1]
+    == "ATGCAACATTGC")
 })

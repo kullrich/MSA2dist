@@ -4,7 +4,14 @@
 \alias{cds2aa}
 \title{cds2aa}
 \usage{
-cds2aa(cds, shorten = FALSE, frame = 1, framelist = NULL, genetic.code = NULL)
+cds2aa(
+    cds,
+    shorten = FALSE,
+    frame = 1,
+    framelist = NULL,
+    genetic.code = NULL,
+    return.cds = FALSE
+)
 }
 \arguments{
 \item{cds}{\code{DNAStringSet} [mandatory]}
@@ -17,6 +24,8 @@ cds2aa(cds, shorten = FALSE, frame = 1, framelist = NULL, genetic.code = NULL)
 
 \item{genetic.code}{The genetic code to use for the translation of codons
 into Amino Acid letters [default: NULL]}
+
+\item{return.cds}{return shorten cds instead of aa [default: FALSE]}
 }
 \value{
 \code{AAStringSet}
@@ -41,6 +50,8 @@ woodmouse |> dnabin2dnastring() |> cds2aa(shorten=TRUE)
 #genetic.code=Biostrings::getGeneticCode("2"))
 woodmouse |> dnabin2dnastring() |> cds2aa(shorten=TRUE,
 genetic.code=Biostrings::getGeneticCode("2"))
+woodmouse |> dnabin2dnastring() |> cds2aa(shorten=TRUE, return.cds=TRUE) |>
+cds2aa(genetic.code=Biostrings::getGeneticCode("2"))
 }
 \seealso{
 \code{\link[Biostrings]{XStringSet-class}},

@@ -19,6 +19,7 @@
 #' [default: 0.5]
 #' @param remove.gaps specify if gaps in the codon alignment should be removed
 #' [default: FALSE]
+#' @param ... other cds2aa parameters
 #' @return codon alignment as \code{DNAStringSet}
 #' @importFrom Biostrings DNAString DNAStringSet AAString AAStringSet
 #' readDNAStringSet readAAStringSet writeXStringSet width subseq
@@ -37,39 +38,58 @@
 
 cds2codonaln <- function(cds1, cds2, type="global",
     substitutionMatrix="BLOSUM62", gapOpening=10, gapExtension=0.5,
-    remove.gaps=FALSE){
+    remove.gaps=FALSE, ...){
     stopifnot("Error: cds1 needs to be either DNAString or DNAStringSet"=
         {methods::is(cds1, "DNAString") || methods::is(cds1, "DNAStringSet")})
     stopifnot("Error: cds2 needs to be either DNAString or DNAStringSet"=
         {methods::is(cds2, "DNAString") || methods::is(cds2, "DNAStringSet")})
     if(methods::is(cds1, "DNAString")){
-        x.aa <- MSA2dist::cds2aa(Biostrings::DNAStringSet(cds1))[[1]]
+        x.aa <- MSA2dist::cds2aa(Biostrings::DNAStringSet(cds1), ...)[[1]]
         x.name <- "cds1"
+        cds1 <- MSA2dist::cds2aa(Biostrings::DNAStringSet(cds1),
+            return.cds=TRUE, ...)[[1]]
     }
     if(methods::is(cds2, "DNAString")){
-        y.aa <- MSA2dist::cds2aa(Biostrings::DNAStringSet(cds2))[[1]]
+        y.aa <- MSA2dist::cds2aa(Biostrings::DNAStringSet(cds2), ...)[[1]]
         y.name <- "cds2"
+        cds2 <- MSA2dist::cds2aa(Biostrings::DNAStringSet(cds2),
+            return.cds=TRUE, ...)[[1]]
     }
     if(methods::is(cds1, "DNAStringSet")){
         stopifnot("Error: cds1 needs to only contain one sequence"=
             length(cds1) == 1)
-        x.aa <- MSA2dist::cds2aa(cds1)[[1]]
+        x.aa <- MSA2dist::cds2aa(cds1, ...)[[1]]
         x.name <- names(cds1)
-        cds1 <- cds1[[1]]
+        cds1 <- MSA2dist::cds2aa(cds1, return.cds=TRUE, ...)[[1]]
     }
     if(methods::is(cds2, "DNAStringSet")){
         stopifnot("Error: cds2 needs to only contain one sequence"=
             length(cds2) == 1)
-        y.aa <- MSA2dist::cds2aa(cds2)[[1]]
+        y.aa <- MSA2dist::cds2aa(cds2, ...)[[1]]
         y.name <- names(cds2)
-        cds2 <- cds2[[1]]
+        cds2 <- MSA2dist::cds2aa(cds2, return.cds=TRUE, ...)[[1]]
     }
     xy.aln <- makePostalignedSeqs(Biostrings::pairwiseAlignment(x.aa, y.aa,
         type=type, substitutionMatrix=substitutionMatrix, gapOpening=gapOpening,
         gapExtension=gapExtension))[[1L]]
     names(xy.aln) <- c(x.name, y.name)
-    xy.cds <- setNames(Biostrings::DNAStringSet(list(cds1, cds2)),
-        c(x.name, y.name))
+    if(type=="local"){
+        xy.aln.x <- gsub("\\*", "X", gsub("-", "", xy.aln[[1]]))
+        cds1_local_pos <- gregexpr(xy.aln.x, gsub("\\*", "X", x.aa))
+        xy.aln.y <- gsub("\\*", "X", gsub("-", "", xy.aln[[2]]))
+        cds2_local_pos <- gregexpr(xy.aln.y, gsub("\\*", "X", y.aa))
+        cds1_local <- Biostrings::subseq(cds1,
+            (cds1_local_pos[[1]][1]*3)-2,
+            (cds1_local_pos[[1]][1]+nchar(xy.aln.x)-1)*3)
+        cds2_local <- Biostrings::subseq(cds2,
+            (cds2_local_pos[[1]][1]*3)-2,
+            (cds2_local_pos[[1]][1]+nchar(xy.aln.y)-1)*3)
+        xy.cds <- setNames(Biostrings::DNAStringSet(list(cds1_local,
+            cds2_local)), c(x.name, y.name))
+    } else{
+        xy.cds <- setNames(Biostrings::DNAStringSet(list(cds1, cds2)),
+            c(x.name, y.name))
+    }
     xy.cds.aln <- MSA2dist::pal2nal(xy.aln, xy.cds, remove.gaps=remove.gaps)
     return(xy.cds.aln)
 }

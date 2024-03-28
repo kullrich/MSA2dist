@@ -8,6 +8,7 @@
 #' @param framelist  supply vector of frames for each entry [default: NULL]
 #' @param genetic.code The genetic code to use for the translation of codons
 #' into Amino Acid letters [default: NULL]
+#' @param return.cds return shorten cds instead of aa [default: FALSE]
 #' @return \code{AAStringSet}
 #' @importFrom methods is slot
 #' @importFrom Biostrings DNAString DNAStringSet AAString AAStringSet
@@ -32,11 +33,13 @@
 #' #genetic.code=Biostrings::getGeneticCode("2"))
 #' woodmouse |> dnabin2dnastring() |> cds2aa(shorten=TRUE,
 #' genetic.code=Biostrings::getGeneticCode("2"))
+#' woodmouse |> dnabin2dnastring() |> cds2aa(shorten=TRUE, return.cds=TRUE) |>
+#' cds2aa(genetic.code=Biostrings::getGeneticCode("2"))
 #' @export cds2aa
 #' @author Kristian K Ullrich
 
 cds2aa <- function(cds, shorten=FALSE, frame=1, framelist=NULL,
-    genetic.code=NULL){
+    genetic.code=NULL, return.cds=FALSE){
     stopifnot("Error: input needs to be a DNAStringSet"=
         methods::is(cds, "DNAStringSet"))
     stopifnot("Error: frame needs to be 1 or 2 or 3"= frame %in% c(1, 2, 3))
@@ -64,9 +67,12 @@ cds2aa <- function(cds, shorten=FALSE, frame=1, framelist=NULL,
     }
     cds <- Biostrings::DNAStringSet(gsub("-", "N", cds))
     cds <- Biostrings::DNAStringSet(gsub("X", "N", cds))
+    if(return.cds){
+        return(cds)
+    }
     if(!is.null(genetic.code)){
         aa <- Biostrings::translate(cds, genetic.code=genetic.code,
-                                    if.fuzzy.codon="X")
+            if.fuzzy.codon="X")
         return(aa)
     }
     aa <- Biostrings::translate(cds, if.fuzzy.codon="X")

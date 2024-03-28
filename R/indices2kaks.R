@@ -106,7 +106,20 @@ indices2kaks <- function(cds,
     ...){
     stopifnot("Error: input needs to be a DNAStringSet"=
         methods::is(cds, "DNAStringSet"))
-    aa <- MSA2dist::cds2aa(cds, ...)
+    local_cds2aa <- function(...,
+        type,
+        substitutionMatrix,
+        gapOpening,
+        gapExtension,
+        remove.gaps) {MSA2dist::cds2aa(...)}
+    local_cdsstring2codonaln <- function(...,
+        shorten,
+        frame,
+        framelist,
+        genetic.code,
+        return.cds) {MSA2dist::cdsstring2codonaln(...)}
+    aa <- local_cds2aa(cds, ...)
+    cds <- local_cds2aa(cds, return.cds=TRUE, ...)
     Comp1 <- FALSE
     Comp2 <- FALSE
     seq1 <- FALSE
@@ -229,7 +242,7 @@ indices2kaks <- function(cds,
                     setNames(cds.names[indices[[i]][j]], "seq1"),
                     setNames(cds.names[indices[[i]][k]], "seq2"),
                     unlist(seqinr::kaks(MSA2dist::dnastring2aln(
-                        MSA2dist::cdsstring2codonaln(cds[c(indices[[i]][j],
+                        local_cdsstring2codonaln(cds[c(indices[[i]][j],
                             indices[[i]][k])], aa[c(indices[[i]][j],
                             indices[[i]][k])],
                             ...)))))
@@ -307,7 +320,7 @@ indices2kaks <- function(cds,
                         setNames(indices[[i]][k], "Comp2"),
                         MSA2dist::codonmat2pnps(
                         MSA2dist::dnastring2codonmat(
-                        MSA2dist::cdsstring2codonaln(cds[c(indices[[i]][j],
+                        local_cdsstring2codonaln(cds[c(indices[[i]][j],
                             indices[[i]][k])], aa[c(indices[[i]][j],
                             indices[[i]][k])],
                         ...))))
@@ -377,7 +390,7 @@ indices2kaks <- function(cds,
                         .combine=rbind) %do% {
                     tmp_out <- rcpp_KaKs(
                         cdsstr = as.character(
-                        MSA2dist::cdsstring2codonaln(cds[c(indices[[i]][j],
+                        local_cdsstring2codonaln(cds[c(indices[[i]][j],
                             indices[[i]][k])], aa[c(indices[[i]][j],
                             indices[[i]][k])],
                             ...)),

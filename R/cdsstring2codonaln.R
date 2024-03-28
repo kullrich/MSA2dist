@@ -54,6 +54,20 @@ cdsstring2codonaln <- function(cds, aa, type="global",
         type=type, substitutionMatrix=substitutionMatrix, gapOpening=gapOpening,
         gapExtension=gapExtension))[[1L]]
     names(xy.aln) <- names(aa)
+    if(type=="local"){
+        xy.aln.x <- gsub("\\*", "X", gsub("-", "", xy.aln[[1]]))
+        cds1_local_pos <- gregexpr(xy.aln.x, gsub("\\*", "X", aa[[1]]))
+        xy.aln.y <- gsub("\\*", "X", gsub("-", "", xy.aln[[2]]))
+        cds2_local_pos <- gregexpr(xy.aln.y, gsub("\\*", "X", aa[[2]]))
+        cds1_local <- Biostrings::subseq(cds[[1]],
+            (cds1_local_pos[[1]][1]*3)-2,
+            (cds1_local_pos[[1]][1]+nchar(xy.aln.x)-1)*3)
+        cds2_local <- Biostrings::subseq(cds[[2]],
+            (cds2_local_pos[[1]][1]*3)-2,
+            (cds2_local_pos[[1]][1]+nchar(xy.aln.y)-1)*3)
+        cds <- setNames(Biostrings::DNAStringSet(list(cds1_local,
+            cds2_local)), names(cds))
+    }
     xy.cds.aln <- MSA2dist::pal2nal(xy.aln, cds, remove.gaps=remove.gaps)
     return(xy.cds.aln)
 }

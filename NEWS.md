@@ -1,3 +1,16 @@
+# MSA2dist 1.7.5 (2024-03-28)
+
+BUG FIXES
+
+* fixed dnastring2kaks to work with local alignments
+* fixed indices2kaks to work with local alignments
+* fixed cds2codonaln to work with local alignments
+* fixed cdsstring2codonaln to work with local alignments
+
+NEW FEATURES
+
+* added return.cds parameter to cds2aa for local alignments
+
 # MSA2dist 1.7.4 (2024-03-18)
 
 BUG FIXES

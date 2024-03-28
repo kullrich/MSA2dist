@@ -11,7 +11,8 @@ cds2codonaln(
     substitutionMatrix = "BLOSUM62",
     gapOpening = 10,
     gapExtension = 0.5,
-    remove.gaps = FALSE
+    remove.gaps = FALSE,
+    ...
 )
 }
 \arguments{
@@ -37,6 +38,8 @@ gap in the alignment (see \code{\link[Biostrings]{pairwiseAlignment}})
 
 \item{remove.gaps}{specify if gaps in the codon alignment should be removed
 [default: FALSE]}
+
+\item{...}{other cds2aa parameters}
 }
 \value{
 codon alignment as \code{DNAStringSet}

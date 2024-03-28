@@ -99,6 +99,18 @@ dnastring2kaks <- function(cds,
     ...){
     stopifnot("Error: input needs to be a DNAStringSet"=
         methods::is(cds, "DNAStringSet"))
+    local_cds2aa <- function(...,
+        type,
+        substitutionMatrix,
+        gapOpening,
+        gapExtension,
+        remove.gaps) {MSA2dist::cds2aa(...)}
+    local_cdsstring2codonaln <- function(...,
+        shorten,
+        frame,
+        framelist,
+        genetic.code,
+        return.cds) {MSA2dist::cdsstring2codonaln(...)}
     Comp1 <- FALSE
     Comp2 <- FALSE
     seq1 <- FALSE
@@ -190,7 +202,8 @@ dnastring2kaks <- function(cds,
             doParallel::registerDoParallel(cl)
             i <- NULL
             j <- NULL
-            aa <- MSA2dist::cds2aa(cds, ...)
+            aa <- local_cds2aa(cds, ...)
+            cds <- local_cds2aa(cds, return.cds=TRUE, ...)
             OUT <- foreach(i = seq(from = 1, to = length(cds) - 1),
                 .combine=rbind, .packages = c('foreach')) %dopar% {
                 foreach(j = seq(from = i + 1, to = length(cds)),
@@ -200,7 +213,7 @@ dnastring2kaks <- function(cds,
                     setNames(cds.names[i], "seq1"),
                     setNames(cds.names[j], "seq2"),
                     unlist(seqinr::kaks(MSA2dist::dnastring2aln(
-                        MSA2dist::cdsstring2codonaln(cds[c(i, j)], aa[c(i, j)],
+                        local_cdsstring2codonaln(cds[c(i, j)], aa[c(i, j)],
                             ...)))))
                 }
             }
@@ -260,7 +273,8 @@ dnastring2kaks <- function(cds,
             doParallel::registerDoParallel(cl)
             i <- NULL
             j <- NULL
-            aa <- MSA2dist::cds2aa(cds, ...)
+            aa <- local_cds2aa(cds, ...)
+            cds <- local_cds2aa(cds, return.cds=TRUE, ...)
             OUT <- foreach(i = seq(from = 1, to = length(cds) - 1),
                 .combine=rbind, .packages = c('foreach')) %dopar% {
                 foreach(j = seq(from = i + 1, to = length(cds)),
@@ -269,7 +283,7 @@ dnastring2kaks <- function(cds,
                     setNames(j, "Comp2"),
                     MSA2dist::codonmat2pnps(
                     MSA2dist::dnastring2codonmat(
-                    MSA2dist::cdsstring2codonaln(cds[c(i, j)], aa[c(i, j)],
+                    local_cdsstring2codonaln(cds[c(i, j)], aa[c(i, j)],
                         ...))))
                 }
             }
@@ -312,14 +326,15 @@ dnastring2kaks <- function(cds,
             doParallel::registerDoParallel(cl)
             i <- NULL
             j <- NULL
-            aa <- MSA2dist::cds2aa(cds, ...)
+            aa <- local_cds2aa(cds, ...)
+            cds <- local_cds2aa(cds, return.cds=TRUE, ...)
             OUT <- foreach(i = seq(from = 1, to = length(cds) - 1),
                 .combine=rbind, .packages = c('foreach')) %dopar% {
                 foreach(j = seq(from = i + 1, to = length(cds)),
                     .combine=rbind) %do% {
                     tmp_out <- rcpp_KaKs(
                         cdsstr = as.character(
-                        MSA2dist::cdsstring2codonaln(cds[c(i, j)], aa[c(i, j)],
+                        local_cdsstring2codonaln(cds[c(i, j)], aa[c(i, j)],
                             ...)),
                         sgc = sgc,
                         method = model)
