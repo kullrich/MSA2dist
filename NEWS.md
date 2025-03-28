@@ -1,3 +1,7 @@
+# MSA2dist 1.11.2 (2025-03-28)
+
+* update DRESCRIPTION
+
 # MSA2dist 1.11.1 (2024-11-14)
 
 BUG FIXES
