@@ -7,7 +7,7 @@
 #' @importFrom methods is slot
 #' @importFrom Biostrings DNAString DNAStringSet AAString AAStringSet
 #' readDNAStringSet readAAStringSet writeXStringSet width subseq
-#' AAMultipleAlignment
+#' @importFrom MultipleAlignment AAMultipleAlignment
 #' @importFrom ape as.AAbin
 #' @seealso \code{\link[seqinr]{as.alignment}}
 #' \code{\link[ape]{as.DNAbin.alignment}}
@@ -26,5 +26,5 @@
 aastring2aabin <- function(aa){
     stopifnot("Error: input needs to be an AAStringSet"=
                 methods::is(aa, "AAStringSet"))
-    return(ape::as.AAbin(Biostrings::AAMultipleAlignment(aa)))
+    return(ape::as.AAbin(MultipleAlignment::AAMultipleAlignment(aa)))
 }

@@ -1,3 +1,8 @@
+# MSA2dist 1.17.1 (2026-06-05)
+
+* update DRESCRIPTION
+* added MultipleAlignment package as dependency
+
 # MSA2dist 1.11.2 (2025-03-28)
 
 * update DRESCRIPTION
