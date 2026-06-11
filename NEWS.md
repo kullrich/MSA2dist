@@ -1,3 +1,7 @@
+# MSA2dist 1.17.2 (2026-06-11)
+
+* update DESCRIPTION
+
 # MSA2dist 1.17.2 (2026-06-09)
 
 * update DESCRIPTION
