@@ -1,3 +1,9 @@
+# MSA2dist 1.17.5 (2026-06-24)
+
+BUG FIXES
+
+* fixed vignette
+
 # MSA2dist 1.17.4 (2026-06-24)
 
 * update DESCRIPTION

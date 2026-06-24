@@ -425,7 +425,7 @@ print(hiv.xy |> dplyr::select(Codon,SynMean,NonSynMean,IndelMean) |>
 
 # Dxy and FST
 
-# Dxy and FST from pre-calculated distance matrix (`dist2dxy()`)
+## Dxy and FST from pre-calculated distance matrix (`dist2dxy()`)
 
 Pairwise genetic distances are already available as a full distance matrix.
 This allows summarisation of within- and between-population divergence
