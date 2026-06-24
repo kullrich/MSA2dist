@@ -14,7 +14,10 @@ rcpp_pairwiseDeletionDNA(dnavector, ncores = 1L, symmetric = 1L)
 \item{symmetric}{symmetric score matrix [default: 1]}
 }
 \value{
-list
+list containing:
+\itemize{
+    \item sitesUsed
+}
 }
 \description{
 returns number of DNA sites used

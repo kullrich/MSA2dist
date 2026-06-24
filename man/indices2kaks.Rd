@@ -5,14 +5,14 @@
 \title{indices2kaks}
 \usage{
 indices2kaks(
-  cds,
-  indices,
-  model = "Li",
-  threads = 1,
-  isMSA = TRUE,
-  sgc = "1",
-  verbose = FALSE,
-  ...
+    cds,
+    indices,
+    model = "Li",
+    threads = 1,
+    isMSA = TRUE,
+    sgc = "1",
+    verbose = FALSE,
+    ...
 )
 }
 \arguments{

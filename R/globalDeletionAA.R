@@ -3,7 +3,8 @@
 #' @description This function returns an \code{AAStringSet} reduced by all
 #' sites containing any gaps ("-", "+", ".") or missing ("X") sites.
 #' @return \code{AAStringSet}
-#' @importFrom methods is slot
+#' @importFrom methods is
+#' @importFrom methods slot
 #' @importFrom Biostrings consensusMatrix
 #' @param aa \code{AAStringSet} [mandatory]
 #' @examples

@@ -11,7 +11,10 @@ using namespace Rcpp;
 //' @title rcpp_pairwiseDeletionDNA
 //' @name rcpp_pairwiseDeletionDNA
 //' @description returns number of DNA sites used
-//' @return list
+//' @return list containing:
+//' \itemize{
+//'     \item sitesUsed
+//' }
 //' @param dnavector StringVector [mandatory]
 //' @param ncores number of cores [default: 1]
 //' @param symmetric symmetric score matrix [default: 1]
@@ -51,7 +54,7 @@ Rcpp::List rcpp_pairwiseDeletionDNA( Rcpp::StringVector dnavector, int ncores = 
   Rcpp::NumericMatrix sitesMatrix(n, n);
   colnames(sitesMatrix)=dnavectornames;
   rownames(sitesMatrix)=dnavectornames;
-  int nsites=dnavector[1].size();
+  int nsites=dnavector[0].size();
   RcppThread::ProgressBar bar(n, 1);
   if(symmetric == 0){
     RcppThread::parallelFor(0, n, [&] (int i) {

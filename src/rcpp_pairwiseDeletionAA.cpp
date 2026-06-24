@@ -11,7 +11,10 @@ using namespace Rcpp;
 //' @title rcpp_pairwiseDeletionAA
 //' @name rcpp_pairwiseDeletionAA
 //' @description returns number of AA sites used
-//' @return list
+//' @return list containing:
+//' \itemize{
+//'     \item sitesUsed
+//' }
 //' @param aavector StringVector [mandatory]
 //' @param ncores number of cores [default: 1]
 //' @param symmetric symmetric score matrix [default: 1]
@@ -56,7 +59,7 @@ Rcpp::List rcpp_pairwiseDeletionAA( Rcpp::StringVector aavector, int ncores = 1,
   Rcpp::NumericMatrix sitesMatrix(n, n);
   colnames(sitesMatrix)=aavectornames;
   rownames(sitesMatrix)=aavectornames;
-  int nsites=aavector[1].size();
+  int nsites=aavector[0].size();
   RcppThread::ProgressBar bar(n, 1);
   if(symmetric == 0){
     RcppThread::parallelFor(0, n, [&] (int i) {

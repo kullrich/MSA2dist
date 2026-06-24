@@ -5,13 +5,13 @@
 \title{cdsstring2codonaln}
 \usage{
 cdsstring2codonaln(
-  cds,
-  aa,
-  type = "global",
-  substitutionMatrix = "BLOSUM62",
-  gapOpening = 10,
-  gapExtension = 0.5,
-  remove.gaps = FALSE
+    cds,
+    aa,
+    type = "global",
+    substitutionMatrix = "BLOSUM62",
+    gapOpening = 10,
+    gapExtension = 0.5,
+    remove.gaps = FALSE
 )
 }
 \arguments{

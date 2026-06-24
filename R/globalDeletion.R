@@ -3,7 +3,8 @@
 #' @description This function returns a \code{DNAStringSet} reduced by all
 #' sites containing any gaps ("-", "+", ".") or missing ("N") sites.
 #' @return \code{DNAStringSet}
-#' @importFrom methods is slot
+#' @importFrom methods is
+#' @importFrom methods slot
 #' @importFrom Biostrings consensusMatrix
 #' @param dna \code{DNAStringSet} [mandatory]
 #' @examples

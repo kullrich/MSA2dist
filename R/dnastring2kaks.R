@@ -20,16 +20,31 @@
 #' @param verbose verbosity (for KaKs Calculator models) [default: FALSE]
 #' @param ... other codon alignment parameters
 #' @return A \code{data.frame} of \code{KaKs} values
-#' @importFrom methods is slot
-#' @importFrom Biostrings DNAString DNAStringSet AAString AAStringSet
-#' readDNAStringSet readAAStringSet writeXStringSet width subseq
+#' @importFrom methods is
+#' @importFrom methods slot
+#' @importFrom Biostrings DNAString
+#' @importFrom Biostrings DNAStringSet
+#' @importFrom Biostrings AAString
+#' @importFrom Biostrings AAStringSet
+#' @importFrom Biostrings readDNAStringSet
+#' @importFrom Biostrings readAAStringSet
+#' @importFrom Biostrings writeXStringSet
+#' @importFrom Biostrings width
+#' @importFrom Biostrings subseq
 #' @importFrom seqinr kaks
-#' @importFrom parallel makeForkCluster stopCluster
+#' @importFrom parallel makeForkCluster
+#' @importFrom parallel stopCluster
 #' @importFrom doParallel registerDoParallel
-#' @importFrom foreach foreach %do% %dopar%
-#' @importFrom tidyr %>% as_tibble pivot_longer
-#' @importFrom dplyr slice left_join
-#' @importFrom tibble column_to_rownames add_column
+#' @importFrom foreach foreach
+#' @importFrom foreach %do%
+#' @importFrom foreach %dopar%
+#' @importFrom tidyr %>%
+#' @importFrom tidyr as_tibble
+#' @importFrom tidyr pivot_longer
+#' @importFrom dplyr slice
+#' @importFrom dplyr left_join
+#' @importFrom tibble column_to_rownames
+#' @importFrom tibble add_column
 #' @importFrom stringr str_split
 #' @seealso \code{\link[seqinr]{kaks}}
 #' @references "MS/MA/GNG/GLWL/GLPB/GMLWL/GMLPB/GYN:" Wang et al. (2010)
@@ -191,7 +206,7 @@ dnastring2kaks <- function(cds,
             attr(OUT, "align") <- "FALSE"
             attr(OUT, "MSA2dist.class") <- "dnastring2kaks"
             return(OUT)
-        } else {
+        } else{
             if(.Platform$OS.type == "windows"){
                 cl <- parallel::makeCluster(threads)
             }
@@ -219,7 +234,7 @@ dnastring2kaks <- function(cds,
             parallel::stopCluster(cl)
             if(is.null(dim(OUT))){
                 OUT <- as.data.frame(t(OUT))
-            } else {
+            } else{
                 OUT <- as.data.frame(OUT)
             }
             OUT[["Ka"]] <- OUT[["ka"]]
@@ -262,7 +277,7 @@ dnastring2kaks <- function(cds,
             attr(OUT, "align") <- "FALSE"
             attr(OUT, "MSA2dist.class") <- "dnastring2kaks"
             return(OUT)
-        } else {
+        } else{
             if(.Platform$OS.type == "windows"){
                 cl <- parallel::makeCluster(threads)
             }
@@ -289,7 +304,7 @@ dnastring2kaks <- function(cds,
             parallel::stopCluster(cl)
             if(is.null(dim(OUT))){
                 OUT <- as.data.frame(t(OUT))
-            } else {
+            } else{
                 OUT <- as.data.frame(OUT)
             }
             OUT[["Ka"]] <- OUT[["dn"]]

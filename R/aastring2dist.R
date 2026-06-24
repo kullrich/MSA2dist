@@ -14,11 +14,25 @@
 #' @return A \code{data.frame} of pairwise distance values
 #' \code{distSTRING}, sites used \code{sitesUsed} and region used
 #' \code{regionUsed}
-#' @importFrom methods is slot
-#' @importFrom Biostrings DNAString DNAStringSet AAString AAStringSet
-#' readDNAStringSet readAAStringSet writeXStringSet width subseq
-#' @importFrom IRanges IRanges IRangesList reduce start end findOverlaps
-#' disjoin overlapsRanges
+#' @importFrom methods is
+#' @importFrom methods slot
+#' @importFrom Biostrings DNAString
+#' @importFrom Biostrings DNAStringSet
+#' @importFrom Biostrings AAString
+#' @importFrom Biostrings AAStringSet
+#' @importFrom Biostrings readDNAStringSet
+#' @importFrom Biostrings readAAStringSet
+#' @importFrom Biostrings writeXStringSet
+#' @importFrom Biostrings width
+#' @importFrom Biostrings subseq
+#' @importFrom IRanges IRanges
+#' @importFrom IRanges IRangesList
+#' @importFrom IRanges reduce
+#' @importFrom IRanges start
+#' @importFrom IRanges end
+#' @importFrom IRanges findOverlaps
+#' @importFrom IRanges disjoin
+#' @importFrom IRanges overlapsRanges
 #' @seealso \code{\link[MSA2dist]{dnastring2dist}}
 #' @examples
 #' ## load example sequence data
@@ -48,7 +62,11 @@ aastring2dist <- function(aa, threads=1, symmetric=TRUE, score=NULL,
     stopifnot("Error: input needs to be an AAStringSet"=
         methods::is(aa, "AAStringSet"))
     stopifnot("Error: set score matrix e.g 'granthamMatrix()'"= !is.null(score))
-    if(symmetric){symmetric_int <- 1}else{symmetric_int <- 0}
+    if(symmetric){
+        symmetric_int <- 1
+    } else{
+        symmetric_int <- 0
+    }
     region.aa <- IRanges::IRanges(start=1, end=unique(width(aa)))
     if(!is.null(mask) || !is.null(region)){
         aa.region <- MSA2dist::string2region(aa, mask=mask, region=region)

@@ -5,8 +5,14 @@
 #' \code{RNAStringSet}, \code{AAStringSet}, \code{BStringSet}
 #' object from the \code{Biostrings} package.
 #' @return subsequence of an \code{Biostrings} object
-#' @importFrom Biostrings DNAString RNAString AAString BString DNAStringSet
-#' RNAStringSet AAStringSet BStringSet
+#' @importFrom Biostrings DNAString
+#' @importFrom Biostrings RNAString
+#' @importFrom Biostrings AAString
+#' @importFrom Biostrings BString
+#' @importFrom Biostrings DNAStringSet
+#' @importFrom Biostrings RNAStringSet
+#' @importFrom Biostrings AAStringSet
+#' @importFrom Biostrings BStringSet
 #' @param x \code{DNAStringSet}, \code{RNAString}, \code{AAString},
 #' \code{BString}, \code{DNAStringSet}, \code{RNAStringSet},
 #' \code{AAStringSet}, \code{BStringSet} [mandatory]

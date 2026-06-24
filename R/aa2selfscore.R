@@ -4,8 +4,10 @@
 #' @param aa \code{AAStringSet} [mandatory]
 #' @param scorematrix score matrix to use [default: BLOSUM62]
 #' @return \code{data.frame}
-#' @importFrom methods is slot
-#' @importFrom Biostrings AAString AAStringSet
+#' @importFrom methods is
+#' @importFrom methods slot
+#' @importFrom Biostrings AAString
+#' @importFrom Biostrings AAStringSet
 #' @importFrom stringr word
 #' @importFrom utils data
 #' @seealso \code{\link[Biostrings]{XStringSet-class}},

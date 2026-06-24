@@ -16,7 +16,11 @@ rcpp_distSTRING(dnavector, scoreMatrix, ncores = 1L, symmetric = 1L)
 \item{symmetric}{symmetric score matrix [default: 1]}
 }
 \value{
-list
+list containing:
+\itemize{
+    \item distSTRING
+    \item sitesUsed
+}
 }
 \description{
 calculates pairwise distances using a score matrix

@@ -5,13 +5,13 @@
 \title{dnastring2kaks}
 \usage{
 dnastring2kaks(
-  cds,
-  model = "Li",
-  threads = 1,
-  isMSA = TRUE,
-  sgc = "1",
-  verbose = FALSE,
-  ...
+    cds,
+    model = "Li",
+    threads = 1,
+    isMSA = TRUE,
+    sgc = "1",
+    verbose = FALSE,
+    ...
 )
 }
 \arguments{

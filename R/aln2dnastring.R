@@ -4,8 +4,15 @@
 #' an \code{DNAStringSet}.
 #' @param aln \code{seqinr} \code{alignment} [mandatory]
 #' @return An object of class \code{DNAStringSet}
-#' @importFrom Biostrings DNAString DNAStringSet AAString AAStringSet
-#' readDNAStringSet readAAStringSet writeXStringSet width subseq
+#' @importFrom Biostrings DNAString
+#' @importFrom Biostrings DNAStringSet
+#' @importFrom Biostrings AAString
+#' @importFrom Biostrings AAStringSet
+#' @importFrom Biostrings readDNAStringSet
+#' @importFrom Biostrings readAAStringSet
+#' @importFrom Biostrings writeXStringSet
+#' @importFrom Biostrings width
+#' @importFrom Biostrings subseq
 #' @importFrom seqinr as.alignment
 #' @seealso \code{\link[seqinr]{as.alignment}}
 #' \code{\link[Biostrings]{DNAStringSet}}

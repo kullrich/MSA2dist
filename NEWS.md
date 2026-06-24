@@ -1,4 +1,21 @@
-# MSA2dist 1.17.2 (2026-06-11)
+# MSA2dist 1.17.4 (2026-06-24)
+
+* update DESCRIPTION
+* update dnastring2dist to handle unique sequence patterns
+
+NEW FEATURES
+
+* added collapseChar
+* added collapseXStringSet
+* added normpop
+* added dnastring2weightedPi
+* added rcpp_weightedPi
+* added rcpp_weightedPi_pop
+* added dnastring2dxy
+* added rcpp_dxy_fst_pop
+* added dist2dxy to calculate dxy per pop from dnastring2dist result
+
+# MSA2dist 1.17.3 (2026-06-11)
 
 * update DESCRIPTION
 

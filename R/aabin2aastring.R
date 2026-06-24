@@ -4,9 +4,17 @@
 #' \code{AAStringSet}.
 #' @param aabin \code{ape} \code{AAbin} [mandatory]
 #' @return An object of class \code{AAStringSet}
-#' @importFrom methods is slot
-#' @importFrom Biostrings DNAString DNAStringSet AAString AAStringSet
-#' readDNAStringSet readAAStringSet writeXStringSet width subseq
+#' @importFrom methods is
+#' @importFrom methods slot
+#' @importFrom Biostrings DNAString
+#' @importFrom Biostrings DNAStringSet
+#' @importFrom Biostrings AAString
+#' @importFrom Biostrings AAStringSet
+#' @importFrom Biostrings readDNAStringSet
+#' @importFrom Biostrings readAAStringSet
+#' @importFrom Biostrings writeXStringSet
+#' @importFrom Biostrings width
+#' @importFrom Biostrings subseq
 #' @importFrom seqinr as.alignment
 #' @importFrom ape as.DNAbin.alignment
 #' @seealso \code{\link[seqinr]{as.alignment}}

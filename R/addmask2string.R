@@ -11,11 +11,25 @@
 #' @param append indicate if mask should be appended or overwritten
 #' [default: TRUE]
 #' @return An object of class \code{DNAStringSet} or \code{AAStringSet}
-#' @importFrom methods is slot
-#' @importFrom Biostrings DNAString DNAStringSet AAString AAStringSet
-#' readDNAStringSet readAAStringSet writeXStringSet width subseq
-#' @importFrom IRanges IRanges IRangesList reduce start end findOverlaps
-#' disjoin overlapsRanges
+#' @importFrom methods is
+#' @importFrom methods slot
+#' @importFrom Biostrings DNAString
+#' @importFrom Biostrings DNAStringSet
+#' @importFrom Biostrings AAString
+#' @importFrom Biostrings AAStringSet
+#' @importFrom Biostrings readDNAStringSet
+#' @importFrom Biostrings readAAStringSet
+#' @importFrom Biostrings writeXStringSet
+#' @importFrom Biostrings width
+#' @importFrom Biostrings subseq
+#' @importFrom IRanges IRanges
+#' @importFrom IRanges IRangesList
+#' @importFrom IRanges reduce
+#' @importFrom IRanges start
+#' @importFrom IRanges end
+#' @importFrom IRanges findOverlaps
+#' @importFrom IRanges disjoin
+#' @importFrom IRanges overlapsRanges
 #' @seealso \code{\link[MSA2dist]{addregion2string}},
 #' \code{\link[MSA2dist]{addpop2string}},
 #' \code{\link[MSA2dist]{addpos2string}}

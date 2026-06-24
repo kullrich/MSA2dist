@@ -30,7 +30,11 @@ rcpp_KaKs <- function(cdsstr, sgc = "1", method = "YN", verbose = FALSE) {
 #' @title rcpp_distSTRING
 #' @name rcpp_distSTRING
 #' @description calculates pairwise distances using a score matrix
-#' @return list
+#' @return list containing:
+#' \itemize{
+#'     \item distSTRING
+#'     \item sitesUsed
+#' }
 #' @param dnavector StringVector [mandatory]
 #' @param scoreMatrix NumericMatrix [mandatory]
 #' @param ncores number of cores [default: 1]
@@ -49,10 +53,59 @@ rcpp_distSTRING <- function(dnavector, scoreMatrix,
 
 #' @useDynLib MSA2dist, .registration = TRUE
 #' @import Rcpp
+#' @title rcpp_dxy_fst_pop
+#' @name rcpp_dxy_fst_pop
+#' @description calculates dxy and fst per population combination
+#' @return list containing:
+#' \itemize{
+#'     \item dxy
+#'     \item fst
+#'     \item pi_within
+#'     \item pi_between
+#'     \item populations
+#'     \item model
+#'     \item estimator
+#' }
+#' @param dnavector StringVector [mandatory]
+#' @param pop_idx IntegerVector [mandatory]
+#' @param model string [default: IUPAC]
+#' @param estimator string [default: count]
+#' @examples
+#' ## load example sequence data
+#' data("iupac", package="MSA2dist")
+#' rcpp_dxy_fst_pop(dnavector=as.character(iupac),
+#' pop_idx=c(rep(1,8),rep(2,8),rep(3,8),rep(4,6)),
+#' model="IUPAC",
+#' estimator="count")
+#' rcpp_dxy_fst_pop(dnavector=as.character(iupac),
+#' pop_idx=c(rep(1,8),rep(2,8),rep(3,8),rep(4,6)),
+#' model="IUPAC",
+#' estimator="prob")
+#' rcpp_dxy_fst_pop(dnavector=as.character(iupac),
+#' pop_idx=c(rep(1,8),rep(2,8),rep(3,8),rep(4,6)),
+#' model="sequence",
+#' estimator="count")
+#' rcpp_dxy_fst_pop(dnavector=as.character(iupac),
+#' pop_idx=c(rep(1,8),rep(2,8),rep(3,8),rep(4,6)),
+#' model="sequence",
+#' estimator="prob")
+#' @export rcpp_dxy_fst_pop
+#' @author Kristian K Ullrich
+rcpp_dxy_fst_pop <- function(dnavector, pop_idx, model = "IUPAC",
+    estimator = "prob") {
+    .Call(`_MSA2dist_rcpp_dxy_fst_pop`, dnavector, pop_idx, model, 
+    estimator)
+}
+
+#' @useDynLib MSA2dist, .registration = TRUE
+#' @import Rcpp
 #' @title rcpp_pairwiseDeletionAA
 #' @name rcpp_pairwiseDeletionAA
 #' @description returns number of AA sites used
-#' @return list
+#' @return list containing:
+#' \itemize{
+#'     \item sitesUsed
+#' }
 #' @param aavector StringVector [mandatory]
 #' @param ncores number of cores [default: 1]
 #' @param symmetric symmetric score matrix [default: 1]
@@ -72,7 +125,10 @@ rcpp_pairwiseDeletionAA <- function(aavector, ncores = 1L, symmetric = 1L) {
 #' @title rcpp_pairwiseDeletionDNA
 #' @name rcpp_pairwiseDeletionDNA
 #' @description returns number of DNA sites used
-#' @return list
+#' @return list containing:
+#' \itemize{
+#'     \item sitesUsed
+#' }
 #' @param dnavector StringVector [mandatory]
 #' @param ncores number of cores [default: 1]
 #' @param symmetric symmetric score matrix [default: 1]
@@ -85,5 +141,79 @@ rcpp_pairwiseDeletionAA <- function(aavector, ncores = 1L, symmetric = 1L) {
 #' @author Kristian K Ullrich
 rcpp_pairwiseDeletionDNA <- function(dnavector, ncores = 1L, symmetric = 1L) {
     .Call(`_MSA2dist_rcpp_pairwiseDeletionDNA`, dnavector, ncores, symmetric)
+}
+
+#' @useDynLib MSA2dist, .registration = TRUE
+#' @import Rcpp
+#' @title rcpp_weightedPi
+#' @name rcpp_weightedPi
+#' @description calculates weighted pi
+#' @return list containing:
+#' \itemize{
+#'     \item weightedPi
+#'     \item model
+#'     \item estimator
+#' }
+#' @param dnavector StringVector [mandatory]
+#' @param model string [default: IUPAC]
+#' @param estimator string [default: count]
+#' @examples
+#' ## load example sequence data
+#' data("hiv", package="MSA2dist")
+#' rcpp_weightedPi(dnavector=as.character(hiv), model="IUPAC",
+#' estimator="count")
+#' rcpp_weightedPi(dnavector=as.character(hiv), model="sequence",
+#' estimator="count")
+#' rcpp_weightedPi(dnavector=as.character(hiv), model="IUPAC",
+#' estimator="prob")
+#' rcpp_weightedPi(dnavector=as.character(hiv), model="sequence",
+#' estimator="prob")
+#' @export rcpp_weightedPi
+#' @author Kristian K Ullrich
+rcpp_weightedPi <- function(dnavector, model = "IUPAC", estimator = "count") {
+    .Call(`_MSA2dist_rcpp_weightedPi`, dnavector, model, estimator)
+}
+
+#' @useDynLib MSA2dist, .registration = TRUE
+#' @import Rcpp
+#' @title rcpp_weightedPi_pop
+#' @name rcpp_weightedPi_pop
+#' @description calculates weighted pi per population
+#' @return list containing:
+#' \itemize{
+#'     \item weightedPi
+#'     \item populations
+#'     \item model
+#'     \item estimator
+#' }
+#' @param dnavector StringVector [mandatory]
+#' @param pop_idx IntegerVector [mandatory]
+#' @param model string [default: IUPAC]
+#' @param estimator string [default: count]
+#' @examples
+#' ## load example sequence data
+#' data("iupac", package="MSA2dist")
+#' rcpp_weightedPi_pop(dnavector=as.character(iupac),
+#' pop_idx=c(rep(1,8),rep(2,8),rep(3,8),rep(4,6)),
+#' model="IUPAC",
+#' estimator="count")
+#' rcpp_weightedPi_pop(dnavector=as.character(iupac),
+#' pop_idx=c(rep(1,8),rep(2,8),rep(3,8),rep(4,6)),
+#' model="IUPAC",
+#' estimator="prob")
+#' rcpp_weightedPi_pop(dnavector=as.character(iupac),
+#' pop_idx=c(rep(1,8),rep(2,8),rep(3,8),rep(4,6)),
+#' model="sequence",
+#' estimator="count")
+#' rcpp_weightedPi_pop(dnavector=as.character(iupac),
+#' pop_idx=c(rep(1,8),rep(2,8),rep(3,8),rep(4,6)),
+#' model="sequence",
+#' estimator="prob")
+#' @export rcpp_weightedPi_pop
+#' @author Kristian K Ullrich
+rcpp_weightedPi_pop <- function(dnavector, pop_idx, model = "IUPAC",
+    estimator = "count") {
+    .Call(`_MSA2dist_rcpp_weightedPi_pop`, dnavector, pop_idx, model,
+    estimator)
 }
 

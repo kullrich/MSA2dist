@@ -10,10 +10,21 @@
 #' into Amino Acid letters [default: NULL]
 #' @param return.cds return shorten cds instead of aa [default: FALSE]
 #' @return \code{AAStringSet}
-#' @importFrom methods is slot
-#' @importFrom Biostrings DNAString DNAStringSet AAString AAStringSet
-#' readDNAStringSet readAAStringSet writeXStringSet width subseq translate
-#' getGeneticCode GENETIC_CODE GENETIC_CODE_TABLE
+#' @importFrom methods is
+#' @importFrom methods slot
+#' @importFrom Biostrings DNAString
+#' @importFrom Biostrings DNAStringSet
+#' @importFrom Biostrings AAString
+#' @importFrom Biostrings AAStringSet
+#' @importFrom Biostrings readDNAStringSet
+#' @importFrom Biostrings readAAStringSet
+#' @importFrom Biostrings writeXStringSet
+#' @importFrom Biostrings width
+#' @importFrom Biostrings subseq
+#' @importFrom Biostrings translate
+#' @importFrom Biostrings getGeneticCode
+#' @importFrom Biostrings GENETIC_CODE
+#' @importFrom Biostrings GENETIC_CODE_TABLE
 #' @importFrom stringr word
 #' @seealso \code{\link[Biostrings]{XStringSet-class}},
 #' \code{\link[seqinr]{translate}}

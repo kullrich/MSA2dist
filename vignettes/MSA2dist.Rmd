@@ -23,7 +23,7 @@ vignette: >
     %\VignetteEncoding{UTF-8}
 ---
 
-```{r echo=FALSE, results='hide', warning=FALSE, message=FALSE}
+```{r setup-packages, echo=FALSE, results='hide', warning=FALSE, message=FALSE}
 suppressPackageStartupMessages({
     library(MSA2dist)
     library(Biostrings)
@@ -99,11 +99,12 @@ BiocManager::install("MSA2dist")
 
 # Load MSA2dist
 
-```{r}
+```{r load-data}
 # load MSA2dist
 library(MSA2dist)
 # load example data
 data(hiv, package="MSA2dist")
+data(iupac, package="MSA2dist")
 data(AAMatrix, package="MSA2dist")
 data(woodmouse, package="ape")
 ```
@@ -119,7 +120,7 @@ object.
 
 `?Biostrings::DNAStringSet()` >>> `?seqinr::as.alignment()`
 
-```{r}
+```{r dnastring2aln}
 ## define two cds sequences
 cds1 <- Biostrings::DNAString("ATGCAACATTGC")
 cds2 <- Biostrings::DNAString("ATG---CATTGC")
@@ -133,21 +134,21 @@ cds1.cds2.aln |> dnastring2aln()
 
 `?seqinr::as.alignment()` >>> `?Biostrings::DNAStringSet()`
 
-```{r}
+```{r aln2dnastring}
 ## convert back into DNAStringSet
 cds1.cds2.aln |> dnastring2aln() |> aln2dnastring()
 ```
 
 `?Biostrings::DNAStringSet()` >>> `?ape::DNAbin()`
 
-```{r}
+```{r dnastring2dnabin}
 ## convert into alignment
 cds1.cds2.aln |> dnastring2dnabin()
 ```
 
 `?ape::DNAbin()` >>> `?Biostrings::DNAStringSet()`
 
-```{r}
+```{r dnabin2dnastring}
 ## convert back into DNAStringSet
 cds1.cds2.aln |> dnastring2dnabin() |> dnabin2dnastring()
 ## use woodmouse data
@@ -156,7 +157,7 @@ woodmouse |> dnabin2dnastring()
 
 `?Biostrings::AAStringSet()` >>> `?seqinr::as.alignment()`
 
-```{r}
+```{r aastring2aln}
 ## translate cds into aa
 aa1.aa2.aln <- cds1.cds2.aln |> cds2aa()
 ## convert into alignment
@@ -165,21 +166,21 @@ aa1.aa2.aln |> aastring2aln()
 
 `?seqinr::as.alignment()` >>> `?Biostrings::AAStringSet()`
 
-```{r}
+```{r aln2aastring}
 ## convert back into AAStringSet
 aa1.aa2.aln |> aastring2aln() |> aln2aastring()
 ```
 
 `?Biostrings::AAStringSet()` >>> `?ape::as.AAbin()`
 
-```{r}
+```{r aastring2aabin}
 ## convert into AAbin
 aa1.aa2.aln |> aastring2aabin()
 ```
 
 `?ape::as.AAbin()` >>> `?Biostrings::AAStringSet()`
 
-```{r}
+```{r aabin2aastring}
 ## convert back into AAStringSet
 aa1.aa2.aln |> aastring2aabin() |> aabin2aastring()
 ```
@@ -195,7 +196,7 @@ This can be forced by using the `shorten = TRUE` option.
 
 Simple translation:
 
-```{r}
+```{r cds2aa}
 ## define two cds sequences
 cds1 <- Biostrings::DNAString("ATGCAACATTGC")
 cds2 <- Biostrings::DNAString("ATG---CATTGC")
@@ -210,7 +211,7 @@ aa1.aa2.aln <- cds1.cds2.aln |> cds2aa()
 
 Translation keeping multiple of three sequence length:
 
-```{r}
+```{r cds2aa-shorten}
 ## translate cds into aa using frame = 2
 ## result is empty due to not multiple of three
 cds1.cds2.aln |> cds2aa(frame=2)
@@ -228,7 +229,7 @@ As you can see from the above example, the initial amino acids `I` will change
 into `M` due to the mitochondrial translation code and also some `*` stop
 codons will change into a `W` amino acid.
 
-```{r}
+```{r cds2aa-genetic}
 ## alternative genetic code
 ## use woodmouse data
 woodmouse |> dnabin2dnastring() |> cds2aa(shorten=TRUE,
@@ -241,7 +242,7 @@ woodmouse |> dnabin2dnastring() |> cds2aa(shorten=TRUE,
 
 ### Grantham's distance
 
-```{r}
+```{r aastring2dist}
 ## calculate pairwise AA distances based on Grantham's distance
 aa.dist <- hiv |> cds2aa() |> aastring2dist(score=granthamMatrix())
 ## obtain distances
@@ -250,7 +251,7 @@ head(aa.dist$distSTRING)
 head(aa.dist$sitesUsed)
 ```
 
-```{r}
+```{r aastring2dist-plot}
 ## create and plot bionj tree
 aa.dist.bionj <- ape::bionj(as.dist(aa.dist$distSTRING))
 plot(aa.dist.bionj)
@@ -260,7 +261,7 @@ To use a different score matrix, here as an example the `AAMatrix` from the
 R package [`alakazam`](https://cran.r-project.org/web/packages/ape/index.html)
 is used:
 
-```{r}
+```{r aastring2dist-matrix}
 ## use AAMatrix data
 head(AAMatrix)
 aa.dist.AAMatrix <- hiv |> cds2aa() |> aastring2dist(score=AAMatrix)
@@ -271,7 +272,7 @@ head(aa.dist.AAMatrix$distSTRING)
 
 ### `ape::dist.dna` models
 
-```{r}
+```{r dnastring2dist}
 ## use hiv data
 dna.dist <- hiv |> dnastring2dist(model="K80")
 ## obtain distances
@@ -280,14 +281,14 @@ head(dna.dist$distSTRING)
 head(dna.dist$sitesUsed)
 ```
 
-```{r}
+```{r dnastring2dist-bionj}
 ## create and plot bionj tree
 dna.dist.bionj <- ape::bionj(as.dist(dna.dist$distSTRING))
 ```
 
 It is also possible to compare the amino acid and nucleotide based trees:
 
-```{r}
+```{r treecompare}
 ## creation of the association matrix:
 association <- cbind(aa.dist.bionj$tip.label, aa.dist.bionj$tip.label)
 ## cophyloplot
@@ -302,7 +303,7 @@ ape::cophyloplot(aa.dist.bionj,
 
 ### `IUPAC` distance 
 
-```{r}
+```{r dnastring2dist-IUPAC}
 ## use hiv data
 hiv.dist.iupac <- head(hiv |> dnastring2dist(model="IUPAC"))
 head(hiv.dist.iupac$distSTRING)
@@ -313,7 +314,7 @@ system.time(hiv |> dnastring2dist(model="IUPAC", threads=2))
 
 Woodmouse data example:
 
-```{r}
+```{r dnastring2dist-woodmouse}
 ## use woodmouse data
 woodmouse.dist <- woodmouse |> dnabin2dnastring() |> dnastring2dist()
 head(woodmouse.dist$distSTRING)
@@ -323,7 +324,7 @@ head(woodmouse.dist$distSTRING)
 
 ## Calculating synonymous and nonsynonymous substitutions (`dnastring2kaks()`)
 
-```{r}
+```{r dnastring2kaks-hiv}
 ## use hiv data
 ## model Li
 head(hiv |> dnastring2kaks(model="Li"))
@@ -351,7 +352,7 @@ models to choose from KaKs_Calculator 2.0 [@wang2010kaks_calculator] are:
 - YN [@yang2000codon]
 - MYN [@zhang2006computing, @wang2009gamma]
 
-```{r}
+```{r dnastring2kaks-YN}
 ## use hiv data
 ## model MYN
 head(hiv |> dnastring2kaks(model="MYN"))
@@ -361,7 +362,7 @@ head(hiv |> dnastring2kaks(model="YN", threads=1))
 
 ## Using indices to calculate Ka/Ks
 
-```{r}
+```{r indices2kaks}
 ## use hiv data
 idx <- list(c(2, 3), c(5,7,9))
 ## model MYN
@@ -380,7 +381,7 @@ The window plots are constructed with the R package
 
 ### Create codon matrix (`dnastring2codonmat()`)
 
-```{r}
+```{r dnastring2codonmat}
 ## define two cds sequences
 cds1 <- Biostrings::DNAString("ATGCAACATTGC")
 cds2 <- Biostrings::DNAString("ATG---CATTGC")
@@ -393,7 +394,7 @@ cds1.cds2.aln |> dnastring2codonmat()
 Like the `cds2aa()` function, also the `dnastring2codonmat()` function is
 implemented to handle different frames.
 
-```{r}
+```{r dnastring2codonmat-frames}
 ## use frame 2 and shorten to circumvent multiple of three error
 cds1 <- Biostrings::DNAString("-ATGCAACATTGC-")
 cds2 <- Biostrings::DNAString("-ATG---CATTGC-")
@@ -404,7 +405,7 @@ cds1.cds2.aln |> dnastring2codonmat(frame=2, shorten=TRUE)
 
 ### Calculate average behavior of each codon (`codonmat2xy()`)
 
-```{r}
+```{r codonmat2xy}
 ## use hiv data
 ## calculate average behavior
 hiv.xy <- hiv |> dnastring2codonmat() |> codonmat2xy()
@@ -412,7 +413,7 @@ hiv.xy <- hiv |> dnastring2codonmat() |> codonmat2xy()
 
 ### Plot average behavior of each codon
 
-```{r}
+```{r codonmat2xy-plot}
 print(hiv.xy |> dplyr::select(Codon,SynMean,NonSynMean,IndelMean) |>
     tidyr::gather(variable, values, -Codon) |>
     ggplot2::ggplot(aes(x=Codon, y=values)) + 
@@ -420,6 +421,73 @@ print(hiv.xy |> dplyr::select(Codon,SynMean,NonSynMean,IndelMean) |>
     ggplot2::geom_point(aes(colour=factor(variable))) + 
     ggplot2::ggtitle("HIV-1 sample 136 patient 1 from
         Sweden envelope glycoprotein (env) gene"))
+```
+
+# Dxy and FST
+
+# Dxy and FST from pre-calculated distance matrix (`dist2dxy()`)
+
+Pairwise genetic distances are already available as a full distance matrix.
+This allows summarisation of within- and between-population divergence
+using full distributional information.
+
+For each population pair, the function reports not only mean values,
+but also distributional summaries of pairwise distances, including:
+
+- mean
+- median
+- minimum
+- maximum
+- variance
+- mean number of aligned sites used
+
+This provides a full empirical description of genetic divergence
+structure across populations including additional statistics such
+as Gmin, RND, and RNDmin when outgroup information is provided.
+
+```{r dist2dxy}
+## create poplist
+poplist <- list(FRA = grep("Mmd.FRA", names(iupac)),
+    GER = grep("Mmd.GER", names(iupac)),
+    IRA = grep("Mmd.IRA", names(iupac)),
+    AFG = grep("Mmm.AFG", names(iupac)))
+iupac <- iupac |> addpop2string(poplist)
+## using popx: FRA, popy: IRA, popout: AFG
+dxy <- iupac |> dnastring2dist() |> dist2dxy(pop=popinteger(iupac),
+    popx="FRA", popy="IRA", popout="AFG")
+dxy$pi_within
+dxy$pi_between
+```
+
+## Dxy and FST directly from `Biostrings::DNAStringSet` (`dnastring2dxy()`)
+
+When starting from raw sequence data, pairwise distances are computed
+on-the-fly from aligned sequences using site-level information
+(identity, mismatch, ambiguity handling, or substitution model
+depending on settings).
+
+Because distances are not pre-stored as a full matrix,
+the output focuses on expected values of divergence,
+i.e. population-level means derived from site-based aggregation.
+
+As a result, the primary outputs are mean-based estimators of:
+
+- within-population diversity (π)
+- between-population divergence (Dxy)
+- derived FST
+
+rather than full distributional summaries of pairwise distances.
+
+```{r dnastring2dxy}
+## create poplist
+poplist <- list(FRA = grep("Mmd.FRA", names(iupac)),
+    GER = grep("Mmd.GER", names(iupac)),
+    IRA = grep("Mmd.IRA", names(iupac)),
+    AFG = grep("Mmm.AFG", names(iupac)))
+iupac <- iupac |> addpop2string(poplist)
+dxy <- iupac |> dnastring2dxy(pop=popinteger(iupac), model="IUPAC")
+dxy$dxy
+dxy$fst
 ```
 
 # References

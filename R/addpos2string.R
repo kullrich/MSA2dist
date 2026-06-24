@@ -10,12 +10,26 @@
 #' @param start start position [mandatory]
 #' @param end end position [mandatory]
 #' @return An object of class \code{DNAStringSet} or \code{AAStringSet}
-#' @importFrom methods is slot
-#' @importFrom Biostrings DNAString DNAStringSet AAString AAStringSet
-#' readDNAStringSet readAAStringSet writeXStringSet width subseq
+#' @importFrom methods is
+#' @importFrom methods slot
+#' @importFrom Biostrings DNAString
+#' @importFrom Biostrings DNAStringSet
+#' @importFrom Biostrings AAString
+#' @importFrom Biostrings AAStringSet
+#' @importFrom Biostrings readDNAStringSet
+#' @importFrom Biostrings readAAStringSet
+#' @importFrom Biostrings writeXStringSet
+#' @importFrom Biostrings width
+#' @importFrom Biostrings subseq
 #' @importFrom GenomicRanges GRanges
-#' @importFrom IRanges IRanges IRangesList reduce start end findOverlaps
-#' disjoin overlapsRanges
+#' @importFrom IRanges IRanges
+#' @importFrom IRanges IRangesList
+#' @importFrom IRanges reduce
+#' @importFrom IRanges start
+#' @importFrom IRanges end
+#' @importFrom IRanges findOverlaps
+#' @importFrom IRanges disjoin
+#' @importFrom IRanges overlapsRanges
 #' @seealso \code{\link[MSA2dist]{addmask2string}},
 #' \code{\link[MSA2dist]{addregion2string}},
 #' \code{\link[MSA2dist]{addpop2string}}

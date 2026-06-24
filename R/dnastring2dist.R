@@ -13,16 +13,31 @@
 #' [default: NULL]
 #' @param region \code{IRanges} object indicating region to use for dist
 #' calculation. Default is null, meaning all sites are used [default: NULL]
+#' @param collapse collapse sequence to patterns first [default: TRUE]
 #' @param ... other \code{ape::dist.dna} parameters
 #' (see \code{\link[ape]{dist.dna}})
 #' @return A data.frame of pairwise distance values \code{distSTRING} and
 #' sites used \code{sitesUsed}
-#' @importFrom methods is slot
-#' @importFrom Biostrings DNAString DNAStringSet AAString AAStringSet
-#' readDNAStringSet readAAStringSet writeXStringSet width subseq
+#' @importFrom methods is
+#' @importFrom methods slot
+#' @importFrom Biostrings DNAString
+#' @importFrom Biostrings DNAStringSet
+#' @importFrom Biostrings AAString
+#' @importFrom Biostrings AAStringSet
+#' @importFrom Biostrings readDNAStringSet
+#' @importFrom Biostrings readAAStringSet
+#' @importFrom Biostrings writeXStringSet
+#' @importFrom Biostrings width
+#' @importFrom Biostrings subseq
 #' @importFrom ape dist.dna
-#' @importFrom IRanges IRanges IRangesList reduce start end findOverlaps
-#' disjoin overlapsRanges
+#' @importFrom IRanges IRanges
+#' @importFrom IRanges IRangesList
+#' @importFrom IRanges reduce
+#' @importFrom IRanges start
+#' @importFrom IRanges end
+#' @importFrom IRanges findOverlaps
+#' @importFrom IRanges disjoin
+#' @importFrom IRanges overlapsRanges
 #' @seealso \code{\link[ape]{dist.dna}}
 #' @examples
 #' ## load example sequence data
@@ -53,21 +68,52 @@
 #' @author Kristian K Ullrich
 
 dnastring2dist <- function(dna, model="IUPAC", threads=1, symmetric=TRUE,
-    score=NULL, mask=NULL, region=NULL, ...){
+    score=NULL, mask=NULL, region=NULL, collapse=TRUE, ...){
     stopifnot("Error: Input needs to be DNAStringSet"=
         methods::is(dna, "DNAStringSet"))
-    if(symmetric){symmetric_int <- 1}else{symmetric_int <- 0}
+    if(symmetric){
+        symmetric_int <- 1
+    } else{
+        symmetric_int <- 0
+    }
     region.dna <- IRanges::IRanges(start=1, end=unique(width(dna)))
     if(!is.null(mask) || !is.null(region)){
         dna.region <- MSA2dist::string2region(dna, mask=mask, region=region)
         dna.char <- as.character(dna.region)
         region.dna <- dna.region@metadata$regionUsed
     } else{dna.char <- as.character(dna)}
+    dna.char.names <- make.unique(make.names(names(dna.char), unique=TRUE))
     if(!is.null(score)){
-        OUT <- rcpp_distSTRING(dnavector=dna.char,
-            scoreMatrix=score, ncores=threads, symmetric=symmetric_int)
-        OUT$distSTRING <- as.data.frame(OUT$distSTRING)
-        OUT$sitesUsed <- as.data.frame(OUT$sitesUsed)
+        if(collapse){
+            dna.char.collapsed <- collapseChar(dna.char)
+            OUT <- rcpp_distSTRING(dnavector=dna.char.collapsed$unique,
+                scoreMatrix=score, ncores=threads, symmetric=symmetric_int)
+            D <- as.matrix(OUT$distSTRING)
+            S <- as.matrix(OUT$sitesUsed)
+            OUT$distSTRING <- as.data.frame(
+                D[
+                    dna.char.collapsed$xmap,
+                    dna.char.collapsed$xmap,
+                    drop=FALSE
+                ]
+            )
+            colnames(OUT$distSTRING) <- names(dna.char)
+            rownames(OUT$distSTRING) <- dna.char.names
+            OUT$sitesUsed <- as.data.frame(
+                S[
+                    dna.char.collapsed$xmap,
+                    dna.char.collapsed$xmap,
+                    drop=FALSE
+                ]
+            )
+            colnames(OUT$sitesUsed) <- names(dna.char)
+            rownames(OUT$sitesUsed) <- dna.char.names
+        } else{
+            OUT <- rcpp_distSTRING(dnavector=dna.char,
+                scoreMatrix=score, ncores=threads, symmetric=symmetric_int)
+            OUT$distSTRING <- as.data.frame(OUT$distSTRING)
+            OUT$sitesUsed <- as.data.frame(OUT$sitesUsed)
+        }
     }
     if(is.null(score)){
         stopifnot("Error: either choose model 'IUPAC' or '?ape::dist.dna'"=
@@ -76,11 +122,38 @@ dnastring2dist <- function(dna, model="IUPAC", threads=1, symmetric=TRUE,
             "K81","F84", "BH87", "T92", "TN93", "GG95", "logdet",
             "paralin", "indel", "indelblock"))
         if(model == "IUPAC"){
-            OUT <- rcpp_distSTRING(dnavector=dna.char,
-                scoreMatrix=iupacMatrix(), ncores=threads,
-                symmetric=symmetric_int)
-            OUT$distSTRING <- as.data.frame(OUT$distSTRING)
-            OUT$sitesUsed <- as.data.frame(OUT$sitesUsed)
+            if(collapse){
+                dna.char.collapsed <- collapseChar(dna.char)
+                OUT <- rcpp_distSTRING(dnavector=dna.char.collapsed$unique,
+                    scoreMatrix=iupacMatrix(), ncores=threads,
+                    symmetric=symmetric_int)
+                D <- as.matrix(OUT$distSTRING)
+                S <- as.matrix(OUT$sitesUsed)
+                OUT$distSTRING <- as.data.frame(
+                    D[
+                        dna.char.collapsed$xmap,
+                        dna.char.collapsed$xmap,
+                        drop=FALSE
+                    ]
+                )
+                colnames(OUT$distSTRING) <- names(dna.char)
+                rownames(OUT$distSTRING) <- dna.char.names
+                OUT$sitesUsed <- as.data.frame(
+                    S[
+                        dna.char.collapsed$xmap,
+                        dna.char.collapsed$xmap,
+                        drop=FALSE
+                    ]
+                )
+                colnames(OUT$sitesUsed) <- names(dna.char)
+                rownames(OUT$sitesUsed) <- dna.char.names
+            } else{
+                OUT <- rcpp_distSTRING(dnavector=dna.char,
+                    scoreMatrix=iupacMatrix(), ncores=threads,
+                    symmetric=symmetric_int)
+                OUT$distSTRING <- as.data.frame(OUT$distSTRING)
+                OUT$sitesUsed <- as.data.frame(OUT$sitesUsed)
+            }
         }
         if(model != "IUPAC"){
             if(!is.null(mask) || !is.null(region)){

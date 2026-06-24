@@ -5,8 +5,15 @@
 #' @param codA \code{codon} A [mandatory]
 #' @param codB \code{codon} B [mandatory]
 #' @return vector of syn and non-syn sites
-#' @importFrom Biostrings DNAString DNAStringSet AAString AAStringSet
-#' readDNAStringSet readAAStringSet writeXStringSet width subseq
+#' @importFrom Biostrings DNAString
+#' @importFrom Biostrings DNAStringSet
+#' @importFrom Biostrings AAString
+#' @importFrom Biostrings AAStringSet
+#' @importFrom Biostrings readDNAStringSet
+#' @importFrom Biostrings readAAStringSet
+#' @importFrom Biostrings writeXStringSet
+#' @importFrom Biostrings width
+#' @importFrom Biostrings subseq
 #' @importFrom seqinr kaks
 #' @seealso \code{\link[seqinr]{kaks}}
 #' @references Nei and Gojobori. (1986) Simple methods for estimating the

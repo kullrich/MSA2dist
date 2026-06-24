@@ -23,8 +23,15 @@
 #' \code{ds} sequence2 name\cr
 #' \code{dn} sequence2 name\cr
 #' \code{dnds} sequence2 name\cr
-#' @importFrom Biostrings DNAString DNAStringSet AAString AAStringSet
-#' readDNAStringSet readAAStringSet writeXStringSet width subseq
+#' @importFrom Biostrings DNAString
+#' @importFrom Biostrings DNAStringSet
+#' @importFrom Biostrings AAString
+#' @importFrom Biostrings AAStringSet
+#' @importFrom Biostrings readDNAStringSet
+#' @importFrom Biostrings readAAStringSet
+#' @importFrom Biostrings writeXStringSet
+#' @importFrom Biostrings width
+#' @importFrom Biostrings subseq
 #' @importFrom seqinr kaks
 #' @importFrom stats setNames
 #' @seealso \code{\link[seqinr]{kaks}}

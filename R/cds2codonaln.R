@@ -21,10 +21,18 @@
 #' [default: FALSE]
 #' @param ... other cds2aa parameters
 #' @return codon alignment as \code{DNAStringSet}
-#' @importFrom Biostrings DNAString DNAStringSet AAString AAStringSet
-#' readDNAStringSet readAAStringSet writeXStringSet width subseq
+#' @importFrom methods is
+#' @importFrom methods slot
+#' @importFrom Biostrings DNAString
+#' @importFrom Biostrings DNAStringSet
+#' @importFrom Biostrings AAString
+#' @importFrom Biostrings AAStringSet
+#' @importFrom Biostrings readDNAStringSet
+#' @importFrom Biostrings readAAStringSet
+#' @importFrom Biostrings writeXStringSet
+#' @importFrom Biostrings width
+#' @importFrom Biostrings subseq
 #' @importFrom pwalign pairwiseAlignment
-#' @importFrom methods is slot
 #' @references Pagès, H et al. (2014) Biostrings: Efficient manipulation of
 #' biological strings. \emph{R package version}, \bold{2(0)}.
 #' @seealso \code{\link[pwalign]{pairwiseAlignment}}

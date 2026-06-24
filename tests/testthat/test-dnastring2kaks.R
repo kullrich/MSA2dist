@@ -1,6 +1,6 @@
 data(hiv)
 
-test_that("compareCodons()", {
+test_that("dnastring2kaks()", {
     h <- hiv[1:3] |> dnastring2kaks(model="Li")
     expect_true(h$seq1[1] == "U68496")
     h <- hiv[1:3] |> dnastring2kaks(model="Li",

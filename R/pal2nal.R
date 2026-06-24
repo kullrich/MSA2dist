@@ -8,10 +8,18 @@
 #' @param remove.gaps specify if gaps in the codon alignment should be removed
 #' [default: FALSE]
 #' @return codon alignment as \code{DNAStringSet}
-#' @importFrom Biostrings DNAString DNAStringSet AAString AAStringSet
-#' readDNAStringSet readAAStringSet writeXStringSet width subseq
+#' @importFrom methods is
+#' @importFrom methods slot
+#' @importFrom Biostrings DNAString
+#' @importFrom Biostrings DNAStringSet
+#' @importFrom Biostrings AAString
+#' @importFrom Biostrings AAStringSet
+#' @importFrom Biostrings readDNAStringSet
+#' @importFrom Biostrings readAAStringSet
+#' @importFrom Biostrings writeXStringSet
+#' @importFrom Biostrings width
+#' @importFrom Biostrings subseq
 #' @importFrom pwalign pairwiseAlignment
-#' @importFrom methods is slot
 #' @references Pagès, H et al. (2014) Biostrings: Efficient manipulation of
 #' biological strings. \emph{R package version}, \bold{2(0)}.
 #' @seealso \code{\link[pwalign]{pairwiseAlignment}}
@@ -46,7 +54,7 @@ pal2nal <- function(pal,
     for(i in seq(from=1, to=length(pal))){
         if(pal.gap.pos[[i]][1] == -1){
             nal_out <- c(nal_out, nal[i])
-        } else {
+        } else{
             nal_i <- as.character(nal[[i]])
             n_i_codons <- nchar(nal_i)/3
             n_i <- ""
@@ -58,7 +66,7 @@ pal2nal <- function(pal,
                 gap <- paste0(rep("---", gap_len), collapse="")
                 if(gap_pos==1){
                     n_i <- paste0(n_i, gap)
-                } else {
+                } else{
                     n_i_codons_to_add <- gap_pos-n_i_codons_added-
                         gap_len_cumsum+gap_len-1
                     n_i<- paste0(n_i, substr(nal_i,

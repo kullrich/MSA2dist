@@ -5,14 +5,15 @@
 \title{dnastring2dist}
 \usage{
 dnastring2dist(
-  dna,
-  model = "IUPAC",
-  threads = 1,
-  symmetric = TRUE,
-  score = NULL,
-  mask = NULL,
-  region = NULL,
-  ...
+    dna,
+    model = "IUPAC",
+    threads = 1,
+    symmetric = TRUE,
+    score = NULL,
+    mask = NULL,
+    region = NULL,
+    collapse = TRUE,
+    ...
 )
 }
 \arguments{
@@ -33,6 +34,8 @@ distances [default: NULL]}
 
 \item{region}{\code{IRanges} object indicating region to use for dist
 calculation. Default is null, meaning all sites are used [default: NULL]}
+
+\item{collapse}{collapse sequence to patterns first [default: TRUE]}
 
 \item{...}{other \code{ape::dist.dna} parameters
 (see \code{\link[ape]{dist.dna}})}

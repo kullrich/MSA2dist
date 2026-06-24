@@ -11,9 +11,17 @@
 #' @param poplist named \code{list} of populations either as index or names per
 #' population (do not mix index and names in one population) [mandatory]
 #' @return An object of class \code{DNAStringSet} or \code{AAStringSet}
-#' @importFrom methods is slot
-#' @importFrom Biostrings DNAString DNAStringSet AAString AAStringSet
-#' readDNAStringSet readAAStringSet writeXStringSet width subseq
+#' @importFrom methods is
+#' @importFrom methods slot
+#' @importFrom Biostrings DNAString
+#' @importFrom Biostrings DNAStringSet
+#' @importFrom Biostrings AAString
+#' @importFrom Biostrings AAStringSet
+#' @importFrom Biostrings readDNAStringSet
+#' @importFrom Biostrings readAAStringSet
+#' @importFrom Biostrings writeXStringSet
+#' @importFrom Biostrings width
+#' @importFrom Biostrings subseq
 #' @seealso \code{\link[MSA2dist]{addmask2string}},
 #' \code{\link[MSA2dist]{addregion2string}},
 #' \code{\link[MSA2dist]{addpos2string}}

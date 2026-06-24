@@ -1,6 +1,6 @@
 data(hiv)
 
-test_that("compareCodons()", {
+test_that("dnastring2dist()", {
     myscore <- iupacMatrix()
     myscore[1,1] <- -1
     h <- hiv |> dnastring2dist(score=myscore)

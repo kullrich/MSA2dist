@@ -5,12 +5,12 @@
 \title{cds2aa}
 \usage{
 cds2aa(
-  cds,
-  shorten = FALSE,
-  frame = 1,
-  framelist = NULL,
-  genetic.code = NULL,
-  return.cds = FALSE
+    cds,
+    shorten = FALSE,
+    frame = 1,
+    framelist = NULL,
+    genetic.code = NULL,
+    return.cds = FALSE
 )
 }
 \arguments{

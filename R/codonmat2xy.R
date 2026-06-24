@@ -18,15 +18,31 @@
 #' \code{CumSumSynMean} cumulative average syn per codon\cr
 #' \code{CumSumNonSynMean} cumulative average nonsyn per codon\cr
 #' \code{CumSumIndelMean} cumulative indels per codon\cr
-#' @importFrom Biostrings DNAString DNAStringSet AAString AAStringSet
-#' readDNAStringSet readAAStringSet writeXStringSet width subseq
+#' @importFrom Biostrings DNAString
+#' @importFrom Biostrings DNAStringSet
+#' @importFrom Biostrings AAString
+#' @importFrom Biostrings AAStringSet
+#' @importFrom Biostrings readDNAStringSet
+#' @importFrom Biostrings readAAStringSet
+#' @importFrom Biostrings writeXStringSet
+#' @importFrom Biostrings width
+#' @importFrom Biostrings subseq
 #' @importFrom seqinr kaks
 #' @importFrom tidyr %>% unite
+#' @importFrom tidyr unite
 #' @importFrom tibble add_column
-#' @importFrom foreach foreach %do% %dopar%
-#' @importFrom parallel makeForkCluster stopCluster
+#' @importFrom foreach foreach
+#' @importFrom foreach %do%
+#' @importFrom foreach %dopar%
+#' @importFrom parallel makeForkCluster
+#' @importFrom parallel stopCluster
 #' @importFrom doParallel registerDoParallel
-#' @importFrom dplyr group_by filter count left_join summarise mutate
+#' @importFrom dplyr group_by
+#' @importFrom dplyr filter
+#' @importFrom dplyr count
+#' @importFrom dplyr left_join
+#' @importFrom dplyr summarise
+#' @importFrom dplyr mutate
 #' @importFrom rlang .data
 #' @seealso \code{\link[MSA2dist]{dnastring2codonmat}}
 #' \code{\link[MSA2dist]{codonmat2pnps}}

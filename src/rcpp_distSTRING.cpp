@@ -11,7 +11,11 @@ using namespace Rcpp;
 //' @title rcpp_distSTRING
 //' @name rcpp_distSTRING
 //' @description calculates pairwise distances using a score matrix
-//' @return list
+//' @return list containing:
+//' \itemize{
+//'     \item distSTRING
+//'     \item sitesUsed
+//' }
 //' @param dnavector StringVector [mandatory]
 //' @param scoreMatrix NumericMatrix [mandatory]
 //' @param ncores number of cores [default: 1]
@@ -46,7 +50,7 @@ Rcpp::List rcpp_distSTRING( Rcpp::StringVector dnavector, Rcpp::NumericMatrix sc
   Rcpp::NumericMatrix sitesMatrix(n, n);
   colnames(sitesMatrix)=dnavectornames;
   rownames(sitesMatrix)=dnavectornames;
-  int nsites=dnavector[1].size();
+  int nsites=dnavector[0].size();
   RcppThread::ProgressBar bar(n, 1);
   if(symmetric == 0){
     RcppThread::parallelFor(0, n, [&] (int i) {

@@ -1,6 +1,6 @@
 data(hiv)
 
-test_that("compareCodons()", {
+test_that("indices2kaks()", {
     idx <- list(c(1,2), c(1,3))
     h <- hiv[1:3] |> indices2kaks(idx, model="Li")
     expect_true(h$seq1[1] == "U68496")

@@ -5,12 +5,12 @@
 \title{aastring2dist}
 \usage{
 aastring2dist(
-  aa,
-  threads = 1,
-  symmetric = TRUE,
-  score = NULL,
-  mask = NULL,
-  region = NULL
+    aa,
+    threads = 1,
+    symmetric = TRUE,
+    score = NULL,
+    mask = NULL,
+    region = NULL
 )
 }
 \arguments{

@@ -39,6 +39,20 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// rcpp_dxy_fst_pop
+Rcpp::List rcpp_dxy_fst_pop(Rcpp::StringVector dnavector, Rcpp::IntegerVector pop_idx, std::string model, std::string estimator);
+RcppExport SEXP _MSA2dist_rcpp_dxy_fst_pop(SEXP dnavectorSEXP, SEXP pop_idxSEXP, SEXP modelSEXP, SEXP estimatorSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::StringVector >::type dnavector(dnavectorSEXP);
+    Rcpp::traits::input_parameter< Rcpp::IntegerVector >::type pop_idx(pop_idxSEXP);
+    Rcpp::traits::input_parameter< std::string >::type model(modelSEXP);
+    Rcpp::traits::input_parameter< std::string >::type estimator(estimatorSEXP);
+    rcpp_result_gen = Rcpp::wrap(rcpp_dxy_fst_pop(dnavector, pop_idx, model, estimator));
+    return rcpp_result_gen;
+END_RCPP
+}
 // rcpp_pairwiseDeletionAA
 Rcpp::List rcpp_pairwiseDeletionAA(Rcpp::StringVector aavector, int ncores, int symmetric);
 RcppExport SEXP _MSA2dist_rcpp_pairwiseDeletionAA(SEXP aavectorSEXP, SEXP ncoresSEXP, SEXP symmetricSEXP) {
@@ -65,12 +79,42 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// rcpp_weightedPi
+Rcpp::List rcpp_weightedPi(Rcpp::StringVector dnavector, std::string model, std::string estimator);
+RcppExport SEXP _MSA2dist_rcpp_weightedPi(SEXP dnavectorSEXP, SEXP modelSEXP, SEXP estimatorSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::StringVector >::type dnavector(dnavectorSEXP);
+    Rcpp::traits::input_parameter< std::string >::type model(modelSEXP);
+    Rcpp::traits::input_parameter< std::string >::type estimator(estimatorSEXP);
+    rcpp_result_gen = Rcpp::wrap(rcpp_weightedPi(dnavector, model, estimator));
+    return rcpp_result_gen;
+END_RCPP
+}
+// rcpp_weightedPi_pop
+Rcpp::List rcpp_weightedPi_pop(Rcpp::StringVector dnavector, Rcpp::IntegerVector pop_idx, std::string model, std::string estimator);
+RcppExport SEXP _MSA2dist_rcpp_weightedPi_pop(SEXP dnavectorSEXP, SEXP pop_idxSEXP, SEXP modelSEXP, SEXP estimatorSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::StringVector >::type dnavector(dnavectorSEXP);
+    Rcpp::traits::input_parameter< Rcpp::IntegerVector >::type pop_idx(pop_idxSEXP);
+    Rcpp::traits::input_parameter< std::string >::type model(modelSEXP);
+    Rcpp::traits::input_parameter< std::string >::type estimator(estimatorSEXP);
+    rcpp_result_gen = Rcpp::wrap(rcpp_weightedPi_pop(dnavector, pop_idx, model, estimator));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_MSA2dist_rcpp_KaKs", (DL_FUNC) &_MSA2dist_rcpp_KaKs, 4},
     {"_MSA2dist_rcpp_distSTRING", (DL_FUNC) &_MSA2dist_rcpp_distSTRING, 4},
+    {"_MSA2dist_rcpp_dxy_fst_pop", (DL_FUNC) &_MSA2dist_rcpp_dxy_fst_pop, 4},
     {"_MSA2dist_rcpp_pairwiseDeletionAA", (DL_FUNC) &_MSA2dist_rcpp_pairwiseDeletionAA, 3},
     {"_MSA2dist_rcpp_pairwiseDeletionDNA", (DL_FUNC) &_MSA2dist_rcpp_pairwiseDeletionDNA, 3},
+    {"_MSA2dist_rcpp_weightedPi", (DL_FUNC) &_MSA2dist_rcpp_weightedPi, 3},
+    {"_MSA2dist_rcpp_weightedPi_pop", (DL_FUNC) &_MSA2dist_rcpp_weightedPi_pop, 4},
     {NULL, NULL, 0}
 };
 

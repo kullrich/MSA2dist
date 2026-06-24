@@ -5,14 +5,14 @@
 \title{cds2codonaln}
 \usage{
 cds2codonaln(
-  cds1,
-  cds2,
-  type = "global",
-  substitutionMatrix = "BLOSUM62",
-  gapOpening = 10,
-  gapExtension = 0.5,
-  remove.gaps = FALSE,
-  ...
+    cds1,
+    cds2,
+    type = "global",
+    substitutionMatrix = "BLOSUM62",
+    gapOpening = 10,
+    gapExtension = 0.5,
+    remove.gaps = FALSE,
+    ...
 )
 }
 \arguments{
