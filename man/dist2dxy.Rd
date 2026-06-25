@@ -6,6 +6,27 @@
 \usage{
 dist2dxy(d, pop = NULL, popx = NULL, popy = NULL, popout = NULL)
 }
+\arguments{
+\item{d}{list returned by \code{dnastring2dist()}}
+
+\item{pop}{[default: NULL] optional population assignment:
+\itemize{
+    \item character vector (same length as dna)
+    \item named character vector (mapping seqnames to pop)
+    \item integer vector (same length as dna)
+    \item named integer vector (mapping index to pop)
+    \item list (see \code{addpop2dnastring()})
+}}
+
+\item{popx}{[default: NULL] Character string specifying
+population x in the rooted population topology ((x,y),o)}
+
+\item{popy}{[default: NULL] Character string specifying
+population y in the rooted population topology ((x,y),o)}
+
+\item{popout}{[default: NULL] Character string specifying
+outgroup population in the rooted population topology ((x,y),o)}
+}
 \value{
 list containing:
 \itemize{
@@ -45,26 +66,27 @@ if one specifies \code{popx}, \code{popy} and \code{popout}.
 The function computes pairwise genetic differentiation statistics
 from a precomputed sequence distance matrix.
 
-Let $d_{ij}$ denote the per-site sequence distance between sequences
-$i$ and $j$, and let $S_{ij}$ be the number of aligned sites used.
+Let \eqn{d_{ij}} denote the per-site sequence distance between
+sequences \eqn{i} and \eqn{j}, and let \eqn{S_{ij}} be the number
+of aligned sites used.
 
 \bold{Within-population diversity}
 
-For population $x$ with sequences $i in x$:
+For population \eqn{x} with sequences \eqn{i in x}:
 
 \deqn{
 D_x = \frac{1}{\binom{n_X}{2}} \sum_{i<j in X} d_{ij}
-}{D_x = mean pairwise distance within population x}
+}{Dx = mean pairwise distance within population x}
 
-\bold{Between-population divergence (Dxy)}
+\bold{Between-population divergence (\eqn{D_{xy}})}
 
-For populations $x$ and $y$:
+For populations \eqn{x} and \eqn{y}:
 
 \deqn{
 D_{xy} = \frac{1}{n_x n_y} \sum_{i in x} \sum_{j in y} d_{ij}
 }{Dxy = mean pairwise distance between populations x and y}
 
-\bold{Fixation index (Fst)}
+\bold{Fixation index (\eqn{F_{ST}})}
 
 Using the distance-based estimator:
 
@@ -72,7 +94,7 @@ Using the distance-based estimator:
 F_{ST} = \frac{D_{xy} - \frac{D_x + D_y}{2}}{D_{xy}}
 }{FST = (Dxy - (Dx + Dy)/2) / Dxy}
 
-\bold{Minimum divergence (Dmin)}
+\bold{Minimum divergence (\eqn{D_{min}})}
 
 \deqn{
 D_{min}(x,y) = \min_{i in x, j in y} d_{ij}
@@ -80,7 +102,7 @@ D_{min}(x,y) = \min_{i in x, j in y} d_{ij}
 
 \bold{Outgroup-corrected divergence}
 
-Let $o$ be an outgroup population:
+Let \eqn{o} be an outgroup population:
 
 \deqn{
 D(x,o) = \frac{1}{n_x n_o} \sum_{i in x} \sum_{k in o} d_{ik}
@@ -108,15 +130,15 @@ RND_{min} = \frac{D_{min}(x,y)}{D_{out}}
 
 \bold{Interpretation}
 \itemize{
-    \item $D_{xy}$: average sequence divergence between populations
-    \item $F_{ST}$: relative differentiation scaled by
+    \item Dxy: average sequence divergence between populations
+    \item FST: relative differentiation scaled by
 within-population diversity
-    \item $D_{min}$: closest haplotype distance between populations
-    \item $RND$: divergence normalized by outgroup distance
-    \item $G_{min}$: proportion of minimum divergence relative to
+    \item Dmin: closest haplotype distance between populations
+    \item RND: divergence normalized by outgroup distance
+    \item Gmin: proportion of minimum divergence relative to
 mean divergence
-    \item $RND_{min}$: minimum divergence scaled by outgroup distance
-    \item $RND_{max}$: max divergence scaled by outgroup distance
+    \item RNDmin: minimum divergence scaled by outgroup distance
+    \item RNDmax: max divergence scaled by outgroup distance
 }
 }
 \examples{

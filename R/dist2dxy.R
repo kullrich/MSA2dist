@@ -8,26 +8,27 @@
 #' The function computes pairwise genetic differentiation statistics
 #' from a precomputed sequence distance matrix.
 #'
-#' Let $d_{ij}$ denote the per-site sequence distance between sequences
-#' $i$ and $j$, and let $S_{ij}$ be the number of aligned sites used.
+#' Let \eqn{d_{ij}} denote the per-site sequence distance between
+#' sequences \eqn{i} and \eqn{j}, and let \eqn{S_{ij}} be the number
+#' of aligned sites used.
 #'
 #' \bold{Within-population diversity}
 #'
-#' For population $x$ with sequences $i in x$:
+#' For population \eqn{x} with sequences \eqn{i in x}:
 #'
 #' \deqn{
 #' D_x = \frac{1}{\binom{n_X}{2}} \sum_{i<j in X} d_{ij}
-#' }{D_x = mean pairwise distance within population x}
+#' }{Dx = mean pairwise distance within population x}
 #'
-#' \bold{Between-population divergence (Dxy)}
+#' \bold{Between-population divergence (\eqn{D_{xy}})}
 #'
-#' For populations $x$ and $y$:
+#' For populations \eqn{x} and \eqn{y}:
 #'
 #' \deqn{
 #' D_{xy} = \frac{1}{n_x n_y} \sum_{i in x} \sum_{j in y} d_{ij}
 #' }{Dxy = mean pairwise distance between populations x and y}
 #'
-#' \bold{Fixation index (Fst)}
+#' \bold{Fixation index (\eqn{F_{ST}})}
 #'
 #' Using the distance-based estimator:
 #'
@@ -35,7 +36,7 @@
 #' F_{ST} = \frac{D_{xy} - \frac{D_x + D_y}{2}}{D_{xy}}
 #' }{FST = (Dxy - (Dx + Dy)/2) / Dxy}
 #'
-#' \bold{Minimum divergence (Dmin)}
+#' \bold{Minimum divergence (\eqn{D_{min}})}
 #'
 #' \deqn{
 #' D_{min}(x,y) = \min_{i in x, j in y} d_{ij}
@@ -43,7 +44,7 @@
 #'
 #' \bold{Outgroup-corrected divergence}
 #'
-#' Let $o$ be an outgroup population:
+#' Let \eqn{o} be an outgroup population:
 #'
 #' \deqn{
 #' D(x,o) = \frac{1}{n_x n_o} \sum_{i in x} \sum_{k in o} d_{ik}
@@ -71,16 +72,31 @@
 #'
 #' \bold{Interpretation}
 #' \itemize{
-#'     \item $D_{xy}$: average sequence divergence between populations
-#'     \item $F_{ST}$: relative differentiation scaled by
+#'     \item Dxy: average sequence divergence between populations
+#'     \item FST: relative differentiation scaled by
 #' within-population diversity
-#'     \item $D_{min}$: closest haplotype distance between populations
-#'     \item $RND$: divergence normalized by outgroup distance
-#'     \item $G_{min}$: proportion of minimum divergence relative to
+#'     \item Dmin: closest haplotype distance between populations
+#'     \item RND: divergence normalized by outgroup distance
+#'     \item Gmin: proportion of minimum divergence relative to
 #' mean divergence
-#'     \item $RND_{min}$: minimum divergence scaled by outgroup distance
-#'     \item $RND_{max}$: max divergence scaled by outgroup distance
+#'     \item RNDmin: minimum divergence scaled by outgroup distance
+#'     \item RNDmax: max divergence scaled by outgroup distance
 #' }
+#' @param d list returned by \code{dnastring2dist()}
+#' @param pop [default: NULL] optional population assignment:
+#' \itemize{
+#'     \item character vector (same length as dna)
+#'     \item named character vector (mapping seqnames to pop)
+#'     \item integer vector (same length as dna)
+#'     \item named integer vector (mapping index to pop)
+#'     \item list (see \code{addpop2dnastring()})
+#' }
+#' @param popx [default: NULL] Character string specifying
+#' population x in the rooted population topology ((x,y),o)
+#' @param popy [default: NULL] Character string specifying
+#' population y in the rooted population topology ((x,y),o)
+#' @param popout [default: NULL] Character string specifying
+#' outgroup population in the rooted population topology ((x,y),o)
 #' @return list containing:
 #' \itemize{
 #'     \item dxy pairwise matrix
@@ -120,6 +136,9 @@
 #' @importFrom IRanges findOverlaps
 #' @importFrom IRanges disjoin
 #' @importFrom IRanges overlapsRanges
+#' @importFrom stats as.dist
+#' @importFrom stats median
+#' @importFrom stats var
 #' @seealso \code{\link[MSA2dist]{dnastring2dist}},
 #' \code{\link[MSA2dist]{addpop2string}}
 #' @examples
@@ -168,18 +187,18 @@ dist2dxy <- function(d, pop=NULL,
     stats_names <- c("mean", "median", "min", "max", "var", "mean_sites")
     get_pair_stats <- function(ix, jx){
         if(identical(ix, jx)){
-            vals <- as.vector(as.dist(distmat[ix, jx]))
-            sitesv <- as.vector(as.dist(sitesmat[ix, jx]))
+            vals <- as.vector(stats::as.dist(distmat[ix, jx]))
+            sitesv <- as.vector(stats::as.dist(sitesmat[ix, jx]))
         } else{
             vals <- as.vector(distmat[ix, jx])
             sitesv <- as.vector(sitesmat[ix, jx])
         }
         return(
             c(mean = mean(vals, na.rm=TRUE),
-            median = median(vals, na.rm=TRUE),
+            median = stats::median(vals, na.rm=TRUE),
             min = min(vals, na.rm=TRUE),
             max = max(vals, na.rm=TRUE),
-            var = var(vals, na.rm=TRUE),
+            var = stats::var(vals, na.rm=TRUE),
             mean_sites = mean(sitesv, na.rm=TRUE))
         )
     }

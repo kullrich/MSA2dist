@@ -1,4 +1,10 @@
-# MSA2dist 1.17.5 (2026-06-25)
+# MSA2dist 1.17.7 (2026-06-25)
+
+BUG FIXES
+
+* fixed Rd files
+
+# MSA2dist 1.17.6 (2026-06-25)
 
 * update DESCRIPTION
 

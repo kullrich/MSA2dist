@@ -4,7 +4,7 @@ Title: MSA2dist calculates pairwise distances between all sequences of a
     DNAStringSet or a AAStringSet using a custom score matrix, conducts
     codon based analysis (including dNdS estimation), and computes
     population genetic divergence statistics such as Dxy and FST
-Version: 1.17.6
+Version: 1.17.7
 Authors@R: 
     person(given = "Kristian K",
            family = "Ullrich",
