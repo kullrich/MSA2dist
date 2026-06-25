@@ -108,6 +108,35 @@ gapExtension = 0.5,
 remove.gaps = FALSE,
 ```
 
+### Computing dxy and fst for all population combinations of a ‘DNAStringSet’
+
+```
+## load example sequence data
+data("iupac", package="MSA2dist")
+poplist <- list(FRA = grep("Mmd.FRA", names(iupac)),
+    GER = grep("Mmd.GER", names(iupac)),
+    IRA = grep("Mmd.IRA", names(iupac)),
+    AFG = grep("Mmm.AFG", names(iupac)))
+iupac <- iupac |> addpop2string(poplist)
+dxy <- iupac |> dnastring2dxy(model="IUPAC", pop=poplist)
+```
+
+```
+> dxy$dxy
+            FRA         GER         IRA          AFG
+FRA 0.002304687 0.004015625 0.005171875 0.0122536740
+GER 0.004015625 0.003835937 0.005703125 0.0123789245
+IRA 0.005171875 0.005703125 0.006320313 0.0118779225
+AFG 0.012253674 0.012378925 0.011877923 0.0008628368
+
+> dxy$fst
+          FRA       GER       IRA       AFG
+FRA 0.0000000 0.2354086 0.1661631 0.8707521
+GER 0.2354086 0.0000000 0.1095890 0.8102107
+IRA 0.1661631 0.1095890 0.0000000 0.6976260
+AFG 0.8707521 0.8102107 0.6976260 0.0000000
+```
+
 ## Code of Conduct - Participation guidelines
 
 This repository adhere to [Contributor Covenant](http://contributor-covenant.org) code of conduct for in any interactions you have within this project. (see [Code of Conduct](https://github.com/kullrich/MSA2dist/blob/master/CODE_OF_CONDUCT.md))
