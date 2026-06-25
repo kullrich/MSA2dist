@@ -25,7 +25,7 @@ BiocManager::install("kullrich/MSA2dist")
 
 ## Supported dN/dS Models
 
-Models used and implemented according to Li (1993) (via seqinr) and Nei & Gojobori (1986) (native implementation). In addition, the complete set of dN/dS estimation methods available in KaKs_Calculator2 has been ported and reimplemented in MSA2dist using Rcpp, enabling efficient and dependency-free calculation of dN, dS, and dN/dS statistics directly within R.
+Models used and implemented according to Li (1993) (via [seqinr](https://github.com/lbbe-software/seqinr)) and Nei & Gojobori (1986) (native implementation). In addition, the complete set of dN/dS estimation methods available in [KaKs_Calculator2](https://github.com/kullrich/kakscalculator2) has been ported and reimplemented in `MSA2dist` using [Rcpp](https://github.com/kullrich/MSA2dist/tree/devel/src), enabling efficient and dependency-free calculation of dN, dS, and dN/dS statistics directly within R.
 
 | Model | Description |
 |---------|-------------|
