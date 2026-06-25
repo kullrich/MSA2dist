@@ -1,3 +1,7 @@
+# MSA2dist 1.17.5 (2026-06-25)
+
+* update DESCRIPTION
+
 # MSA2dist 1.17.5 (2026-06-24)
 
 BUG FIXES

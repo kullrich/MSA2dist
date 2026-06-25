@@ -1,6 +1,6 @@
 # MSA2dist <a href="https://www.bioconductor.org/packages/release/bioc/html/MSA2dist.html"><img src="man/figures/logo.png" align="right" height="160" /></a>
 
-`MSA2dist` calculates pairwise distances between all sequences of a `DNAStringSet` or a `AAStringSet` using a custom score matrix and conducts codon based analysis. It uses scoring matrices to be used in these pairwise distance calculations which can be adapted to any scoring for DNA or AA characters. E.g. by using literal distances `MSA2dist` calculates pairwise `IUPAC` distances. `DNAStringSet` alignments can be analysed as codon alignments to look for synonymous and nonsynonymous substitutions (dN/dS) in a parallelised fashion using a variety of substitution models. Non-aligned coding sequences can be directly used to construct pairwise codon alignments (global/local) and calculate dN/dS without any external dependencies.
+`MSA2dist` calculates pairwise distances between all sequences of a `DNAStringSet` or a `AAStringSet` using a custom score matrix and conducts codon based analysis. It uses scoring matrices to be used in these pairwise distance calculations which can be adapted to any scoring for DNA or AA characters. E.g. by using literal distances `MSA2dist` calculates pairwise `IUPAC` distances. `DNAStringSet` alignments can be analysed as codon alignments to look for synonymous and nonsynonymous substitutions (dN/dS) in a parallelised fashion using a variety of substitution models. Non-aligned coding sequences can be directly used to construct pairwise codon alignments (global/local) and calculate dN/dS without any external dependencies. In addition, `MSA2dist` provides population genetic analyses, including the calculation of nucleotide divergence between populations (Dxy) and genetic differentiation statistics (FST) from aligned sequence data.
 
 ## Installation instructions
 
@@ -22,6 +22,34 @@ And the development version from
 ``` r
 BiocManager::install("kullrich/MSA2dist")
 ```
+
+## Supported dN/dS Models
+
+Models used and implemented according to Li (1993) (via seqinr) and Nei & Gojobori (1986) (native implementation). In addition, the complete set of dN/dS estimation methods available in KaKs_Calculator2 has been ported and reimplemented in MSA2dist using Rcpp, enabling efficient and dependency-free calculation of dN, dS, and dN/dS statistics directly within R.
+
+| Model | Description |
+|---------|-------------|
+| `Li` | Li (1993) method |
+| `NG86` | Nei & Gojobori (1986) method |
+| `NG` | Nei & Gojobori method |
+| `LWL` | Li-Wu-Luo method |
+| `LPB` | Li-Pamilo-Bianchi method |
+| `MLWL` | Modified Li-Wu-Luo method |
+| `MLPB` | Modified Li-Pamilo-Bianchi method |
+| `GY` | Goldman-Yang maximum-likelihood model |
+| `YN` | Yang-Nielsen method |
+| `MYN` | Modified Yang-Nielsen method |
+| `MS` | Model Selection method |
+| `MA` | Model Averaging method |
+| `GNG` | Gamma-series Nei-Gojobori method |
+| `GLWL` | Gamma-series Li-Wu-Luo method |
+| `GLPB` | Gamma-series Li-Pamilo-Bianchi method |
+| `GMLWL` | Gamma-series Modified Li-Wu-Luo method |
+| `GMLPB` | Gamma-series Modified Li-Pamilo-Bianchi method |
+| `GYN` | Gamma-series Yang-Nielsen method |
+| `GMYN` | Gamma-series Modified Yang-Nielsen method |
+
+These models differ in their assumptions regarding codon frequencies, transition/transversion bias, unequal substitution rates among sites, and rate heterogeneity. This allows users to select simple counting-based approaches for rapid screening or more sophisticated maximum-likelihood and gamma-corrected methods for evolutionary analyses.
 
 ## Code of Conduct - Participation guidelines
 
