@@ -51,6 +51,63 @@ Models used and implemented according to Li (1993) (via [seqinr](https://github.
 
 These models differ in their assumptions regarding codon frequencies, transition/transversion bias, unequal substitution rates among sites, and rate heterogeneity. This allows users to select simple counting-based approaches for rapid screening or more sophisticated maximum-likelihood and gamma-corrected methods for evolutionary analyses.
 
+## Examples
+
+### Computing pairwise dN/dS using parallel threads
+
+```
+## load example sequence data
+data("hiv", package="MSA2dist")
+hiv.dNdS <- hiv |> dnastring2kaks(model="MYN", threads=2)
+```
+
+```
+> tibble(hiv.dNdS)
+# A tibble: 78 × 25
+   Comp1 Comp2 seq1   seq2   Method Ka    Ks    `Ka/Ks` `P-Value(Fisher)` Length
+   <chr> <chr> <chr>  <chr>  <chr>  <chr> <chr> <chr>   <chr>             <chr> 
+ 1 1     2     U68496 U68497 MYN    0.02… 0.09… 0.2672… 0.104824          273   
+ 2 1     3     U68496 U68498 MYN    0.08… 0.04… 1.85833 0.665602          273   
+ 3 1     4     U68496 U68499 MYN    0.08… 0.05… 1.66318 0.645824          273   
+ 4 1     5     U68496 U68500 MYN    0.11… 0.11… 1.00159 0.96729           273   
+ 5 1     6     U68496 U68501 MYN    0.10… 0.07… 1.35518 0.731834          273   
+ 6 1     7     U68496 U68502 MYN    0.14… 0.17… 0.8292… 0.600487          273   
+ 7 1     8     U68496 U68503 MYN    0.13… 0.09… 1.41146 0.589764          273   
+ 8 1     9     U68496 U68504 MYN    0.11… 0.23… 0.4656… 0.0955289         273   
+ 9 1     10    U68496 U68505 MYN    0.10… 0.27… 0.4019… 0.116874          273   
+10 1     11    U68496 U68506 MYN    0.11… 0.11… 1.05831 0.944884          273   
+# ℹ 68 more rows
+# ℹ 15 more variables: `S-Sites` <chr>, `N-Sites` <chr>,
+#   `Fold-Sites(0:2:4)` <chr>, Substitutions <chr>, `S-Substitutions` <chr>,
+#   `N-Substitutions` <chr>, `Fold-S-Substitutions(0:2:4)` <chr>,
+#   `Fold-N-Substitutions(0:2:4)` <chr>, `Divergence-Time` <chr>,
+#   `Substitution-Rate-Ratio(rTC:rAG:rTA:rCG:rTG:rCA/rCA)` <chr>,
+#   `GC(1:2:3)` <chr>, `ML-Score` <chr>, AICc <chr>, `Akaike-Weight` <chr>, …
+# ℹ Use `print(n = ...)` to see more rows
+```
+
+### Computing pairwise dN/dS with automatic pairwise codon alignments from unaligned sequences (option `isMSA = FALSE`)
+
+```
+## define three unaligned cds sequences
+cds1 <- Biostrings::DNAString("ATGCAACATTGC")
+cds2 <- Biostrings::DNAString("ATGCATTGC")
+cds3 <- Biostrings::DNAString("ATGCAATGC")
+cds_sequences <- Biostrings::DNAStringSet(list(cds1, cds2, cds3))
+names(cds_sequences) <- c("cds1", "cds2", "cds3")
+cds_sequences |> dnastring2kaks(model="Li", isMSA=FALSE)
+```
+
+Alignment parameter can be adapted (see `?cds2codonaln` for options)
+
+```
+type = "global",
+substitutionMatrix = "BLOSUM62",
+gapOpening = 10,
+gapExtension = 0.5,
+remove.gaps = FALSE,
+```
+
 ## Code of Conduct - Participation guidelines
 
 This repository adhere to [Contributor Covenant](http://contributor-covenant.org) code of conduct for in any interactions you have within this project. (see [Code of Conduct](https://github.com/kullrich/MSA2dist/blob/master/CODE_OF_CONDUCT.md))
