@@ -1,3 +1,8 @@
+# MSA2dist 1.17.8 (2026-06-26)
+
+* shorten package title
+* update vignette abstract
+
 # MSA2dist 1.17.7 (2026-06-25)
 
 BUG FIXES

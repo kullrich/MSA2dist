@@ -13,7 +13,9 @@ abstract: >
     parallelised fashion using a variety of substitution models. Non-aligned
     coding sequences can be directly used to construct pairwise codon
     alignments (global/local) and calculate dN/dS without any external
-    dependencies.
+    dependencies. In addition, MSA2dist provides population genetic analyses,
+    including the calculation of nucleotide divergence between populations (Dxy)
+    and genetic differentiation statistics (FST) from aligned sequence data.
 bibliography: bibliography.bib
 nocite: '@*'
 output: BiocStyle::html_document
