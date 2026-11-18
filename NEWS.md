@@ -1,3 +1,7 @@
+# MSA2dist 1.17.9 (2026-11-18)
+
+* update collapseXStringSet
+
 # MSA2dist 1.17.8 (2026-06-26)
 
 * shorten package title

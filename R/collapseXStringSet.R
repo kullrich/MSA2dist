@@ -33,7 +33,7 @@ collapseXStringSet <- function(xstringset){
         methods::is(xstringset, "XStringSet"))
     xchar <- as.character(xstringset)
     unique_idx <- !duplicated(xchar)
-    unique_x <- xstringset[unique_idx]
+    unique_x <- as.character(xstringset[unique_idx])
     xmap <- match(xchar, unique_x)
     list(
         unique = unique_x,
